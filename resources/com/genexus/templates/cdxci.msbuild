@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="ShowTargets" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<!-- Path of GeneXus installation -->
+		<GX_PROGRAM_DIR Condition="'$(GX_PROGRAM_DIR)'==''"></GX_PROGRAM_DIR>
+	</PropertyGroup>
+
+	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
+
+    <Target Name="ShowTargets">
+        <Message Text="BuildWithDB" />
+        <Message Text="BuildWithNoDB" />
+    </Target>
+
+    <Target Name="OpenKB">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <!-- Java properties -->
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="servlet directory" Value="$(ServletDir)" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="static content directory seen from client" Value="$(StaticDir)" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Compiler Path" Value="$(JavaPath)\javac.exe" />
+        <SetDataStoreProperty Condition="'$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Interpreter Path" Value="$(JavaPath)\java.exe" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="JDK_DIR_JAVA" Value="$(JavaPath)\..\" ContinueOnError="WarnAndContinue"/>
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(TomcatVersionName) != ''" Generator="Default" Name="TOMCAT_VERSION" Value="$(TomcatVersionName)" ContinueOnError="WarnAndContinue"/>
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="Log JDBC Activity" Value="Yes" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) == ''" Generator="Default" Name="Log JDBC Activity" Value="No" />
+        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="JDBC log file" Value="$(JDBClogFile)" />
+        
+        <!-- Performance properties -->
+        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
+        <SetGeneratorProperty Condition="'$(android)'=='True'" Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
+    </Target>
+
+    <Target Name="CustomBuild" DependsOnTargets="OpenKB">
+        <CustomBuild Name="$(customBuildName)" ContinueOnError="ErrorAndContinue" />
+        <CloseKnowledgeBase/>
+    </Target>
+    
+    <Target Name="BuildWithDB" DependsOnTargets="OpenKB">
+        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="BuildWithNoDB"  DependsOnTargets="OpenKB">
+        <SetEnvironmentProperty Name="Populate Data" Value="True" />
+        <!-- Hago un set para saber cual es, no lo puedo leer, el msbuild no me devuelve datos -->
+        <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
+        <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
+        <SetEnvironmentProperty Name="Populate Data" Value="false" />
+        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="No" />
+        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="TestObjTestSuite">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <RunTests TestObjects="$(testObjectsList)" Browser="$(testBrowser)" Arguments="$(testArgs)" AllowFailedTests="true" ContinueOnFailedBuild="True" DetailedResults="true" ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">
+            <Output TaskParameter="ExecutedCount" PropertyName="ExecutedCount"/>
+            <Output TaskParameter="SuccessCount" PropertyName="SuccessCount"/>
+            <Output TaskParameter="ErrorCount" PropertyName="ErrorCount"/>
+            <Output TaskParameter="WarningCount" PropertyName="WarningCount"/>
+            <Output TaskParameter="SkippedCount" PropertyName="SkippedCount"/>
+            <Output TaskParameter="ResultsFile" PropertyName="ResultsFile"/>
+        </RunTests>
+        		<JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
+			<Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
+		</JUnitExportTests>
+		<Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="TestUIObj">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <RunTests Type="UI" Browser="$(testBrowser)" BaseURL="$(appURL)" ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)" AllowFailedTests="true" BuildTests="False" ContinueOnFailedBuild="True" DetailedResults="true" >
+            <Output TaskParameter="ExecutedCount" PropertyName="ExecutedCount"/>
+            <Output TaskParameter="SuccessCount" PropertyName="SuccessCount"/>
+            <Output TaskParameter="ErrorCount" PropertyName="ErrorCount"/>
+            <Output TaskParameter="WarningCount" PropertyName="WarningCount"/>
+            <Output TaskParameter="SkippedCount" PropertyName="SkippedCount"/>
+            <Output TaskParameter="ResultsFile" PropertyName="ResultsFile"/>
+        </RunTests>
+        		<JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
+			<Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
+		</JUnitExportTests>
+		<Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="CheckReorgRequired">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <!-- DoNotExecuteReorg = false, otherwise it performs a Copy Model
+			 FailIfReorg = true, so that it doesn't execute it (we just want to
+				a) know whether a Reorg is needed
+				b) get the reorganization script it would execute
+		-->
+		<Reorganize DoNotExecuteReorg="false" FailIfReorg="true" ContinueOnError="WarnAndContinue" />
+        <PropertyGroup>
+			<ReorgRequired>false</ReorgRequired>
+			<ReorgRequired Condition="'$(MSBuildLastTaskResult)' == 'False'">true</ReorgRequired>
+		</PropertyGroup>
+        <Error Condition="$(ReorgRequired)"/>
+        <CloseKnowledgeBase/>
+	</Target>
+
+    <Target Name="UpdateInstallationModel">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <UpdateWorkingModel />
+    </Target>
+
+    <Target Name="ApplyReorg">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+		<Reorganize ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+	</Target>
+
+    <Target Name="UpdateToLatest">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+	</Target>
+
+    <Target Name="PackageGXModule">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <Message Text="Packaging Module:$(PackageModuleName)"/>
+        <GetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion">
+            <Output TaskParameter="PropertyValue" PropertyName="ModuleVersionValue" />
+        </GetObjectProperty>
+        <Message Text="Read ModuleVersion::$(ModuleVersionValue)" />
+        <SetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion" Value="$(ModuleVersionValue)+$(PipelineBuildNumber)" />
+        <Message Text="Packaging Module Version:$(ModuleVersionValue)+$(PipelineBuildNumber)" />
+		<ItemGroup>
+			<EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
+			<EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
+			<EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
+		</ItemGroup>
+		<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="PublishGXModule">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <!--
+            Para hacer la publicación a un nexus Maven hay que:
+            1. Crear settings.xml en .\Users\Adm\.m2\ con exacto esto:
+                <servers>
+                    <server>
+                        <id>${repo.id}</id>
+                        <username>${repo.login}</username>
+                        <password>${repo.pwd}</password> 
+                    </server>
+                </servers>
+            2. Agregar la flag: SemVersion.flag en el root de GX
+            3. Cambiar en el genexus.exe.config el tag Global Matrix para apuntar al nuestro de prueba:
+                http://integration.nexus.genexus.com/repository/maven-releases/
+            4. Tambie se puede agregar otro tag configurando el que queremos
+        -->
+        <Message Text="opc path:: $(opcPath)" />
+        <Message Text="server:: $(serverId)" />
+        <PublishModule OpcFile="$(opcPath)" Server="$(serverId)" User="$(serverUsername)" Password="$(serverPassword)" />
+		<CloseKnowledgeBase/>
+    </Target>
+    
+    <Target Name="CloseKB">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+		<CloseKnowledgeBase/>
+    </Target>
+   
+</Project>
