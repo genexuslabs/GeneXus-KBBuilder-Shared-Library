@@ -31,7 +31,7 @@ def call(Map args = [:]) {
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "fullTestResultsFile", "${localUnitTestingPath.trim()}\\UnitTestResults.xml")
     bat label: "Running Tests:${args.testObjects}", 
         script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
-    dir(localTestingPath) {
+    dir(localUnitTestingPath) {
         junit "UnitTestResults.xml"
     }
 
