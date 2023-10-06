@@ -21,14 +21,14 @@ def call(Map args = [:]) {
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
     withCredentials([ usernamePassword(credentialsId: args.gxserverCredentials, passwordVariable: 'gxserverPWD', usernameVariable: 'gxserverUSR')]) {
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "testObjectsList", args.testObjects)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "testBrowser", test.browser)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "testArgs", test.arguments)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "gxsUsername", gxserverUSR)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "gxsPassword", gxserverPWD)
+        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testObjectsList", args.testObjects)
+        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testBrowser", args.testBrowser)
+        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testArgs", args.testArguments)
+        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "gxsUsername", gxserverUSR)
+        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "gxsPassword", gxserverPWD)
     }
     String localUnitTestingPath = powershell script: "[System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\tests\\unit\")", returnStdout: true
-    msbuildGenArgs = concatArgs(msbuildGenArgs, "fullTestResultsFile", "${localUnitTestingPath.trim()}\\UnitTestResults.xml")
+    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "fullTestResultsFile", "${localUnitTestingPath.trim()}\\UnitTestResults.xml")
     bat label: "Running Tests:${args.testObjects}", 
         script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
     dir(localTestingPath) {
