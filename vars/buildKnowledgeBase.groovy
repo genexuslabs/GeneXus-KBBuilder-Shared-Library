@@ -14,34 +14,23 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
-    String target = " /t:BuildWithDB"
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "Generator", args.generator)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "DataSource", args.dataSource)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "rebuild", String.valueOf(args.forceRebuild))
-
-    //Java flags
-    if(args.generator == "Java") {
-        String jdkToolPath = tool name: args.jdkInstallationId, type: 'jdk'
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "JavaPath", jdkToolPath)
-        if(args.tomcatVersion) {
-            msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "TomcatVersionName", parseTomcatVersion(args.tomcatVersion))
-        }
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "ServletDir", "${args.localKBPath}\\${args.targetPath}\\web\\Deploy\\servlet")
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "StaticDir", "${args.localKBPath}\\${args.targetPath}\\web\\Deploy\\static")
-        if(args.jdbcLogPath) {
-            msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "JDBClogFile", args.jdbcLogPath)
-        }
-    }
-    // Android flag
-    if(Boolean.valueOf(args.genexusNeedAndroidSDK)) {
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "android", 'True')
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "androidSDKpath", "${args.genexusNeedAndroidSDK}")
-    }
-
     bat label: 'Build all', 
-        script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+
+            /p:Generator="${args.generator}" \
+            /p:DataSource="${args.dataSource}" \
+            /p:rebuild="${args.forceRebuild)}" \
+            /p:JavaPath="${args.javaPath}" \
+            /p:TomcatVersionName="${args.tomcatVersionName}" \
+            /p:ServletDir="${args.localKBPath}\\${args.targetPath}\\web\\Deploy\\servlet" \
+            /p:StaticDir="${args.localKBPath}\\${args.targetPath}\\web\\Deploy\\static" \
+            /p:JDBClogFile="${args.jdbcLogPath}" \
+            /p:androidSDKpath="${args.genexusNeedAndroidSDK}" \
+            /p:fullTestResultsFile= \
+            /t:BuildKnowledgeBase
+        """
 }

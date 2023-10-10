@@ -13,14 +13,13 @@ def call(Map args = [:]) {
     // Sync properties.msbuild
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
-
-    Boolean foundReorganization = false
-    String target = " /t:ApplyReorg"
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
-
-    bat label: "Apply reorganization", 
-        script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
+    
+    bat label: "Apply Reorganization",
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+            /t:ApplyReorg
+        """
 }

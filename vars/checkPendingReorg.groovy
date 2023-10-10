@@ -15,14 +15,15 @@ def call(Map args = [:]) {
     writeFile file: 'cdxci.msbuild', text: fileContents
 
     Boolean foundReorganization = false
-    String target = " /t:CheckReorgRequired"
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
     try {
         bat label: "Impact Analysis", 
-            script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
+            script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:environmentName="${args.environmentName}" \
+                /t:CheckReorgRequired
+            """
         echo "NOT found pending reorganization"
     } catch (error) {
         echo "Found pending reorganization"

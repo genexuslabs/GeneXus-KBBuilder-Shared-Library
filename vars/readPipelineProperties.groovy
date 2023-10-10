@@ -34,5 +34,9 @@ def call(Map args = [:]) {
     props.localKBPath = localKBPath.trim()
     echo "INFO KnowledgeBase:: ${localKBPath.trim()}"
 
+    String localUnitTestingPath = powershell script: "[System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\tests\\unit\")", returnStdout: true
+    props.localUnitTestPath = localUnitTestPath.trim()
+    echo "INFO localUnitTestPath:: ${localUnitTestPath.trim()}"
+
     return props
 }

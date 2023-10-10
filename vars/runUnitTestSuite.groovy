@@ -14,26 +14,21 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
-    Boolean foundReorganization = false
-    String target = " /t:TestObjTestSuite"
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
-    withCredentials([ usernamePassword(credentialsId: args.gxserverCredentials, passwordVariable: 'gxserverPWD', usernameVariable: 'gxserverUSR')]) {
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testObjectsList", args.testObjects)
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testBrowser", args.testBrowser)
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "testArgs", args.testArguments)
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "gxsUsername", gxserverUSR)
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "gxsPassword", gxserverPWD)
-    }
-    String localUnitTestingPath = powershell script: "[System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\tests\\unit\")", returnStdout: true
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "fullTestResultsFile", "${localUnitTestingPath.trim()}\\UnitTestResults.xml")
     bat label: "Running Tests:${args.testObjects}", 
-        script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+            /p:testObjectsList="${args.testObjects}" \
+            /p:testBrowser="${args.testBrowser}" \
+            /p:testArgs="${args.testArguments}" \
+            /p:gxsUsername="${args.gxserverUSR}" \
+            /p:gxsPassword="${args.gxserverPWD}" \
+            /p:fullTestResultsFile="${args.localUnitTestPath}\\UnitTestResults.xml" \
+            /t:TestObjTestSuite
+        """
     dir(localUnitTestingPath.trim()) {
         junit "UnitTestResults.xml"
     }
-
-    return foundReorganization
 }
