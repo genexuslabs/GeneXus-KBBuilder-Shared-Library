@@ -11,9 +11,9 @@
 
 def call(Map args = [:]) {
     def fileContents
+    fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
+    writeFile file: 'deleteGeneXusInstallation.ps1', text: fileContents
     if(Boolean.valueOf(args.forceUpdateGX)) {
-        fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
-        writeFile file: 'deleteGeneXusInstallation.ps1', text: fileContents
         powershell script: ".\\deleteGeneXusInstallation.ps1 -localAndroidSDKPath:'${args.localAndroidSDKPath}' -localGXPath:'${args.localGXPath}'"
     }
     fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/updateGeneXusInstallationByURI.ps1'

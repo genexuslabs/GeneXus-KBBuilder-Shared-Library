@@ -38,7 +38,7 @@
         <CloseKnowledgeBase/>
     </Target>
     
-    <Target Name="BuildWithDB" DependsOnTargets="OpenKB">
+    <Target Name="BuildKnowledgeBase" DependsOnTargets="OpenKB">
         <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>

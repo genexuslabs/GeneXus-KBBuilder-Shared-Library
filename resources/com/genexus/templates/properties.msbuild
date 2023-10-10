@@ -104,36 +104,6 @@
         -->
         <CloseKnowledgeBase/>
     </Target>
-
-    <Target Name="ReadCommiteableProperties">
-        <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <Delete Condition="Exists($(PropFileAbsolutePath))" Files='$(PropFileAbsolutePath)' />     
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines="{" />
-        <!-- Read Target Path -->
-        <GetEnvironmentProperty Name="TargetPath" >
-            <Output TaskParameter="PropertyValue" PropertyName="EnvTargetPath"/>
-        </GetEnvironmentProperty>
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines='"targetPath":"$(EnvTargetPath)",' />
-        <!-- Read Data Source -->
-        <GetEnvironmentProperty Name="DataSource" >
-            <Output TaskParameter="PropertyValue" PropertyName="EnvDataSource"/>
-        </GetEnvironmentProperty>
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines='"dataSource":"$(EnvDataSource)",' />
-        <!-- Read Generator Language -->
-        <GetEnvironmentProperty Name="GeneratedLanguage" >
-            <Output TaskParameter="PropertyValue" PropertyName="EnvGenerator"/>
-        </GetEnvironmentProperty>
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines='"generator":"$(EnvGenerator)",' />
-        <!-- IF Java ->> Read Java Package Name -->
-        <GetGeneratorProperty Condition="'$(EnvGenerator)' == 'Java'" Name="Java Package Name" > 
-            <Output TaskParameter="PropertyValue" PropertyName="JavaPackageName"/> 
-        </GetGeneratorProperty> 
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines='"javaPackageName":"$(JavaPackageName)"' />
-              
-        <WriteLinesToFile File="$(PropFileAbsolutePath)" Lines="}" />
-		<CloseKnowledgeBase/>
-    </Target>
     
     <Target Name="CloseKB">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
