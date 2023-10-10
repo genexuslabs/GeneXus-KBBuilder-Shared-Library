@@ -36,7 +36,7 @@ def call(Map args = [:]) {
 
     String localUnitTestingPath = powershell script: "[System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\tests\\unit\")", returnStdout: true
     props.localUnitTestPath = localUnitTestingPath.trim()
-    echo "INFO localUnitTestPath:: ${localUnitTestPath.trim()}"
+    echo "INFO localUnitTestPath:: ${localUnitTestingPath.trim()}"
 
     return props
 }
