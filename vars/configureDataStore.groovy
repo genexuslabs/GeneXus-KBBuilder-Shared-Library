@@ -14,12 +14,12 @@
 def call(Map args = [:]) {
     // Sync properties.msbuild
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
-    writeFile file: 'cdxci.msbuild', text: fileContents
+    writeFile file: 'properties.msbuild', text: fileContents
 
     withCredentials([usernamePassword(credentialsId: args.storageDBCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
         bat label: "Configure Storage Datastore", 
             script: """
-                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.localGXPath}" \
                 /p:localKbPath="${args.localKBPath}" \
                 /p:environmentName="${args.environmentName}" \

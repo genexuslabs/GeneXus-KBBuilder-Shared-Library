@@ -14,12 +14,12 @@
 def call(Map args = [:], String dataStoreName) {
     // Sync properties.msbuild
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
-    writeFile file: 'cdxci.msbuild', text: fileContents
+    writeFile file: 'properties.msbuild', text: fileContents
 
     withCredentials([usernamePassword(credentialsId: args.gxflowDBCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
         bat label: "Configure GAM Datastore", 
             script: """
-                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.localGXPath}" \
                 /p:localKbPath="${args.localKBPath}" \
                 /p:environmentName="${args.environmentName}" \
