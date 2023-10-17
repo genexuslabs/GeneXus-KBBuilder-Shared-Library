@@ -16,7 +16,7 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
-    withCredentials([usernamePassword(credentialsId: datastoreCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
+    withCredentials([usernamePassword(credentialsId: args.gamDBCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
         bat label: "Configure GAM Datastore", 
             script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
@@ -25,10 +25,10 @@ def call(Map args = [:]) {
                 /p:environmentName="${args.environmentName}" \
                 /p:generator="${args.generator}" \
                 /p:dataSource="${args.dataSource}" \
-                /p:dataStoreName="${args.dataStoreName}" \
+                /p:dataStoreName="GAM" \
                 /p:dbName="${args.gamDBName}" \
                 /p:dbServerName="${args.gamDBServer}" \
-                /p:dbServerPort="${args.gamDBServerPort}\\UnitTestResults.xml" \
+                /p:dbServerPort="${args.gamDBServerPort}" \
                 /p:dbServerUser="${username}" \
                 /p:dbServerPass="${password}" \
                 /t:ConfigureDataStore
