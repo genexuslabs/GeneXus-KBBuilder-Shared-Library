@@ -13,7 +13,7 @@
 
 def call(Map args = [:]) {
     // Sync properties.msbuild
-    def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+    def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
     writeFile file: 'properties.msbuild', text: fileContents
 
     withCredentials([usernamePassword(credentialsId: args.gamDBCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
