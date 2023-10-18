@@ -20,7 +20,7 @@ def call(Map args = [:]) {
             /p:GX_PROGRAM_DIR="${args.localGXPath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
-            /p:rebuild="${args.forceRebuild)}" \
+            /p:rebuild="${args.forceRebuild}" \
             /t:BuildConfigurationEnv
         """
 }
