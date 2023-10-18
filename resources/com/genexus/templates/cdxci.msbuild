@@ -9,50 +9,41 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
-        <Message Text="BuildWithDB" />
+        <Message Text="BuildConfigurationEnv" />
         <Message Text="BuildWithNoDB" />
     </Target>
 
-    <Target Name="OpenKB">
+    <Target Name="BuildConfigurationEnv">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <!-- Java properties -->
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="servlet directory" Value="$(ServletDir)" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="static content directory seen from client" Value="$(StaticDir)" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Compiler Path" Value="$(JavaPath)\javac.exe" />
-        <SetDataStoreProperty Condition="'$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Interpreter Path" Value="$(JavaPath)\java.exe" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="JDK_DIR_JAVA" Value="$(JavaPath)\..\" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(TomcatVersionName) != ''" Generator="Default" Name="TOMCAT_VERSION" Value="$(TomcatVersionName)" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="Log JDBC Activity" Value="Yes" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) == ''" Generator="Default" Name="Log JDBC Activity" Value="No" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="JDBC log file" Value="$(JDBClogFile)" />
-        
-        <!-- Performance properties -->
-        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
-        <SetGeneratorProperty Condition="'$(android)'=='True'" Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
-    </Target>
-
-    <Target Name="CustomBuild" DependsOnTargets="OpenKB">
-        <CustomBuild Name="$(customBuildName)" ContinueOnError="ErrorAndContinue" />
-        <CloseKnowledgeBase/>
-    </Target>
-    
-    <Target Name="BuildKnowledgeBase" DependsOnTargets="OpenKB">
-        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
-        <CloseKnowledgeBase/>
-    </Target>
-
-    <Target Name="BuildWithNoDB"  DependsOnTargets="OpenKB">
-        <SetEnvironmentProperty Name="Populate Data" Value="True" />
-        <!-- Hago un set para saber cual es, no lo puedo leer, el msbuild no me devuelve datos -->
         <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
         <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
         <SetEnvironmentProperty Name="Populate Data" Value="false" />
         <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="No" />
+        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
         <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
+
+    <Target Name="CustomBuild">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <CustomBuild Name="$(customBuildName)" ContinueOnError="ErrorAndContinue" />
+        <CloseKnowledgeBase/>
+    </Target>
+    
+    <Target Name="BuildInstallationEnv">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <SetEnvironmentProperty Name="Keep GAM database updated" Value="true" />
+        <SetEnvironmentProperty Name="Deploy business processes on build" Value="Yes" />
+        <SetEnvironmentProperty Name="Populate Data" Value="true" />
+        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="Yes" />
+        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
+        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
+
 
     <Target Name="TestObjTestSuite">
         <OpenKnowledgeBase Directory="$(localKbPath)" />

@@ -9,8 +9,11 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
-        <Message Text="BuildWithDB" />
-        <Message Text="BuildWithNoDB" />
+        <Message Text="ConfigureDataStore" />
+        <Message Text="SetJavaEnvProperties" />
+        <Message Text="ConfigureAndroidSDKPath" />
+        <Message Text="SetMobileCompilationMode" />
+        <Message Text="CloseKB" />
     </Target>
 
     <Target Name="ConfigureDataStore">
@@ -37,55 +40,42 @@
         <SetDataStoreProperty Condition="'$(dataStoreName)'=='Default' AND '$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
     </Target>
 
-    <Target Name="ConfigureEmptyGXFlowDatastore">
-        <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <SetDataStoreProperty DataStore="GXFLOW" Name="Database name" Value="DBNoExistente" />
-		<CloseKnowledgeBase/>
-    </Target>
-
-    <Target Name="ConfigureAWSStorageProvider">
-        <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Provider" Value="$(Provider)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Access Key ID" Value="$(AWSAccessKey)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Secret Access Key" Value="$(AWSSecretKey)" />
-        <SetGeneratorProperty Generator="Default" Name="Bucket Name" Value="$(Bucket)" />
-        <SetGeneratorProperty Generator="Default" Name="Folder Name" Value="$(Folder)" />
-        <SetGeneratorProperty Generator="Default" Name="Privacy" Value="$(Public)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Region" Value="$(Region)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Endpoint" Value="$(EndpointType)" />
-        <SetGeneratorProperty Generator="Default" Name="Storage Custom Endpoint" Value="$(Endpoint)" />
-        <CloseKnowledgeBase/>
-    </Target>
-
-    <Target Name="OpenKB">
+    <Target Name="SetJavaEnvProperties">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
         <!-- Java properties -->
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="servlet directory" Value="$(ServletDir)" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="static content directory seen from client" Value="$(StaticDir)" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Compiler Path" Value="$(JavaPath)\javac.exe" />
-        <SetDataStoreProperty Condition="'$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="Interpreter Path" Value="$(JavaPath)\java.exe" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java'" Generator="Default" Name="JDK_DIR_JAVA" Value="$(JavaPath)\..\" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(TomcatVersionName) != ''" Generator="Default" Name="TOMCAT_VERSION" Value="$(TomcatVersionName)" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="Log JDBC Activity" Value="Yes" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) == ''" Generator="Default" Name="Log JDBC Activity" Value="No" />
-        <SetGeneratorProperty Condition="'$(Generator)'=='Java' AND $(JDBClogFile) != ''" Generator="Default" Name="JDBC log file" Value="$(JDBClogFile)" />
-        
-        <!-- Performance properties -->
-        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
-        <SetGeneratorProperty Condition="'$(android)'=='True'" Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
+        <SetGeneratorProperty Generator="Default" Name="servlet directory" Value="$(ServletDir)" />
+        <SetGeneratorProperty Generator="Default" Name="static content directory seen from client" Value="$(StaticDir)" />
+        <SetGeneratorProperty Generator="Default" Name="Compiler Path" Value="$(JavaPath)\javac.exe" />
+        <SetDataStoreProperty DataStore="Default" Name="Use custom JDBC URL" Value="False" />
+        <SetGeneratorProperty Generator="Default" Name="Interpreter Path" Value="$(JavaPath)\java.exe" />
+        <SetGeneratorProperty Generator="Default" Name="JDK_DIR_JAVA" Value="$(JavaPath)\..\" ContinueOnError="WarnAndContinue"/>
+        <SetGeneratorProperty Condition="$(TomcatVersionName) != ''" Generator="Default" Name="TOMCAT_VERSION" Value="$(TomcatVersionName)" ContinueOnError="WarnAndContinue"/>
+        <SetGeneratorProperty Condition="$(JDBClogFile) == ''" Generator="Default" Name="Log JDBC Activity" Value="No" />
+        <SetGeneratorProperty Condition="$(JDBClogFile) != ''" Generator="Default" Name="Log JDBC Activity" Value="Yes" />
+        <SetGeneratorProperty Condition="$(JDBClogFile) != ''" Generator="Default" Name="JDBC log file" Value="$(JDBClogFile)" />
 		<CloseKnowledgeBase/>
     </Target>
 
-    <Target Name="SetAngularServicesURL">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-        <SetGeneratorProperty Generator="Frontend" Name="Services URL" Value="$(httpServicesURL)"/>
-        <CloseKnowledgeBase/>
-	</Target>
-    
+    <Target Name="ConfigureAndroidSDKPath">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <!-- 
+        START TRUNK
+        <HasGenerator GeneratorName="Frontend">
+            <Output TaskParameter="Found" PropertyName="GeneratorFound" />
+            <Output TaskParameter="GeneratorType" PropertyName="GeneratorType" />
+            <Output TaskParameter="UserInterface" PropertyName="GeneratorUserInterface" />
+            <Output TaskParameter="Language" PropertyName="GeneratorLanguage" />
+        </HasGenerator>
+        <Message Text="The generator with name 'Frontend' was not found" Condition=" '$(GeneratorFound)' == 'false' " Importance="high" />
+        <Message Text="The generator with name 'Frontend' was found, is of type '$(GeneratorType)', generates '$(GeneratorLanguage)' for '$(GeneratorUserInterface)'" Condition=" '$(GeneratorFound)' == 'true' " Importance="high" />
+        <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
+        END TRUNK
+        -->
+        <SetGeneratorProperty Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
+		<CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="SetMobileCompilationMode">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetGeneratorProperty Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" ContinueOnError="WarnAndContinue"/> 
