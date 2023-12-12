@@ -16,6 +16,17 @@
         <Message Text="CloseKB" />
     </Target>
 
+    <Target Name="AvoidDatastoreConnections">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
+        <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
+        <SetEnvironmentProperty Name="Populate Data" Value="false" />
+        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="No" />
+        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
+        <CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="ConfigureDataStore">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(environmentName)" />

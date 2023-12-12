@@ -13,17 +13,6 @@
         <Message Text="BuildWithNoDB" />
     </Target>
 
-    <Target Name="BuildConfigurationEnv">
-        <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
-        <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
-        <SetEnvironmentProperty Name="Populate Data" Value="false" />
-        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="No" />
-        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
-        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
-        <CloseKnowledgeBase/>
-    </Target>
 
     <Target Name="CustomBuild">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
@@ -31,14 +20,8 @@
         <CloseKnowledgeBase/>
     </Target>
     
-    <Target Name="BuildInstallationEnv">
+    <Target Name="BuildEnvironment">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <SetEnvironmentProperty Name="Keep GAM database updated" Value="true" />
-        <SetEnvironmentProperty Name="Deploy business processes on build" Value="Yes" />
-        <SetEnvironmentProperty Name="Populate Data" Value="true" />
-        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="Yes" />
-        <SetGeneratorProperty Generator="Default" Name="deploy to cloud" Value="No" />
         <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
