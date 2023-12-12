@@ -26,8 +26,6 @@
         <CloseKnowledgeBase/>
     </Target>
 
-
-
     <Target Name="TestObjTestSuite">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
@@ -103,19 +101,19 @@
 
     <Target Name="PackageGXModule">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-        <Message Text="Packaging Module:$(PackageModuleName)"/>
-        <GetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion">
+        <Message Text="Packaging Module:$(packageModuleName)"/>
+        <GetObjectProperty Object="Module:$(packageModuleName)" Name="ModuleVersion">
             <Output TaskParameter="PropertyValue" PropertyName="ModuleVersionValue" />
         </GetObjectProperty>
         <Message Text="Read ModuleVersion::$(ModuleVersionValue)" />
-        <SetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion" Value="$(ModuleVersionValue)+$(PipelineBuildNumber)" />
-        <Message Text="Packaging Module Version:$(ModuleVersionValue)+$(PipelineBuildNumber)" />
+        <SetObjectProperty Object="Module:$(packageModuleName)" Name="ModuleVersion" Value="$(ModuleVersionValue)+$(pipelineBuildNumber)" />
+        <Message Text="Packaging Module Version:$(ModuleVersionValue)+$(pipelineBuildNumber)" />
 		<ItemGroup>
-			<EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
-			<EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
-			<EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
+			<EnvToPackage Include="$(csharpEnvName)" Condition="$(csharpEnvName) != '' "/>
+			<EnvToPackage Include="$(javaEnvName)" Condition="$(javaEnvName) != '' "/>
+			<EnvToPackage Include="$(netCoreEnvName)" Condition="$(netCoreEnvName) != '' "/>
 		</ItemGroup>
-		<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
+		<PackageModule ModuleName="$(packageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(destinationPath)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
 
