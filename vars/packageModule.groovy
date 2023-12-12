@@ -14,7 +14,7 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
     
-    def moduleTargetPath = "${args.localKBPath}\\IntegrationModule\\${packageModuleName}\\${buildJobNumber}"
+    def moduleTargetPath = "${args.localKBPath}\\IntegrationModule\\${args.packageModuleName}\\${args.buildJobNumber}"
 
     bat label: "Apply Reorganization",
         script: """
