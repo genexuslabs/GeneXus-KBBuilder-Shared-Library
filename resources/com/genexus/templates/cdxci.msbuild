@@ -106,8 +106,10 @@
             <Output TaskParameter="PropertyValue" PropertyName="ModuleVersionValue" />
         </GetObjectProperty>
         <Message Text="Read ModuleVersion::$(ModuleVersionValue)" />
+        <!--
         <SetObjectProperty Object="Module:$(packageModuleName)" Name="ModuleVersion" Value="$(ModuleVersionValue)+$(pipelineBuildNumber)" />
         <Message Text="Packaging Module Version:$(ModuleVersionValue)+$(pipelineBuildNumber)" />
+        -->
 		<ItemGroup>
 			<EnvToPackage Include="$(csharpEnvName)" Condition="$(csharpEnvName) != '' "/>
 			<EnvToPackage Include="$(javaEnvName)" Condition="$(javaEnvName) != '' "/>
