@@ -8,7 +8,6 @@ param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $protectionServerName,
-    [Parameter(Mandatory=$True)]
     [string] $protectionServerUser
 )
 $ErrorActionPreference="Stop"

@@ -20,12 +20,16 @@ def call(Map args = [:]) {
     writeFile file: 'updateGeneXusInstallationByURI.ps1', text: fileContents
     powershell script: ".\\updateGeneXusInstallationByURI.ps1 -genexusURI:'${args.genexusURI}' -localAndroidSDKPath:'${args.localAndroidSDKPath}' -localGXPath:'${args.localGXPath}'"
 
-    withCredentials([
-        usernamePassword(credentialsId: "${args.protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
-    ]) {
-        fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configProtectionServer.ps1'
-        writeFile file: 'configProtectionServer.ps1', text: fileContents
-        powershell script: ".\\configProtectionServer.ps1 -protectionServerType:'${args.protServerType}' -protectionServerName:'${args.protServerName}' -protectionServerUser:'${protectionServerUser}' -localGXPath:'${args.localGXPath}'"
+    fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configProtectionServer.ps1'
+    writeFile file: 'configProtectionServer.ps1', text: fileContents
+    if(args.protServerCredentialsId) {
+        withCredentials([
+            usernamePassword(credentialsId: "${args.protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
+        ]) {
+            powershell script: ".\\configProtectionServer.ps1 -protectionServerType:'${args.protServerType}' -protectionServerName:'${args.protServerName}' -protectionServerUser:'${protectionServerUser}' -localGXPath:'${args.localGXPath}'"
+        }
+    } else {
+            powershell script: ".\\configProtectionServer.ps1 -protectionServerType:'${args.protServerType}' -protectionServerName:'${args.protServerName}' -localGXPath:'${args.localGXPath}'"
     }
     
     fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/getGeneXusInstallationVersion.ps1'
