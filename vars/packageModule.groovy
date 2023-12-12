@@ -16,12 +16,10 @@ def call(Map args = [:]) {
     
     def moduleTargetPath = "${args.localKBPath}\\IntegrationModule\\${args.packageModuleName}\\${args.buildJobNumber}"
 
-    bat label: "Apply Reorganization",
-        script: """
+    bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
             /p:GX_PROGRAM_DIR="${args.localGXPath}" \
             /p:localKbPath="${args.localKBPath}" \
-            /p:environmentName="${args.environmentName}" \
             /p:packageModuleName="${args.packageModuleName}" \
             /p:pipelineBuildNumber="${args.buildJobNumber}" \
             /p:csharpEnvName="${args.csharpEnvName}" \
