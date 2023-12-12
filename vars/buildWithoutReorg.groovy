@@ -16,7 +16,7 @@ def call(Map args = [:]) {
     writeFile file: 'cdxci.msbuild', text: fileContents
 
     
-    def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+    fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
     writeFile file: 'properties.msbuild', text: fileContents
 
     bat label: 'Avoid Datastore connections', 
