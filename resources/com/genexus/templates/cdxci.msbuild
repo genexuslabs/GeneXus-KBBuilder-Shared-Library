@@ -20,7 +20,7 @@
         <CloseKnowledgeBase/>
     </Target>
     
-    <Target Name="BuildEnvironment">
+    <Target Name="BuildConfigurationEnv">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
