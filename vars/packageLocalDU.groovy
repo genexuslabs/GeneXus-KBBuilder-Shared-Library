@@ -17,7 +17,6 @@ def call(Map args = [:]) {
             /p:GX_PROGRAM_DIR="${args.localGXPath}" \
             /p:TargetId="LOCAL" \
             /p:KBPath="${args.localKBPath}" \
-            /p:KBVersion="${args.gxserverVersion}" \
             /p:KBEnvironment="${args.environmentName}" \
             /p:DeploymentUnit="${args.duName}" \
             /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
