@@ -20,6 +20,7 @@ def call(Map args = [:]) {
     writeFile file: 'updateGeneXusInstallationByURI.ps1', text: fileContents
     powershell script: ".\\updateGeneXusInstallationByURI.ps1 -genexusURI:'${args.genexusURI}' -localAndroidSDKPath:'${args.localAndroidSDKPath}' -localGXPath:'${args.localGXPath}'"
 
+    /*
     fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configProtectionServer.ps1'
     writeFile file: 'configProtectionServer.ps1', text: fileContents
     if(args.protServerCredentialsId) {
@@ -31,6 +32,7 @@ def call(Map args = [:]) {
     } else {
             powershell script: ".\\configProtectionServer.ps1 -protectionServerType:'${args.protServerType}' -protectionServerName:'${args.protServerName}' -localGXPath:'${args.localGXPath}'"
     }
+    */
     
     fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/getGeneXusInstallationVersion.ps1'
     writeFile file: 'getGeneXusInstallationVersion.ps1', text: fileContents
