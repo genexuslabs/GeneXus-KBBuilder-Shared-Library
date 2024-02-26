@@ -35,6 +35,6 @@ def call(Map args = [:]) {
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
             /p:rebuild="${args.forceRebuild}" \
-            /t:BuildEnvironment
+            /t:BuildConfigurationEnv
         """
 }
