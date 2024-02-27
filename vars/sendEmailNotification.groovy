@@ -26,7 +26,7 @@ String createTemplate(String templateName, def params) {
 def call(Map args = [:]) {
     try {
         def engine2 = new NotificationHelper()
-        def changeLogSet = engine2.getChangeLogSet(currentBuild)
+        def changeLogSet = engine2.getChangeLogSet()
         def icon
         String template
         String templateName
