@@ -122,8 +122,8 @@ def call(Map args = [:]) {
         emailext body: template,
             mimeType: 'text/html',
             subject: "${icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
-            to: "${notificationAction.to}",
-            replyTo: "${notificationAction.to}",
+            to: "jalbarellos@genexus.com",
+            replyTo: "jalbarellos@genexus.com",
             attachLog: true
     } catch (error) {
         currentBuild.result = 'FAILURE'
