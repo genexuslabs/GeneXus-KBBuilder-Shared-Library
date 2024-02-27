@@ -89,7 +89,8 @@ def call(Map args = [:]) {
             to: "jalbarellos@genexus.com",
             replyTo: "jalbarellos@genexus.com",
             attachLog: true
-    } catch (error) {
+
+    } catch (def error) {
         currentBuild.result = 'FAILURE'
         throw error
     }
