@@ -80,7 +80,7 @@ def call(Map args = [:]) {
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
             "changeLogSet"      :   changeLogSet,
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
-            "gxversion"         :   gxVersion
+            "gxversion"         :   "18.0.0.0"//gxVersion
         ]);
 
         emailext body: template,
