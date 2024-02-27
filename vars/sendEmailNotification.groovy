@@ -1,4 +1,5 @@
 import groovy.text.StreamingTemplateEngine
+import com.genexus.NotificationHelper
 
 /**
  * This method
@@ -10,44 +11,6 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-/**
- * This methods 
- * @param 
- */
-@NonCPS 
-String getChangeLogSet() {
-    String revisions = ""
-    def changeLogSets = currentBuild.changeSets
-    if(changeLogSets.size() != 0) {
-        Boolean isEven = false
-        for (def entry in changeLogSets) {
-            for (def revision in entry.items) {
-                def date = new Date(revision.timestamp)
-                if(isEven) { revisions += "<tr class=\"revisions-even\">" }
-                else { revisions += "<tr class=\"revisions-odd\">" }
-                isEven = !(isEven)
-                revisions +="<th class=\"revision-item\">${revision.commitId.toString()}</th>"
-                revisions +="<th class=\"revision-item\" style=\"width:240px;\">${date.toString()}</th>"
-                revisions +="<th class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${revision.author.toString()}</th>"
-                revisions +="<th class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${revision.msg.toString()}</th>"
-                def count = 0
-                def files = new ArrayList(revision.affectedFiles)
-                for (def file in files) {
-                //    echo " ${file.editType.name} ${file.path}"
-                    count += 1
-                }
-                revisions +="<th class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${count.toString()} Files</th>"
-                revisions += "</tr>"
-            }
-        }
-    }
-    else {
-        revisions += "<tr class=\"revisions-even\">"
-        revisions +="<th class=\"revision-item\">No changes</th>"
-        revisions += "</tr>"
-    }
-    return revisions
-}
 
 /*
  * Job readPipelineProperties >> Read properties from build.properties
@@ -62,7 +25,8 @@ String getChangeLogSet() {
 
 def call(Map args = [:]) {
     try {
-        def changeLogSet = getChangeLogSet(currentBuild)
+        def engine2 = new NotificationHelper()
+        def changeLogSet = engine2.getChangeLogSet(currentBuild)
         def icon
         String template
         String templateName

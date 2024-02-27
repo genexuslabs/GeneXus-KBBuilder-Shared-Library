@@ -16,9 +16,9 @@ String createTemplate(String templateName, def params) {
  * @param 
  */
 @NonCPS 
-String getChangeLogSet(def currentBuildDefinition) {
+String getChangeLogSet() {
     String revisions = ""
-    def changeLogSets = currentBuildDefinition.changeSets
+    def changeLogSets = currentBuild.changeSets
     if(changeLogSets.size() != 0) {
         Boolean isEven = false
         for (def entry in changeLogSets) {
