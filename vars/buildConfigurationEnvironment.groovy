@@ -24,7 +24,7 @@ def call(Map args = [:]) {
     bat label: 'Avoid Datastore connections', 
         script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
             /t:AvoidDatastoreConnections
@@ -33,7 +33,7 @@ def call(Map args = [:]) {
     bat label: 'Build all', 
         script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
             /p:rebuild="${args.forceRebuild}" \
