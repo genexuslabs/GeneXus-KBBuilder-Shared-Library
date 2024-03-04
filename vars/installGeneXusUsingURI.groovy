@@ -10,10 +10,9 @@
  */
 
 import com.genexus.GeneXusHelper
-def helper = new GeneXusHelper()
 
 def call(Map args = [:]) {
-    def fileContents
+    def helper = new GeneXusHelper()
     if(Boolean.valueOf(args.forceUpdateGX)) {
         helper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
     }
