@@ -1,5 +1,5 @@
 /*
- * Job applyReorganization >> This method executes the task 'Reorganize'
+ * Job applyReorganization >> This methos executes the 'Reorganize' task
  *
  * @Param args = [:]
  * +- gxBasePath
@@ -18,7 +18,6 @@ def call(Map args = [:]) {
         /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
         /p:localKbPath="${args.localKBPath}" \
         /p:environmentName="${args.environmentName}" \
-        /p:moduleName="${args.moduleName}" \
         /t:ApplyReorg
     """
 }
