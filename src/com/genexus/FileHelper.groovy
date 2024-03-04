@@ -24,9 +24,7 @@ String joinPath(String a, String b) {
  */
 String getFullPath(String auxPath) {
     try {
-        echo "auxPath::${auxPath}"
-
-        def absolutePath = powershell script: "[System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\${auxPath}\")", returnStdout: true
+        def absolutePath = powershell script: "[System.IO.Path]::GetFullPath(\"${auxPath}\")", returnStdout: true
         return absolutePath.trim()
     } catch (error) {
         currentBuild.result = 'FAILURE'
