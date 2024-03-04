@@ -1,13 +1,13 @@
 /*
- * Job installGeneXusUsingURI >> 
- *                              1. IF [forceUpdateGX] >> DELETE GX INSTALLATION
- *                              2. COMPARE [genexusURI] WITH [gxBasePath]\\LastURI.txt
- *                              -- 2.1. UPDATE [gxBasePath] FROM [genexusURI]
- *                              -- 2.2. CONFIG ProgramData and UserData DIRECTORIES
- *                              -- 2.3. RUN [gxBasePath]\\install
- *                              -- 2.4. IF [localAndroidSDKPath] DOWNLOAD USING [gxBasePath]\Android\Setup\AndroidRequirements.exe
- *                              3. CONFIGURE [protServerType], [protServerName], [protServerCredentialsId]
- *                              4. PRINT GENEXUS VERSION
+ * Job installGeneXusUsingURI:
+ * -- >> IF [forceUpdateGX] >> DELETE GX INSTALLATION
+ * -- >> COMPARE [genexusURI] WITH [gxBasePath]\\LastURI.txt
+ * -- -- >> UPDATE [gxBasePath] FROM [genexusURI]
+ * -- -- >> CONFIG ProgramData and UserData DIRECTORIES
+ * -- -- >> RUN [gxBasePath]\\install
+ * -- -- >> IF [localAndroidSDKPath] DOWNLOAD USING [gxBasePath]\Android\Setup\AndroidRequirements.exe
+ * -- >> CONFIGURE [protServerType], [protServerName], [protServerCredentialsId]
+ * -- >> PRINT GENEXUS VERSION
  *
  * @Param args = [:]
  * +- forceUpdateGX

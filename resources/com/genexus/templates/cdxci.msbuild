@@ -9,8 +9,17 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
-        <Message Text="BuildWithDB" />
-        <Message Text="BuildWithNoDB" />
+        <Message Text="BuildConfigurationEnv" />
+        <Message Text="CustomBuild" />
+        <Message Text="UpdateInstalledModule" />
+        <Message Text="TestObjTestSuite" />
+        <Message Text="TestUIObj" />
+        <Message Text="CheckReorgRequired" />
+        <Message Text="UpdateInstallationModel" />
+        <Message Text="ApplyReorg" />
+        <Message Text="PackageGXModule" />
+        <Message Text="PublishGXModule" />
+        <Message Text="CloseKB" />
     </Target>
 
     <Target Name="OpenKB">
@@ -33,26 +42,22 @@
         <SetGeneratorProperty Condition="'$(android)'=='True'" Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
     </Target>
 
+    <Target Name="BuildConfigurationEnv">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
+        <CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="CustomBuild" DependsOnTargets="OpenKB">
         <CustomBuild Name="$(customBuildName)" ContinueOnError="ErrorAndContinue" />
         <CloseKnowledgeBase/>
     </Target>
     
-    <Target Name="BuildWithDB" DependsOnTargets="OpenKB">
-        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
+    <Target Name="UpdateInstalledModule">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
-    </Target>
-
-    <Target Name="BuildWithNoDB"  DependsOnTargets="OpenKB">
-        <SetEnvironmentProperty Name="Populate Data" Value="True" />
-        <!-- Hago un set para saber cual es, no lo puedo leer, el msbuild no me devuelve datos -->
-        <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
-        <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
-        <SetEnvironmentProperty Name="Populate Data" Value="false" />
-        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="No" />
-        <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
-        <CloseKnowledgeBase/>
-    </Target>
+	</Target>
 
     <Target Name="TestObjTestSuite">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
@@ -117,12 +122,6 @@
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
 		<Reorganize ContinueOnError="ErrorAndContinue"/>
-        <CloseKnowledgeBase/>
-	</Target>
-
-    <Target Name="UpdateInstalledModule">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
 	</Target>
 
