@@ -39,9 +39,9 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
         withCredentials([
             usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
         ]) {
-            fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configProtectionServer.ps1'
-            writeFile file: 'configProtectionServer.ps1', text: fileContents
-            powershell script: ".\\configProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
+            fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
+            writeFile file: 'configureProtectionServer.ps1', text: fileContents
+            powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
