@@ -10,16 +10,16 @@
  */
 
 import com.genexus.GeneXusHelper
-def genexus = new GeneXusHelper()
+def helper = new GeneXusHelper()
 
 def call(Map args = [:]) {
     def fileContents
     if(Boolean.valueOf(args.forceUpdateGX)) {
-        genexus.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
+        helper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
     }
-    genexus.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath)
+    helper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath)
 
-    genexus.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
-    
-    genexus.getGeneXusInstallationVersion(args.gxBasePath)
+    helper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
+
+    helper.getGeneXusInstallationVersion(args.gxBasePath)
 }
