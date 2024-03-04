@@ -120,7 +120,7 @@
         <CloseKnowledgeBase/>
 	</Target>
 
-    <Target Name="UpdateToLatest">
+    <Target Name="UpdateInstalledModule">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
