@@ -7,7 +7,7 @@ param (
     [string] $msbuildScript,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $localGXPath,
+    [string] $gxBasePath,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $localKBPath,
@@ -21,13 +21,13 @@ param (
 $ErrorActionPreference="Stop"
 Write-Output((Get-Date -Format G) + " INFO input msbuildExePath::$msbuildExePath")
 Write-Output((Get-Date -Format G) + " INFO input msbuildScript::$msbuildScript")
-Write-Output((Get-Date -Format G) + " INFO input localGXPath::$localGXPath")
+Write-Output((Get-Date -Format G) + " INFO input gxBasePath::$gxBasePath")
 Write-Output((Get-Date -Format G) + " INFO input localKBPath::$localKBPath")
 Write-Output((Get-Date -Format G) + " INFO input environmentName::$environmentName")
 Write-Output((Get-Date -Format G) + " INFO input propertiesFilePath::$propertiesFilePath")
 #
 $target = " /t:ReadCommiteableProperties"
-$msbuildGenArgs = " /p:GX_PROGRAM_DIR=`"$localGXPath`""
+$msbuildGenArgs = " /p:GX_PROGRAM_DIR=`"$gxBasePath`""
 $msbuildGenArgs += " /p:localKbPath=`"$localKBPath`""
 $msbuildGenArgs += " /p:EnvironmentName=`"$environmentName`""
 $msbuildGenArgs += " /p:PropFileAbsolutePath=`"$propertiesFilePath`""

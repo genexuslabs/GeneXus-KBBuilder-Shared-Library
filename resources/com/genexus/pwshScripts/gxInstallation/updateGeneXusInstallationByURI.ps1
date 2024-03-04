@@ -1,7 +1,7 @@
 param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $localGXPath,
+    [string] $gxBasePath,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $genexusURI,
@@ -12,8 +12,8 @@ param (
 $ErrorActionPreference="Stop"
 #
 $flag = $true
-$lastURIFilePath = "$localGXPath\lastURI.txt"
-if(Test-Path -Path "$localGXPath") {
+$lastURIFilePath = "$gxBasePath\lastURI.txt"
+if(Test-Path -Path "$gxBasePath") {
     if(Test-Path -Path "$lastURIFilePath") {
         $lastURI = Get-Content $lastURIFilePath
         if ($lastURI -eq $genexusURI) {
@@ -22,8 +22,8 @@ if(Test-Path -Path "$localGXPath") {
     }
 }
 if ($flag) {
-	Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $localGXPath $localAndroidSDKPath}
-    $null = New-Item -Path "$localGXPath" -ItemType directory
+	Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $gxBasePath $localAndroidSDKPath}
+    $null = New-Item -Path "$gxBasePath" -ItemType directory
     $tempDir = [System.IO.Path]::GetTempPath()
     [string] $guid = [System.Guid]::NewGuid()
     $blZip = Join-Path -Path $tempDir -ChildPath $guid".zip"
@@ -32,19 +32,19 @@ if ($flag) {
     $clnt.DownloadFile("$genexusURI", $blZip)
 
     Write-Output((Get-Date -Format G) + " INFO unziping gx-bl")
-    Expand-Archive -LiteralPath $blZip -DestinationPath "$localGXPath" -Force
+    Expand-Archive -LiteralPath $blZip -DestinationPath "$gxBasePath" -Force
     #Mover sub carpeta al raiz si existe serchgxfile
     $serchGxFile="Artech.Common.dll"
-    $auxDirs = Get-ChildItem -Path "$localGXPath"  | Where-Object { $_.Name.StartsWith($serchGxFile)}
+    $auxDirs = Get-ChildItem -Path "$gxBasePath"  | Where-Object { $_.Name.StartsWith($serchGxFile)}
     if ($auxDirs -eq $null) {
-        $dirs = Get-ChildItem -Directory -Path "$localGXPath" 
+        $dirs = Get-ChildItem -Directory -Path "$gxBasePath" 
         foreach($i in $dirs)
         {
-            $auxDirs = Get-ChildItem -Path "$localGXPath\$i" | Where-Object { $_.Name.StartsWith($serchGxFile)}
+            $auxDirs = Get-ChildItem -Path "$gxBasePath\$i" | Where-Object { $_.Name.StartsWith($serchGxFile)}
             #MOVER  Todo de $i a current 
             if ($auxDirs -ne $null) {
-                Get-Item -Path "$localGXPath\$i\*" | Move-Item -destination "$localGXPath"
-                Remove-Item -Path "$localGXPath\$i" 
+                Get-Item -Path "$gxBasePath\$i\*" | Move-Item -destination "$gxBasePath"
+                Remove-Item -Path "$gxBasePath\$i" 
                 break;
             }
         }
@@ -52,12 +52,12 @@ if ($flag) {
     Write-Output((Get-Date -Format G) + " Remove genexus.zip")
     Remove-Item -Path $blZip -Recurse
 
-    $gxExeConfigPath = "$localGXPath\GeneXus.exe.config"
-    $relativeProgramDataPath = "$localGXPath\..\ProgramData"
+    $gxExeConfigPath = "$gxBasePath\GeneXus.exe.config"
+    $relativeProgramDataPath = "$gxBasePath\..\ProgramData"
     if(!(Test-Path -Path $relativeProgramDataPath)) {$null = New-Item -Path $relativeProgramDataPath -ItemType Directory}
     Set-Location -Path $relativeProgramDataPath
     $programDataPath = (Get-Location).Path
-    $relativeUserDataPath = "$localGXPath\..\UserData"
+    $relativeUserDataPath = "$gxBasePath\..\UserData"
     if(!(Test-Path -Path $relativeUserDataPath)) {$null = New-Item -Path $relativeUserDataPath -ItemType Directory}
     Set-Location -Path $relativeUserDataPath
     $userDataPath = (Get-Location).Path
@@ -84,17 +84,17 @@ if ($flag) {
 
     $xml.Save($gxExeConfigPath)
 
-    $gxInstallationPth = "$localGXPath\GeneXus.com"
+    $gxInstallationPth = "$gxBasePath\GeneXus.com"
     Write-Output((Get-Date -Format G) + " INFO executing genexus.com /install")
     powershell "$gxInstallationPth /install"
     if(Test-Path -Path $lastURIFilePath) { Remove-Item -Path $lastURIFilePath }
     $null = New-Item -Path $lastURIFilePath
     Set-Content -Path $lastURIFilePath -Value "$genexusURI"
     if(![string]::IsNullOrEmpty($localAndroidSDKPath)) {
-        $androidRequirementsExe = "$localGXPath\Android\Setup\AndroidRequirements.exe"
+        $androidRequirementsExe = "$gxBasePath\Android\Setup\AndroidRequirements.exe"
         Write-Output((Get-Date -Format G) + " INFO downloading androidSDK") 
         #AndroidRequirements.exe /s GXPATH=<path GX> ANDROIDSDKPATH=<path Android SDK> LOG=<path log>
-        Start-Process -FilePath $androidRequirementsExe -ArgumentList "/s GXPATH=`"$localGXPath`" ANDROIDSDKPATH=`"$localAndroidSDKPath`" LOG=`"$localAndroidSDKPath\androidsdk.log`"" -NoNewWindow -Wait
+        Start-Process -FilePath $androidRequirementsExe -ArgumentList "/s GXPATH=`"$gxBasePath`" ANDROIDSDKPATH=`"$localAndroidSDKPath`" LOG=`"$localAndroidSDKPath\androidsdk.log`"" -NoNewWindow -Wait
         Write-Output((Get-Date -Format G) + " INFO finish downloading androidSDK") 
     }
 }

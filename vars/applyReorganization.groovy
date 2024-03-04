@@ -2,7 +2,7 @@
  * Job reorganizeDatabase >> Read properties from environment
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- propertiesFilePath
@@ -17,7 +17,7 @@ def call(Map args = [:]) {
     Boolean foundReorganization = false
     String target = " /t:ApplyReorg"
     String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
+    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.gxBasePath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
 

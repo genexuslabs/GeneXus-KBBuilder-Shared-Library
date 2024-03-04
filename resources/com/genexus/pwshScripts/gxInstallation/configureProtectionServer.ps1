@@ -1,7 +1,7 @@
 param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $localGXPath,
+    [string] $gxBasePath,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $protectionServerType,
@@ -13,7 +13,7 @@ param (
 )
 $ErrorActionPreference="Stop"
 #
-$protectionIniFilePath = "$localGXPath\Protect.ini"
+$protectionIniFilePath = "$gxBasePath\Protect.ini"
 if(Test-Path -Path $protectionIniFilePath) {
     Remove-Item -Path $protectionIniFilePath
 }

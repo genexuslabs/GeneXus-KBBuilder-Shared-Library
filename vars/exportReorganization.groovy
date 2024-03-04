@@ -2,7 +2,7 @@
  * Job exportReorganization >> Read properties from environment
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- propertiesFilePath
@@ -12,7 +12,7 @@
 def call(Map args = [:], String reorgExportPath) {
     String target = " /t:ExportReorganization"
     String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
+    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.gxBasePath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "SourcePath", "${args.localKBPath}\\${args.targetPath}")
@@ -39,7 +39,7 @@ def call(Map args = [:], String reorgExportPath) {
     }
     
     bat label: 'Export reorganization', 
-        script: "\"${args.msbuildExePath}\" \"${args.localGXPath}\\deploy.msbuild\" ${target} ${msbuildGenArgs} /nologo "
+        script: "\"${args.msbuildExePath}\" \"${args.gxBasePath}\\deploy.msbuild\" ${target} ${msbuildGenArgs} /nologo "
 
     powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
 }

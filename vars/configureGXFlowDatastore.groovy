@@ -2,7 +2,7 @@
  * Job configureDataStore >> config datastore default
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- generator
@@ -43,7 +43,7 @@ def call(Map args = [:], String dataStoreName) {
     String target = ' /t:ConfigureDataStore'
 
     String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.localGXPath)
+    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.gxBasePath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "environmentName", args.environmentName)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "generator", args.generator)

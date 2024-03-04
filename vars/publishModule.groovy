@@ -2,7 +2,7 @@
  * Job reorganizeDatabase >> Read properties from environment
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- propertiesFilePath
@@ -18,7 +18,7 @@ def call(Map args = [:]) {
 
     bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:packageModuleName="${args.packageModuleName}" \
             /p:pipelineBuildNumber="${args.buildJobNumber}" \

@@ -1,14 +1,14 @@
 param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $localGXPath,
+    [string] $gxBasePath,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $localAndroidSDKPath
 )
 $ErrorActionPreference="Stop"
 #
-$gxExeConfigPath = "$localGXPath\GeneXus.exe.config"
+$gxExeConfigPath = "$gxBasePath\GeneXus.exe.config"
 if(Test-Path -Path $gxExeConfigPath) {
     [xml]$gxExeConfig = Get-Content $gxExeConfigPath 
     #$gxExeConfig
@@ -30,9 +30,9 @@ if(Test-Path -Path $gxExeConfigPath) {
         }
     }
 }
-if(Test-Path -Path $localGXPath) {
-    Write-Output((Get-Date -Format G) + " INFO remove localGXPath: $localGXPath") 
-    Remove-Item -Path "$localGXPath" -Recurse -ErrorAction Stop
+if(Test-Path -Path $gxBasePath) {
+    Write-Output((Get-Date -Format G) + " INFO remove gxBasePath: $gxBasePath") 
+    Remove-Item -Path "$gxBasePath" -Recurse -ErrorAction Stop
 }
 if(Test-Path -Path $localAndroidSDKPath) {
     Write-Output((Get-Date -Format G) + " INFO remove localAndroidSDKPath: $localAndroidSDKPath") 

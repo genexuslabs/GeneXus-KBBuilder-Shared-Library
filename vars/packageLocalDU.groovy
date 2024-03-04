@@ -2,7 +2,7 @@
  * Job reorganizeDatabase >> Read properties from environment
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- propertiesFilePath
@@ -13,8 +13,8 @@ def call(Map args = [:]) {
 
     String gxdprojFilePath = ''
     bat script: """
-            "${args.msbuildExePath}" "${args.localGXPath}\\deploy.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:TargetId="LOCAL" \
             /p:KBPath="${args.localKBPath}" \
             /p:KBEnvironment="${args.environmentName}" \
@@ -40,7 +40,7 @@ def call(Map args = [:]) {
         
     bat script: """
             "${args.msbuildExePath}" "${gxdprojFilePath}" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
             /p:DeployFileFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}" \

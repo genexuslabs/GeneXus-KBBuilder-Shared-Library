@@ -2,7 +2,7 @@
  * Job runUnitTestSuite >> Read properties from environment
  *
  * @Param args = [:]
- * +- localGXPath
+ * +- gxBasePath
  * +- localKBPath
  * +- environmentName
  * +- propertiesFilePath
@@ -17,7 +17,7 @@ def call(Map args = [:]) {
     bat label: "Running Tests:${args.testObjects}", 
         script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.localGXPath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
             /p:testObjectsList="${args.testObjects}" \
