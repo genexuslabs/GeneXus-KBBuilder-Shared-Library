@@ -22,6 +22,22 @@ String joinPath(String a, String b) {
  * This method return absolute path from a relativa path
  * @param relativePath is relative path
  */
+String getFullPath(String auxPath) {
+    try {
+        def absolutePath = powershell script: """
+            [System.IO.Path]::GetFullPath(\"${WORKSPACE}\\..\\${auxPath}\")
+        """, returnStdout: true
+        return absolutePath.trim()
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * This method return absolute path from a relativa path
+ * @param relativePath is relative path
+ */
 String getAbsolutePathFromWS(String relativePath) {
     try {
         String auxPath = env.WORKSPACE + relativePath
