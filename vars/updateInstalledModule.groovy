@@ -1,5 +1,5 @@
 /*
- * Job updateInstalledModule >> Run UpdateModule Task to update one module
+ * Job updateInstalledModule >> This method run UpdateModule Task to update a specific module
  * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?46830,Modules+MSBuild+Tasks#UpdateModule+Task 
  *
  * @Param args = [:]
