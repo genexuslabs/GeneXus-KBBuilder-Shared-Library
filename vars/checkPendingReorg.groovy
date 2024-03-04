@@ -1,28 +1,29 @@
 /*
- * Job checkPendingReorg >> Read properties from environment
+ * Job checkPendingReorg >> This methos executes the 'Reorganize' task with the 'FailIfReorg=true' flag. If the task fails, it indicates that there is a pending reorganization
  *
  * @Param args = [:]
  * +- gxBasePath
  * +- localKBPath
  * +- environmentName
- * +- propertiesFilePath
- * +- machineFilePath
+ *
+ * @Return Boolean
  */
 
 def call(Map args = [:]) {
-    // Sync properties.msbuild
+    // Sync cdxci.msbuild
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
     Boolean foundReorganization = false
-    String target = " /t:CheckReorgRequired"
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.gxBasePath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
     try {
         bat label: "Impact Analysis", 
-            script: "\"${args.msbuildExePath}\" .\\cdxci.msbuild ${target} ${msbuildGenArgs} /nologo "
+            script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:environmentName="${args.environmentName}" \
+                /t:CheckReorgRequired
+            """
         echo "NOT found pending reorganization"
     } catch (error) {
         echo "Found pending reorganization"

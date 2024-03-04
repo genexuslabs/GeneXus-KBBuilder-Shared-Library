@@ -1,5 +1,6 @@
 /*
- * Job reorganizeDatabase >> Read properties from environment
+ * Job publishModule >> 
+ * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PublishModule+Task
  *
  * @Param args = [:]
  * +- gxBasePath

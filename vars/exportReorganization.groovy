@@ -1,5 +1,6 @@
 /*
- * Job exportReorganization >> Read properties from environment
+ * Job exportReorganization >> This method 
+ * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?42568,Reorganization+Deployment+MSBuild+Tasks
  *
  * @Param args = [:]
  * +- gxBasePath
