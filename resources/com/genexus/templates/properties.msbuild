@@ -102,7 +102,7 @@
         <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
         END TRUNK
         -->
-        <SetGeneratorProperty Generator="$(generatorName)" Name="$(propName)" Value="$(propValue)" />
+        <SetGeneratorProperty Generator="$(generatorName)" Name="$(propertyName)" Value="$(propertyValue)" />
 		<CloseKnowledgeBase/>
     </Target>
 
