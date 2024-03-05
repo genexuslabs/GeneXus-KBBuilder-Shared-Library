@@ -87,6 +87,25 @@
 		<CloseKnowledgeBase/>
     </Target>
 
+    <Target Name="SetGeneratorProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <!-- 
+        START TRUNK
+        <HasGenerator GeneratorName="Frontend">
+            <Output TaskParameter="Found" PropertyName="GeneratorFound" />
+            <Output TaskParameter="GeneratorType" PropertyName="GeneratorType" />
+            <Output TaskParameter="UserInterface" PropertyName="GeneratorUserInterface" />
+            <Output TaskParameter="Language" PropertyName="GeneratorLanguage" />
+        </HasGenerator>
+        <Message Text="The generator with name 'Frontend' was not found" Condition=" '$(GeneratorFound)' == 'false' " Importance="high" />
+        <Message Text="The generator with name 'Frontend' was found, is of type '$(GeneratorType)', generates '$(GeneratorLanguage)' for '$(GeneratorUserInterface)'" Condition=" '$(GeneratorFound)' == 'true' " Importance="high" />
+        <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
+        END TRUNK
+        -->
+        <SetGeneratorProperty Generator="$(generatorName)" Name="$(propName)" Value="$(propValue)" />
+		<CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="SetMobileCompilationMode">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetGeneratorProperty Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" ContinueOnError="WarnAndContinue"/> 
