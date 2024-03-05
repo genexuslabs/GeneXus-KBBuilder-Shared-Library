@@ -5,7 +5,6 @@
  * @Param args = [:]
  * +- gxBasePath
  * +- localKBPath
- * +- environmentName
  * +- propertiesFilePath
  * +- moduleName
  */
@@ -20,7 +19,6 @@ def call(Map args = [:]) {
         "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
         /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
         /p:localKbPath="${args.localKBPath}" \
-        /p:environmentName="${args.environmentName}" \
         /p:moduleName="${args.moduleName}" \
         /t:UpdateInstalledModule
     """
