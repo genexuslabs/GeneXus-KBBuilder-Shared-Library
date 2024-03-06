@@ -153,8 +153,8 @@ void setGeneratorProperty(Map args = [:], String genName, String genPropName, St
  *
  * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, 
  *             and localKBPath, to customize the MSBuild execution.
- * @param generatorName The name of the generator for which to retrieve the property.
- * @param genPropName The name of the generator property to retrieve.
+ * @param objName The name of the object (or category) for which to retrieve the property.
+ * @param objPropName The name of the object property to retrieve.
  * @return The value of the specified generator property.
  *
  * This method generates a properties file using a provided MSBuild template and then
@@ -181,7 +181,7 @@ String getObjectProperty(Map args = [:], String objName, String objPropName) {
             /t:GetObjectProperty
         """
         def commiteableGenPropValue = readJSON file: propsFile
-        echo "[READ] Object property `${genPropName}` = ${commiteableGenPropValue.aux}"
+        echo "[READ] Object property `${objPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -194,7 +194,7 @@ String getObjectProperty(Map args = [:], String objName, String objPropName) {
  *
  * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
  *             and localKBPath, to customize the MSBuild execution.
- * @param objName The name of the object for which to set the property.
+ * @param objName The name of the object (or category) for which to set the property.
  * @param objPropName The name of the object property to set.
  * @param objPropValue The value to assign to the specified object property.
  *
