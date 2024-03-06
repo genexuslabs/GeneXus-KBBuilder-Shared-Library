@@ -61,9 +61,10 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
  */
 String getGeneratorProperty(Map args = [:], String generatorName, String genPropName) {
     try {
-        // Sync properties.msbuild -- TODO no sync if exists
-        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: 'properties.msbuild', text: fileContents
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
 
         def propsFile = "${WORKSPACE}\\CommProperty.json"
         bat script: """
@@ -92,10 +93,11 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
  */
 void setGeneratorProperty(Map args = [:], String genName, String genPropName, String genPropValue) {
     try {
-        // Sync properties.msbuild -- TODO no sync if exists
-        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: 'properties.msbuild', text: fileContents
-
+        
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
         bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
