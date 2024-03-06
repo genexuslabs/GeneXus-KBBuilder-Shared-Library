@@ -63,7 +63,6 @@
             <Output TaskParameter="PropertyValue" PropertyName="EnvironmentPropValue"/>
         </GetEnvironmentProperty>
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(EnvironmentPropValue)",' />
-              
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
     </Target>
     

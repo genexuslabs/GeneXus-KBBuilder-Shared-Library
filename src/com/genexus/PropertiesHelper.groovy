@@ -6,10 +6,10 @@ package com.genexus
  */
 String getEnvironmentProperty(Map args = [:], String envPropName) {
     try {
-        // Sync properties.msbuild -- TODO no sync if exists
-        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: "properties.msbuild", text: fileContents
-
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
         def propsFile = "${WORKSPACE}\\CommProperty.json"
         bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
@@ -21,9 +21,9 @@ String getEnvironmentProperty(Map args = [:], String envPropName) {
             /p:helperName="aux" \
             /t:GetEnvironmentProperty
         """
-        commiteableGenPropValue = file.readJsonFile(propsFile)
-        echo "[READ] Generator property `${genPropName}` = ${commiteableGenPropValue.aux}"
-        return commiteableGenPropValue.aux
+        def commiteableEnvPropValue = readJSON file: propsFile
+        echo "[READ] Environment property `${envPropName}` = ${commiteableEnvPropValue.aux}"
+        return commiteableEnvPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -36,10 +36,11 @@ String getEnvironmentProperty(Map args = [:], String envPropName) {
  */
 void setEnvironmentProperty(Map args = [:], String envPropName, String envPropValue) {
     try {
-        // Sync properties.msbuild -- TODO no sync if exists
-        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: 'properties.msbuild', text: fileContents
-
+        
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
         bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
@@ -61,10 +62,11 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
  */
 String getGeneratorProperty(Map args = [:], String generatorName, String genPropName) {
     try {
-        // Sync properties.msbuild -- TODO no sync if exists
-        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: 'properties.msbuild', text: fileContents
-
+        
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
         def propsFile = "${WORKSPACE}\\CommProperty.json"
         bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
@@ -77,7 +79,7 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
             /p:helperName="aux" \
             /t:GetGeneratorProperty
         """
-        commiteableGenPropValue = file.readJsonFile(propsFile)
+        def commiteableGenPropValue = readJSON file: propsFile
         echo "[READ] Generator property `${genPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
@@ -92,7 +94,7 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
  */
 void setGeneratorProperty(Map args = [:], String genName, String genPropName, String genPropValue) {
     try {
-        if (!fileExists("${WORKSPACE}\\properties.msbuild")) { //tested
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
             writeFile file: 'properties.msbuild', text: fileContents
         }
