@@ -151,8 +151,8 @@ void setGeneratorProperty(Map args = [:], String genName, String genPropName, St
 /**
  * Retrieves an object property using the MSBuild command.
  *
- * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
- *             and environmentName, to customize the MSBuild execution.
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, 
+ *             and localKBPath, to customize the MSBuild execution.
  * @param generatorName The name of the generator for which to retrieve the property.
  * @param genPropName The name of the generator property to retrieve.
  * @return The value of the specified generator property.
@@ -162,21 +162,20 @@ void setGeneratorProperty(Map args = [:], String genName, String genPropName, St
  * is used to store temporary values during the execution of the MSBuild command.
  *
  */
-String getObjectProperty(Map args = [:], String generatorName, String genPropName) {
+String getObjectProperty(Map args = [:], String objName, String objPropName) {
     try {
         
         if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
             writeFile file: 'properties.msbuild', text: fileContents
         }
-        def propsFile = "${WORKSPACE}\\CommProperty.json"
+        def propsFile = "${WORKSPACE}\\ObjProperty.json"
         bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
-            /p:environmentName="${args.environmentName}" \
-            /p:generatorName="${genName}" \
-            /p:generatorPropName="${genPropName}" \
+            /p:objectName="${objName}" \
+            /p:objectPropName="${objPropName}" \
             /p:propFileAbsolutePath="${propsFile}" \
             /p:helperName="aux" \
             /t:GetObjectProperty
@@ -193,8 +192,8 @@ String getObjectProperty(Map args = [:], String generatorName, String genPropNam
 /**
  * Sets an object property using the MSBuild command.
  *
- * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
- *             and environmentName, to customize the MSBuild execution.
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
+ *             and localKBPath, to customize the MSBuild execution.
  * @param objName The name of the object for which to set the property.
  * @param objPropName The name of the object property to set.
  * @param objPropValue The value to assign to the specified object property.
@@ -214,7 +213,6 @@ void setObjectProperty(Map args = [:], String objName, String objPropName, Strin
                 "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:localKbPath="${args.localKBPath}" \
-                /p:environmentName="${args.environmentName}" \
                 /p:objectName="${objName}" \
                 /p:objectPropName="${objPropName}" \
                 /p:objectPropValue="${objPropValue}" \
