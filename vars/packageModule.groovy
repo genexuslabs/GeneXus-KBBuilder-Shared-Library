@@ -15,7 +15,7 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
     
-    def moduleTargetPath = "${args.localKBPath}\\IntegrationModule\\${args.packageModuleName}\\${env.BUILD_NUMBER}"
+    def moduleTargetPath = "${args.localKBPath}\\CDCI_Modules\\${args.packageModuleName}\\${env.BUILD_NUMBER}"
 
     bat label: "Package Module::${args.packageModuleName}",
         script: """
