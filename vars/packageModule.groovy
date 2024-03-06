@@ -34,5 +34,5 @@ def call(Map args = [:]) {
     """
     def packageModuleName = readJSON file: propsFile
     echo "[READ] Object property `packageModuleName` = ${packageModuleName.aux}"
-    return "${moduleTargetPath}\\${args.packageModuleName}_${packageModuleName}.opc"
+    return "${moduleTargetPath}\\${args.packageModuleName}_${packageModuleName.aux}.opc"
 }
