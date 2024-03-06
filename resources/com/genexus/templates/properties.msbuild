@@ -104,4 +104,23 @@
         <SetGeneratorProperty Generator="$(generatorName)" Name="$(generatorPropName)" Value="$(generatorPropValue)" />
 		<CloseKnowledgeBase/>
     </Target>
+
+    <Target Name="GetObjectProperty">
+        <!-- Task to create .json file with property name n value-->
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
+        <GetObjectProperty Object="$(objectName)" Name="$(objectPropName)">
+            <Output TaskParameter="PropertyValue" PropertyName="ObjectPropValue" />
+        </GetObjectProperty>
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(ObjectPropValue)"' />
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
+    </Target>
+
+    <Target Name="SetObjectProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetObjectProperty Object="$(objectName)" Name="$(objectPropName)" Value="$(objectPropValue)" />
+		<CloseKnowledgeBase/>
+    </Target>
+    
 </Project>

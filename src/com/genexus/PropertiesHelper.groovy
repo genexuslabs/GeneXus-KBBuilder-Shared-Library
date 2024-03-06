@@ -148,4 +148,82 @@ void setGeneratorProperty(Map args = [:], String genName, String genPropName, St
     }
 }
 
+/**
+ * Retrieves an object property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param generatorName The name of the generator for which to retrieve the property.
+ * @param genPropName The name of the generator property to retrieve.
+ * @return The value of the specified generator property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to obtain the requested object property value. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+String getObjectProperty(Map args = [:], String generatorName, String genPropName) {
+    try {
+        
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        def propsFile = "${WORKSPACE}\\CommProperty.json"
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+            /p:generatorName="${genName}" \
+            /p:generatorPropName="${genPropName}" \
+            /p:propFileAbsolutePath="${propsFile}" \
+            /p:helperName="aux" \
+            /t:GetObjectProperty
+        """
+        def commiteableGenPropValue = readJSON file: propsFile
+        echo "[READ] Object property `${genPropName}` = ${commiteableGenPropValue.aux}"
+        return commiteableGenPropValue.aux
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Sets an object property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param objName The name of the object for which to set the property.
+ * @param objPropName The name of the object property to set.
+ * @param objPropValue The value to assign to the specified object property.
+ *
+ * This method generates a properties file using a provided MSBuild template. It then
+ * executes MSBuild to set the value of the specified object property. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+void setObjectProperty(Map args = [:], String objName, String objPropName, String objPropValue) {
+    try {
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        bat script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:environmentName="${args.environmentName}" \
+                /p:objectName="${objName}" \
+                /p:objectPropName="${objPropName}" \
+                /p:objectPropValue="${objPropValue}" \
+                /t:SetObjectProperty
+            """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this
