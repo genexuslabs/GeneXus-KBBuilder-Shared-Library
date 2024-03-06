@@ -7,8 +7,8 @@ package com.genexus
 String getEnvironmentProperty(Map args = [:], String envPropName) {
     try {
         // Sync properties.msbuild -- TODO no sync if exists
-        fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: "${WORKSPACE}\\properties.msbuild", text: fileContents
+        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+        writeFile file: "properties.msbuild", text: fileContents
 
         def propsFile = "${WORKSPACE}\\CommProperty.json"
         bat script: """
@@ -37,7 +37,7 @@ String getEnvironmentProperty(Map args = [:], String envPropName) {
 void setEnvironmentProperty(Map args = [:], String envPropName, String envPropValue) {
     try {
         // Sync properties.msbuild -- TODO no sync if exists
-        fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
         writeFile file: 'properties.msbuild', text: fileContents
 
         bat script: """
@@ -62,7 +62,7 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
 String getGeneratorProperty(Map args = [:], String generatorName, String genPropName) {
     try {
         // Sync properties.msbuild -- TODO no sync if exists
-        fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
         writeFile file: 'properties.msbuild', text: fileContents
 
         def propsFile = "${WORKSPACE}\\CommProperty.json"
@@ -93,7 +93,7 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
 void setGeneratorProperty(Map args = [:], String genName, String genPropName, String genPropValue) {
     try {
         // Sync properties.msbuild -- TODO no sync if exists
-        fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+        def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
         writeFile file: 'properties.msbuild', text: fileContents
 
         bat script: """
