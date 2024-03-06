@@ -46,8 +46,8 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:localKbPath="${args.localKBPath}" \
                 /p:environmentName="${args.environmentName}" \
-                /p:environmentPropName="${environmentPropName}" \
-                /p:environmentPropValue="${environmentPropValue}" \
+                /p:environmentPropName="${envPropName}" \
+                /p:environmentPropValue="${envPropValue}" \
                 /t:SetEnvironmentProperty
             """
     } catch (error) {
