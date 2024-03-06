@@ -22,7 +22,7 @@ String getEnvironmentProperty(Map args = [:], String envPropName) {
             /t:GetEnvironmentProperty
         """
         commiteableGenPropValue = file.readJsonFile(propsFile)
-        echo "[READ] Generator property `${genPropName} = ${commiteableGenPropValue.aux}"
+        echo "[READ] Generator property `${genPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -78,7 +78,7 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
             /t:GetGeneratorProperty
         """
         commiteableGenPropValue = file.readJsonFile(propsFile)
-        echo "[READ] Generator property `${genPropName} = ${commiteableGenPropValue.aux}"
+        echo "[READ] Generator property `${genPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
