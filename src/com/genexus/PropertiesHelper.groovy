@@ -6,9 +6,9 @@ package com.genexus
  */
 String getEnvironmentProperty(Map args = [:], String envPropName) {
     try {
-                // Sync properties.msbuild -- TODO no sync if exists
+        // Sync properties.msbuild -- TODO no sync if exists
         fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
-        writeFile file: 'properties.msbuild', text: fileContents
+        writeFile file: '${WORKSPACE}\\properties.msbuild', text: fileContents
 
         def propsFile = "${WORKSPACE}\\CommProperty.json"
         bat script: """
