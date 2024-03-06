@@ -1,8 +1,11 @@
 package com.genexus
 
 /**
- * This method return path combine function
- * @param 
+ * This method combines two path components to create a joined path.
+ *
+ * @param a The first path component.
+ * @param b The second path component.
+ * @return The combined path resulting from joining the two input path components.
  */
 String joinPath(String a, String b) {
     try {
@@ -19,8 +22,10 @@ String joinPath(String a, String b) {
 }
 
 /**
- * This method return absolute path from a relativa path
- * @param relativePath is relative path
+ * This method returns the absolute path from a given relative or absolute path.
+ *
+ * @param auxPath The path, either relative or absolute, for which to obtain the absolute path.
+ * @return The absolute path corresponding to the provided path.
  */
 String getFullPath(String auxPath) {
     try {
@@ -33,8 +38,11 @@ String getFullPath(String auxPath) {
 }
 
 /**
- * This method return absolute path from a relativa path
- * @param relativePath is relative path
+ * This method returns the absolute path from a relative path within the Jenkins workspace.
+ *
+ * @param relativePath The relative path within the Jenkins workspace.
+ *                    If the path does not exist, the method creates the necessary directories.
+ * @return The absolute path corresponding to the provided relative path within the Jenkins workspace.
  */
 String getAbsolutePathFromWS(String relativePath) {
     try {
@@ -45,6 +53,28 @@ String getAbsolutePathFromWS(String relativePath) {
             (Get-Location).Path
         """, returnStdout: true
         return absolutePath.trim()
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+
+/**
+ * This method forcefully removes a directory and its contents.
+ *
+ * @param dirPath The relative path of the directory to be removed.
+ *                If the directory exists, it will be deleted along with all its contents.
+ *                If the directory does not exist, no action will be taken.
+ */
+void removeDirectoryPath(String dirPath) {
+    try {
+        powershell label: "Remove path: ${dirPath}",
+            script: """
+                if(Test-Path -Path '${dirPath}') {
+                    Remove-Item -Path '${dirPath}' -Recurse -Force 
+                }
+            """
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
