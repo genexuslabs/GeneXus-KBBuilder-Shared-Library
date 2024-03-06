@@ -1,8 +1,16 @@
 package com.genexus
 
 /**
- * This method get envronment property using msbuild command
- * @param 
+ * This method retrieves an environment property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param envPropName The name of the environment property to retrieve.
+ * @return The value of the specified environment property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to obtain the requested environment property value. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
  */
 String getEnvironmentProperty(Map args = [:], String envPropName) {
     try {
@@ -31,8 +39,16 @@ String getEnvironmentProperty(Map args = [:], String envPropName) {
 }
 
 /**
- * This method set environment property using msbuild command
- * @param 
+ * This method sets an environment property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param envPropName The name of the environment property to set.
+ * @param envPropValue The value to assign to the specified environment property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to set the value of the specified environment property. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
  */
 void setEnvironmentProperty(Map args = [:], String envPropName, String envPropValue) {
     try {
@@ -57,8 +73,17 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
 }
 
 /**
- * This method get generator property using msbuild command
- * @param 
+ * This method retrieves a generator property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param generatorName The name of the generator for which to retrieve the property.
+ * @param genPropName The name of the generator property to retrieve.
+ * @return The value of the specified generator property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to obtain the requested generator property value. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
  */
 String getGeneratorProperty(Map args = [:], String generatorName, String genPropName) {
     try {
@@ -89,8 +114,17 @@ String getGeneratorProperty(Map args = [:], String generatorName, String genProp
 }
 
 /**
- * This method set generator property using msbuild command
- * @param 
+ * This method sets a generator property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath, localKBPath,
+ *             and environmentName, to customize the MSBuild execution.
+ * @param genName The name of the generator for which to set the property.
+ * @param genPropName The name of the generator property to set.
+ * @param genPropValue The value to assign to the specified generator property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to set the value of the specified generator property. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
  */
 void setGeneratorProperty(Map args = [:], String genName, String genPropName, String genPropValue) {
     try {
