@@ -15,20 +15,24 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
     
+    def propsFile = "${WORKSPACE}\\modVer.json"
     def moduleTargetPath = "${args.localKBPath}\\CDCI_Modules\\${args.packageModuleName}\\${env.BUILD_NUMBER}"
 
-    bat label: "Package Module::${args.packageModuleName}",
-        script: """
-            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-            /p:localKbPath="${args.localKBPath}" \
-            /p:packageModuleName="${args.packageModuleName}" \
-            /p:pipelineBuildNumber="${env.BUILD_NUMBER}" \
-            /p:csharpEnvName="${args.csharpEnvName}" \
-            /p:javaEnvName="${args.javaEnvName}" \
-            /p:netCoreEnvName="${args.netCoreEnvName}" \
-            /p:destinationPath="${moduleTargetPath}" \
-            /t:PackageGXModule
-        """
-    return moduleTargetPath
+    bat script: """
+        "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+        /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+        /p:localKbPath="${args.localKBPath}" \
+        /p:packageModuleName="${args.packageModuleName}" \
+        /p:pipelineBuildNumber="${env.BUILD_NUMBER}" \
+        /p:csharpEnvName="${args.csharpEnvName}" \
+        /p:javaEnvName="${args.javaEnvName}" \
+        /p:netCoreEnvName="${args.netCoreEnvName}" \
+        /p:destinationPath="${moduleTargetPath}" \
+        /p:propFileAbsolutePath="${propsFile}" \
+        /p:helperName="aux" \
+        /t:PackageGXModule
+    """
+    def packageModuleName = readJSON file: propsFile
+    echo "[READ] Object property `packageModuleName` = ${packageModuleName.aux}"
+    return "${moduleTargetPath}\\${args.packageModuleName}_${packageModuleName}.opc"
 }
