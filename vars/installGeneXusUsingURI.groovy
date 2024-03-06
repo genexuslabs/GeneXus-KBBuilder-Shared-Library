@@ -20,14 +20,14 @@
 import com.genexus.GeneXusHelper
 
 def call(Map args = [:]) {
-    def helper = new GeneXusHelper()
+    def gxHelper = new GeneXusHelper()
     if(Boolean.valueOf(args.forceUpdateGX)) {
-        helper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
+        gxHelper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
     }
-    helper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath)
+    gxHelper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath)
 
-    helper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
+    gxHelper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
 
-    def gxVersion = helper.getGeneXusInstallationVersion(args.gxBasePath)
+    def gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
     echo "Using GeneXus Installation version::${gxVersion}"
 }
