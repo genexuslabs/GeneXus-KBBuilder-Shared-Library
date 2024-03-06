@@ -54,6 +54,9 @@
     </Target>
     
     <Target Name="UpdateInstalledModule">
+    <!-- CREAR SEPARADOR DE LIST STRING
+        CREAR ITEMGROUP (CHATBOT GEN)
+        -->
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>

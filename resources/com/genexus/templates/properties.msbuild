@@ -9,16 +9,18 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
+        <Message Text="AvoidDatastoreConnections" />
         <Message Text="ConfigureDataStore" />
-        <Message Text="SetJavaEnvProperties" />
-        <Message Text="ConfigureAndroidSDKPath" />
-        <Message Text="SetMobileCompilationMode" />
+        <Message Text="GetEnvironmentProperty" />
+        <Message Text="SetEnvironmentProperty" />
+        <Message Text="GetGeneratorProperty" />
+        <Message Text="SetGeneratorProperty" />
         <Message Text="CloseKB" />
     </Target>
 
     <Target Name="AvoidDatastoreConnections">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <SetEnvironmentProperty Name="Keep GAM database updated" Value="false" />
         <SetEnvironmentProperty Name="Deploy business processes on build" Value="No" />
         <SetEnvironmentProperty Name="Populate Data" Value="false" />
@@ -51,42 +53,40 @@
         <SetDataStoreProperty Condition="'$(dataStoreName)'=='Default' AND '$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
     </Target>
 
-    <Target Name="SetJavaEnvProperties">
+    <Target Name="GetEnvironmentProperty">
+        <!-- Task to create .json file with property name n value-->
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-        <!-- Java properties -->
-        <SetGeneratorProperty Generator="Default" Name="servlet directory" Value="$(ServletDir)" />
-        <SetGeneratorProperty Generator="Default" Name="static content directory seen from client" Value="$(StaticDir)" />
-        <SetGeneratorProperty Generator="Default" Name="Compiler Path" Value="$(JavaPath)\javac.exe" />
-        <SetDataStoreProperty DataStore="Default" Name="Use custom JDBC URL" Value="False" />
-        <SetGeneratorProperty Generator="Default" Name="Interpreter Path" Value="$(JavaPath)\java.exe" />
-        <SetGeneratorProperty Generator="Default" Name="JDK_DIR_JAVA" Value="$(JavaPath)\..\" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="$(TomcatVersionName) != ''" Generator="Default" Name="TOMCAT_VERSION" Value="$(TomcatVersionName)" ContinueOnError="WarnAndContinue"/>
-        <SetGeneratorProperty Condition="$(JDBClogFile) == ''" Generator="Default" Name="Log JDBC Activity" Value="No" />
-        <SetGeneratorProperty Condition="$(JDBClogFile) != ''" Generator="Default" Name="Log JDBC Activity" Value="Yes" />
-        <SetGeneratorProperty Condition="$(JDBClogFile) != ''" Generator="Default" Name="JDBC log file" Value="$(JDBClogFile)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
+        <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
+        <GetEnvironmentProperty Name="$(environmentPropName)" >
+            <Output TaskParameter="PropertyValue" PropertyName="EnvironmentPropValue"/>
+        </GetEnvironmentProperty>
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(EnvironmentPropValue)",' />
+              
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
+    </Target>
+    
+    <Target Name="SetEnvironmentProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
+        <SetEnvironmentProperty Name="$(environmentPropName)" Value="$(environmentPropValue)" />
 		<CloseKnowledgeBase/>
     </Target>
-
-    <Target Name="ConfigureAndroidSDKPath">
+    
+    <Target Name="GetGeneratorProperty">
+        <!-- Task to create .json file with property name n value-->
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <!-- 
-        START TRUNK
-        <HasGenerator GeneratorName="Frontend">
-            <Output TaskParameter="Found" PropertyName="GeneratorFound" />
-            <Output TaskParameter="GeneratorType" PropertyName="GeneratorType" />
-            <Output TaskParameter="UserInterface" PropertyName="GeneratorUserInterface" />
-            <Output TaskParameter="Language" PropertyName="GeneratorLanguage" />
-        </HasGenerator>
-        <Message Text="The generator with name 'Frontend' was not found" Condition=" '$(GeneratorFound)' == 'false' " Importance="high" />
-        <Message Text="The generator with name 'Frontend' was found, is of type '$(GeneratorType)', generates '$(GeneratorLanguage)' for '$(GeneratorUserInterface)'" Condition=" '$(GeneratorFound)' == 'true' " Importance="high" />
-        <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
-        END TRUNK
-        -->
-        <SetGeneratorProperty Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
-		<CloseKnowledgeBase/>
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
+        <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
+        <GetGeneratorProperty Name="$(generatorPropName)" > 
+            <Output TaskParameter="PropertyValue" PropertyName="GeneratorPropValue"/> 
+        </GetGeneratorProperty> 
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(GeneratorPropValue)"' />
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
     </Target>
-
+    
     <Target Name="SetGeneratorProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <!-- 
@@ -102,26 +102,7 @@
         <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
         END TRUNK
         -->
-        <SetGeneratorProperty Generator="$(generatorName)" Name="$(propertyName)" Value="$(propertyValue)" />
+        <SetGeneratorProperty Generator="$(generatorName)" Name="$(generatorPropName)" Value="$(generatorPropValue)" />
 		<CloseKnowledgeBase/>
-    </Target>
-
-    <Target Name="SetMobileCompilationMode">
-        <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetGeneratorProperty Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" ContinueOnError="WarnAndContinue"/> 
-        <!-- 
-        START TRUNK
-        <HasGenerator GeneratorName="Frontend">
-            <Output TaskParameter="Found" PropertyName="GeneratorFound" />
-            <Output TaskParameter="GeneratorType" PropertyName="GeneratorType" />
-            <Output TaskParameter="UserInterface" PropertyName="GeneratorUserInterface" />
-            <Output TaskParameter="Language" PropertyName="GeneratorLanguage" />
-        </HasGenerator>
-        <Message Text="The generator with name 'Frontend' was not found" Condition=" '$(GeneratorFound)' == 'false' " Importance="high" />
-        <Message Text="The generator with name 'Frontend' was found, is of type '$(GeneratorType)', generates '$(GeneratorLanguage)' for '$(GeneratorUserInterface)'" Condition=" '$(GeneratorFound)' == 'true' " Importance="high" />
-        <SetGeneratorProperty Condition="'$(GeneratorFound)'=='true'" Generator="Frontend" Name="ANGULAR_GENERATION_MODE" Value="Distribution" />
-        END TRUNK
-        -->
-        <CloseKnowledgeBase/>
     </Target>
 </Project>
