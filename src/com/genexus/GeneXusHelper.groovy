@@ -76,20 +76,20 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
  * This methods 
  * @param 
  */
-void configureNugetServer(String gxBasePath, String nugetServerName, String nugetServerSource, String nugetServerCredentialsId) {
+void configureNugetServer(Map args = [:]) {
     try{
         if (!fileExists("${WORKSPACE}\\cdxci.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
             writeFile file: 'cdxci.msbuild', text: fileContents
         }
         withCredentials([
-            usernamePassword(credentialsId: "${nugetServerCredentialsId}", passwordVariable: 'nugetServerPass', usernameVariable: 'nugetServerUser')
+            usernamePassword(credentialsId: "${args.nugetServerCredentialsId}", passwordVariable: 'nugetServerPass', usernameVariable: 'nugetServerUser')
         ]) {        
             bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:ServerName="${nugetServerName}" \
-                /p:ServerSource="${nugetServerSource}" \
+                /p:ServerName="${args.nugetServerName}" \
+                /p:ServerSource="${args.nugetServerSource}" \
                 /p:ServerUsername="${nugetServerUser}" \
                 /p:ServerPassword="${nugetServerPass}" \
                 /t:GetEnvironmentProperty
