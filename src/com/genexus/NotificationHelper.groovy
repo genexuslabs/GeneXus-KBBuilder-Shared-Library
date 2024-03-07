@@ -92,7 +92,7 @@ Map getBuildInfo() {
 void sendEmail(Map args = [:]) {
         def gxHelper = new GeneXusHelper()
         String gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
-        def changeLogSet = getChangeLogSet()
+        def changeLogSet //= getChangeLogSet()
         Map emailConst = getBuildInfo()
 
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
