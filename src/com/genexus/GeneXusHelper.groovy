@@ -73,6 +73,35 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
 }
 
 /**
+ * This methods 
+ * @param 
+ */
+void configureNugetServer(String gxBasePath, String nugetServerName, String nugetServerSource, String nugetServerCredentialsId) {
+    try{
+        if (!fileExists("${WORKSPACE}\\cdxci.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+            writeFile file: 'cdxci.msbuild', text: fileContents
+        }
+        withCredentials([
+            usernamePassword(credentialsId: "${nugetServerCredentialsId}", passwordVariable: 'nugetServerPass', usernameVariable: 'nugetServerUser')
+        ]) {        
+            bat script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:ServerName="${nugetServerName}" \
+                /p:ServerSource="${nugetServerSource}" \
+                /p:ServerUsername="${nugetServerUser}" \
+                /p:ServerPassword="${nugetServerPass}" \
+                /t:GetEnvironmentProperty
+            """
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
  * This method retrieves the version of the GeneXus installation.
  *
  * @param gxBasePath The base path of the GeneXus installation for which to obtain the version.
