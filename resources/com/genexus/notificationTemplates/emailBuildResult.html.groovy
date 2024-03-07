@@ -126,7 +126,6 @@
         <div class="jenkins-properties">
             <div class="jenkins-properties-nav">
                 <ul id="build-properties">
-                    <li><strong>Pipeline:</strong> ${jenkinsJobName}</li>
                     <li><strong>Date:</strong> ${jenkinsTimestamp}</li>
                     <li><strong>Duration:</strong> ${jenkinsDuration}</li>
                     <li>${cause}</li>
