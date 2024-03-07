@@ -110,8 +110,6 @@ void sendEmail(Map args = [:]) {
             "gxversion"         :   gxVersion
         ]);
 
-        def parsedBaseList = args.notificationBaseList.replace(', ', ', cc:')
-
         emailext body: template,
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
