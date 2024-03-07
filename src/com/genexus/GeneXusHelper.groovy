@@ -99,7 +99,7 @@ void configureNugetServer(Map args = [:]) {
                 /p:ServerSource="${args.nugetServerSource}" \
                 /p:ServerUsername="${nugetServerUser}" \
                 /p:ServerPassword="${nugetServerPass}" \
-                /t:GetEnvironmentProperty
+                /t:AddNugetServer
             """
         }
     } catch (error) {
