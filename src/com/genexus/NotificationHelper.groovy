@@ -97,13 +97,12 @@ void sendEmail(Map args = [:]) {
         def changeLogSet = getChangeLogSet()
         Map emailConst = getBuildInfo()
 
-        echo "BUILD_TIMESTAMP:${env.BUILD_TIMESTAMP}"
-        echo "BUILD_TIMESTAMP:${BUILD_TIMESTAMP}"
+        echo "BUILD_TIMESTAMP:${currentBuild.timestamp}"
 
         String templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
         def template = createTemplate(templateName, [
             "jenkinsUrl"        :   env.BUILD_URL,
-            "jenkinsTimestamp"  :   "${env.BUILD_TIMESTAMP}",
+            "jenkinsTimestamp"  :   currentBuild.timestamp,
             "buildNumber"       :   env.BUILD_NUMBER,
             "buildColor"        :   emailConst.buildColor,
             "buildResult"       :   emailConst.buildResult,
