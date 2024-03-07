@@ -114,7 +114,7 @@ void sendEmail(Map args = [:]) {
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
             to: "jalbarellos@genexus.com",
-            replyTo: "${args.notificationBaseList}",
+            recipientProviders: [[$class: 'CulpritsRecipientProvider']],
             cc: "${args.notificationBaseList}",
             attachLog: true
     }
