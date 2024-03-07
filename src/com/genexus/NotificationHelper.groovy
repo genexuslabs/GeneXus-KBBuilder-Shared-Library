@@ -90,6 +90,8 @@ Map getBuildInfo() {
 
 
 void sendEmail(Map args = [:]) {
+    String flag = "[${args.notificationWhen}]"
+    if(flag.contains(currentBuild.currentResult)) {
         def gxHelper = new GeneXusHelper()
         String gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
         def changeLogSet = getChangeLogSet()
@@ -113,12 +115,12 @@ void sendEmail(Map args = [:]) {
             "gxversion"         :   gxVersion
         ]);
 
-
         emailext body: template,
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
-            to: "jalbarellos@genexus.com",
-            replyTo: "jalbarellos@genexus.com",
+            to: "${args.notificationBaseList}",
+            replyTo: "${args.notificationBaseList}",
             attachLog: true
+    }
 }
 return this
