@@ -113,8 +113,8 @@ void sendEmail(Map args = [:]) {
         emailext body: template,
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
-            to: "${args.notificationBaseList}",
-            replyTo: "${args.notificationBaseList}",
+            to: "jalbarellos@genexus.com",
+            cc: "${args.notificationBaseList}",
             attachLog: true
     }
 }
