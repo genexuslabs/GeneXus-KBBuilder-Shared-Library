@@ -129,7 +129,7 @@
 	</Target>
 
     <Target Name="AddNugetServer">
-        <AddModulesServer Type="Nexus - NuGet" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="NexusNuGet" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">
