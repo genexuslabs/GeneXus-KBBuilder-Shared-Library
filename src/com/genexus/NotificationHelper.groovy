@@ -98,10 +98,13 @@ void sendEmail(Map args = [:]) {
         Map emailConst = getBuildInfo()
 
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
+        echo "jobName: ${jobName}"
         String templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
         String jobFullDisplayName = currentBuild.fullDisplayName
+        echo "jobFullDisplayName: ${jobFullDisplayName}"
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
         def jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
+        echo "jobDisplayName: ${jobDisplayName}"
         def template = createTemplate(templateName, [
             "jenkinsJobName"    :   jobName,
             "jenkinsUrl"        :   env.BUILD_URL,
