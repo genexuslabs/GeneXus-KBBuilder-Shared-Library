@@ -113,9 +113,7 @@ void sendEmail(Map args = [:]) {
         emailext body: template,
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
-            to: "jalbarellos@genexus.com",
-            recipientProviders: [[$class: 'CulpritsRecipientProvider']],
-            cc: "${args.notificationBaseList}",
+            to: "jalbarellos@genexus.com, cc: ${args.notificationBaseList}",
             attachLog: true
     }
 }
