@@ -94,7 +94,7 @@ void sendEmail(Map args = [:]) {
         String gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
         def changeLogSet = getChangeLogSet()
         Map emailConst = getBuildInfo()
-        
+
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
         String templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
         def template = createTemplate(templateName, [
@@ -110,8 +110,9 @@ void sendEmail(Map args = [:]) {
             "gxversion"         :   gxVersion
         ]);
 
+        String jobFullDisplayName = currentBuild.fullDisplayName
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
-        def jobDisplayName = "${currentBuild.fullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
+        def jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
 
         emailext body: template,
             mimeType: 'text/html',
