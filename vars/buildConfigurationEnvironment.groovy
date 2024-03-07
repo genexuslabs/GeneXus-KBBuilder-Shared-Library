@@ -1,18 +1,23 @@
 /*
- * Job buildConfigurationEnvironment >> This method executes the 'BuildAll' task after configuring the following properties:
- * -- >> "Keep GAM database updated" = false
- * -- >> "Deploy business processes on build" = No
- * -- >> "Populate Data" = false
- * -- >> "Reorganize server tables" = No
- * -- >> "deploy to cloud" = No
+ * Job buildConfigurationEnvironment >> This method executes the 'BuildAll' task after configuring specific properties to customize the build environment.
  *
- * @Param args = [:]
- * +- gxBasePath
- * +- localKBPath
- * +- environmentName
- * +- forceRebuild
+ * Custom Configuration:
+ * - "Keep GAM database updated" = false
+ * - "Deploy business processes on build" = No
+ * - "Populate Data" = false
+ * - "Reorganize server tables" = No
+ * - "Deploy to cloud" = No
+ *
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - localKBPath: The local path of the Knowledge Base.
+ *   - environmentName: The name of the environment.
+ *   - msbuildExePath: The path to the MSBuild executable.
+ *   - forceRebuild: A boolean indicating whether to force a rebuild.
+ *
  */
-
+ 
 def call(Map args = [:]) {
     // Sync cdxci.msbuild
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'

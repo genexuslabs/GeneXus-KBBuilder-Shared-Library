@@ -1,62 +1,36 @@
-/*
- * Job configureDataStore >> config datastore default
+/**
+ * Job: configureDataStore >> This job configures the GXFlow Data Store.
  *
- * @Param args = [:]
- * +- gxBasePath
- * +- localKBPath
- * +- environmentName
- * +- generator
- * +- dataSource
- * +- storageDBName, storageDBServer, storageDBServerPort, storageDBCredentialsId
- * +- generator
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - localKBPath: The local path of the Knowledge Base.
+ *   - environmentName: The name of the environment.
+ *   - dbName: The name of the database.
+ *   - dbServerName: The name of the database server.
+ *   - dbServerPort: The port of the database server.
+ *   - dbServerCredentialsId: The credentials ID containing the username and password for the database server.
+ *
  */
 
-def call(Map args = [:], String dataStoreName) {
-    def databaseName
-    def datastoreServer
-    def datastorePort
-    def datastoreCredentialsId
-    switch (dataStoreName) {
-        case 'GAM':
-            databaseName = args.gamDBName
-            datastoreServer = args.gamDBServer
-            datastorePort = args.gamDBServerPort
-            datastoreCredentialsId = args.gamDBCredentialsId
-        break
-        case 'GXFlow':
-            databaseName = args.gxflowDBName
-            datastoreServer = args.gxflowDBServer
-            datastorePort = args.gxflowDBServerPort
-            datastoreCredentialsId = args.gxflowDBCredentialsId
-        break
-        default:
-            databaseName = args.storageDBName
-            datastoreServer = args.storageDBServer
-            datastorePort = args.storageDBServerPort
-            datastoreCredentialsId = args.storageDBCredentialsId
-        break
-    }
+def call(Map args = [:]) {
     // Sync properties.msbuild
     def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
     writeFile file: 'properties.msbuild', text: fileContents
 
-    String target = ' /t:ConfigureDataStore'
-
-    String msbuildGenArgs = ''
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "GX_PROGRAM_DIR", args.gxBasePath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "environmentName", args.environmentName)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "generator", args.generator)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dataSource", args.dataSource)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dataStoreName", dataStoreName)
-
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dbName", databaseName)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dbServerName", datastoreServer)
-    msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dbServerPort", datastorePort)
-    withCredentials([usernamePassword(credentialsId: datastoreCredentialsId, usernameVariable: 'username', passwordVariable: 'password')]) {
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dbServerUser", username)
-        msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "dbServerPass", password)
+    withCredentials([usernamePassword(credentialsId: dbServerCredentialsId, usernameVariable: 'dbUsername', passwordVariable: 'dbPassword')]) {
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+            /p:dataStoreName="GXFlow" \
+            /p:dbName="${args.dbName}" \
+            /p:dbServerName="${args.dbServerName}" \
+            /p:dbServerPort="${args.dbServerPort}" \
+            /p:dbServerUser="${dbUsername}" \
+            /p:dbServerPass="${dbPassword}" \
+            /t:ConfigureDataStore
+        """
     }
-    bat label: 'Writing commiteable properties',
-        script: "\"${args.msbuildExePath}\" .\\properties.msbuild ${target} ${msbuildGenArgs} /nologo "
 }

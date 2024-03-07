@@ -1,13 +1,21 @@
-/*
- * Job packageModule >> This method executes the task 'PackageModule' to publishes a module from the working model to a local path 
- * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PackageModule+Task
+/**
+ * Job: packageModule >> This job executes the 'PackageGXModule' task to publish a module from the working model to a local path.
+ * -- >> For detailed information on the task, refer to the documentation: https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PackageModule+Task
  *
- * @Param args = [:]
- * +- gxBasePath
- * +- localKBPath
- * +- environmentName
- * +- propertiesFilePath
- * +- machineFilePath
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - localKBPath: The local path of the Knowledge Base.
+ *   - packageModuleName: The name of the module to be packaged.
+ *   - csharpEnvName: The C# environment name.
+ *   - javaEnvName: The Java environment name.
+ *   - netCoreEnvName: The .NET Core environment name.
+ *
+ * Additional Information:
+ *  - propsFile: An auxiliary file where the 'GetObjectProperty' task writes the module version.
+ *  - moduleTargetPath: The local path inside the Knowledge Base where the packaged module is intended to be stored.
+ *  - packageModuleName: The module version is read from the 'propsFile' file during the execution.
+ *
  */
 
 def call(Map args = [:]) {
@@ -33,6 +41,5 @@ def call(Map args = [:]) {
         /t:PackageGXModule
     """
     def packageModuleName = readJSON file: propsFile
-    echo "[READ] Object property `packageModuleName` = ${packageModuleName.aux}"
     return "${moduleTargetPath}\\${args.packageModuleName}_${packageModuleName.aux}.opc"
 }

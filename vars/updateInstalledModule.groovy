@@ -1,12 +1,13 @@
 /*
- * Job updateInstalledModule >> This method run UpdateModule Task to update a specific module
- * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?46830,Modules+MSBuild+Tasks#UpdateModule+Task 
+ * Job updateInstalledModule >> This method runs the 'UpdateModule' task to update a specific module.
+ * -- >> For detailed information on the task, refer to the documentation: https://wiki.genexus.com/commwiki/wiki?46830,Modules+MSBuild+Tasks#UpdateModule+Task 
  *
- * @Param args = [:]
- * +- gxBasePath
- * +- localKBPath
- * +- propertiesFilePath
- * +- moduleName
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - localKBPath: The local path of the Knowledge Base.
+ *   - moduleName: The name of the module to be updated.
+ *
  */
 
 def call(Map args = [:]) {

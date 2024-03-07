@@ -11,6 +11,7 @@
     <Target Name="ShowTargets">
         <Message Text="AvoidDatastoreConnections" />
         <Message Text="ConfigureDataStore" />
+        <Message Text="ConfigureGAMDataStore" />
         <Message Text="GetEnvironmentProperty" />
         <Message Text="SetEnvironmentProperty" />
         <Message Text="GetGeneratorProperty" />
@@ -34,25 +35,21 @@
     <Target Name="ConfigureDataStore">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(environmentName)" />
-        <!-- 
-        START TRUNK
-        <HasDataStore DataStoreName="Default">
-            <Output TaskParameter="Found" PropertyName="DataStoreFound" />
-            <Output TaskParameter="DataStoreType" PropertyName="DataStoreType" />
-        </HasDataStore>
-        <Error Text="The datastore with name 'Default' was not found" Condition=" '$(DataStoreFound)' == 'false' " Importance="high" />
-        <Message Text="The datastore with name 'Default' was found, is of type '$(DataStoreType)'" Condition=" '$(DataStoreFound)' == 'true' " Importance="high" />
-        END TRUNK
-        -->
-        <SetGeneratorProperty Condition="'$(dataStoreName)'=='Default'" Generator="Default" Name="Reorganize server tables" Value="Yes" />
-        <SetEnvironmentProperty Condition="'$(dataStoreName)'=='GAM'" Name="Keep GAM database updated" Value="true" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Name="Database name" Value="$(dbName)" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Name="Server name" Value="$(dbServerName)" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Name="Server TCP/IP port" Value="$(dbServerPort)" />
-        <SetDataStoreProperty Condition="'$(dataStoreName)'=='Default' AND '$(Generator)'=='.NET' AND '$(DataSource)'=='SQL Server'" DataStore="Default" Name="Use trusted connection" Value="No" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Name="User id" Value="$(dbServerUser)" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Name="User password" Value="$(dbServerPass)" />
-        <SetDataStoreProperty Condition="'$(dataStoreName)'=='Default' AND '$(Generator)'=='Java'" DataStore="Default" Name="Use custom JDBC URL" Value="False" />
+        <GetEnvironmentProperty Name="DataSource" >
+            <Output TaskParameter="PropertyValue" PropertyName="EnvDataSource"/>
+        </GetEnvironmentProperty>
+        <GetEnvironmentProperty Name="GeneratedLanguage" >
+            <Output TaskParameter="PropertyValue" PropertyName="EnvGenerator"/>
+        </GetEnvironmentProperty>
+        <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="Yes" />
+        <SetDataStoreProperty DataStore="$(dataStoreName)" Condition="'$(EnvGenerator)'=='.NET' AND '$(EnvDataSource)'=='SQL Server'" Name="Use trusted connection" Value="No" />
+        <SetDataStoreProperty DataStore="$(dataStoreName)" Condition="'$(EnvGenerator)'=='Java'" Name="Use custom JDBC URL" Value="False" />
+        <SetEnvironmentProperty Condition="'$(dataStoreName)'=='GAM'" Name="Keep GAM database updated" Value="true" />
     </Target>
 
     <Target Name="GetEnvironmentProperty">

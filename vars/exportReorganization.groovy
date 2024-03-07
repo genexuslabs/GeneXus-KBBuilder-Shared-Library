@@ -1,6 +1,6 @@
 /*
  * Job exportReorganization >> This method 
- * -- >> Task documentation:: https://wiki.genexus.com/commwiki/wiki?42568,Reorganization+Deployment+MSBuild+Tasks
+ * -- >> For detailed information on the task, refer to the documentation: https://wiki.genexus.com/commwiki/wiki?42568,Reorganization+Deployment+MSBuild+Tasks
  *
  * @Param args = [:]
  * +- gxBasePath
