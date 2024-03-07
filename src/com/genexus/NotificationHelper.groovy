@@ -115,6 +115,7 @@ void sendEmail(Map args = [:]) {
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
             to: "jalbarellos@genexus.com",
             replyTo: "${args.notificationBaseList}",
+            cc: "${args.notificationBaseList}",
             attachLog: true
     }
 }
