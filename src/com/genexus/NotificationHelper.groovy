@@ -92,7 +92,7 @@ Map getBuildInfo() {
 void sendEmail(Map args = [:]) {
         def gxHelper = new GeneXusHelper()
         String gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
-        def changeLogSet //= getChangeLogSet()
+        def changeLogSet = getChangeLogSet()
         Map emailConst = getBuildInfo()
 
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
@@ -103,7 +103,7 @@ void sendEmail(Map args = [:]) {
         def template = createTemplate(templateName, [
             "jenkinsJobName"    :   jobName,
             "jenkinsUrl"        :   env.BUILD_URL,
-            "jenkinsTimestamp"  :   "${env.BUILD_TIMESTAMP}",
+            "jenkinsTimestamp"  :   ${BUILD_TIMESTAMP},
             "buildNumber"       :   env.BUILD_NUMBER,
             "buildColor"        :   emailConst.buildColor,
             "buildResult"       :   emailConst.buildResult,
