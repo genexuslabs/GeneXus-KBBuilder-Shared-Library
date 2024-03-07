@@ -103,7 +103,7 @@ void sendEmail(Map args = [:]) {
         def template = createTemplate(templateName, [
             "jenkinsJobName"    :   jobName,
             "jenkinsUrl"        :   env.BUILD_URL,
-            "jenkinsTimestamp"  :   ${BUILD_TIMESTAMP},
+            "jenkinsTimestamp"  :   "${env.BUILD_TIMESTAMP}",
             "buildNumber"       :   env.BUILD_NUMBER,
             "buildColor"        :   emailConst.buildColor,
             "buildResult"       :   emailConst.buildResult,
