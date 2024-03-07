@@ -73,8 +73,15 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
 }
 
 /**
- * This methods 
- * @param 
+ * Configures NuGet server settings for the GeneXus environment.
+ * -- >> For detailed information on the task, refer to the documentation: https://wiki.genexus.com/commwiki/wiki?46830,Modules+MSBuild+Tasks#AddModulesServer+Task
+ *
+ * @param args A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - nugetServerCredentialsId: Jenkins credentials ID for NuGet server authentication.
+ *   - nugetServerName: Name or URL of the NuGet server.
+ *   - nugetServerSource: NuGet server source URL.
+ *
  */
 void configureNugetServer(Map args = [:]) {
     try{
