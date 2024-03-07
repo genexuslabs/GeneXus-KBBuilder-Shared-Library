@@ -110,14 +110,12 @@ void sendEmail(Map args = [:]) {
             "gxversion"         :   gxVersion
         ]);
 
-        echo "List: ${args.notificationBaseList}"
-        def auxBaseList = args.notificationBaseList.replace(', ', ', cc:')
-        echo "Parse list: ${auxBaseList}"
+        def parsedBaseList = args.notificationBaseList.replace(', ', ', cc:')
 
         emailext body: template,
             mimeType: 'text/html',
             subject: "${emailConst.icon} ${currentBuild.fullDisplayName}",
-            to: "jalbarellos@genexus.com, cc:${args.notificationBaseList.replace(', ', ', cc:'}",
+            to: "jalbarellos@genexus.com, cc:${args.notificationBaseList.replace(', ', ', cc:')}",
             attachLog: true
     }
 }
