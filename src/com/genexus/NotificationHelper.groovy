@@ -1,5 +1,6 @@
 package com.genexus
 import groovy.text.StreamingTemplateEngine
+import com.genexus.GeneXusHelper
 
 /**
  * This method
@@ -50,4 +51,73 @@ String getChangeLogSet() {
     return revisions
 }
 
+Map getBuildInfo() {
+    Map ret = [:]
+    switch (currentBuild.currentResult) {
+        case 'SUCCESS':
+            ret.icon = "✅"
+            ret.buildColor = "green"
+            ret.buildResult = "Success"
+        break
+        case 'UNSTABLE':
+            ret.icon = "⚠️"
+            ret.buildColor = "#FFC300"
+            ret.buildResult = "Unstable"
+        break
+        case 'FAILURE':
+            ret.icon = "❌"
+            ret.buildColor = "red"
+            ret.buildResult = "Failure"
+        break
+        case 'NOT_BUILT':
+            ret.icon = "🔳"
+            ret.buildColor = "black"
+            ret.buildResult = "Not build"
+        break
+        case 'ABORTED':
+            ret.icon = "⛔"
+            ret.buildColor = "orange"
+            ret.buildResult = "Aborted"
+        break
+        default:
+            ret.icon = "🚨"
+            ret.buildColor = "red"
+            ret.buildResult = "Unknown"
+        break
+    }
+    return ret
+}
+
+
+void sendEmail(Map args = [:]) {
+        def gxHelper = new GeneXusHelper()
+        String gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
+        def changeLogSet = getChangeLogSet()
+        Map emailConst = getBuildInfo()
+        
+        String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
+        String templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
+        def template = createTemplate(templateName, [
+            "jenkinsJobName"    :   jobName,
+            "jenkinsUrl"        :   env.BUILD_URL,
+            "jenkinsTimestamp"  :   env.BUILD_TIMESTAMP,
+            "buildNumber"       :   env.BUILD_NUMBER,
+            "buildColor"        :   emailConst.buildColor,
+            "buildResult"       :   emailConst.buildResult,
+            "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
+            "changeLogSet"      :   changeLogSet,
+            "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
+            "gxversion"         :   gxVersion
+        ]);
+
+        def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
+        def jobDisplayName = "${currentBuild.fullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
+
+        emailext body: template,
+            mimeType: 'text/html',
+            subject: "${emailConst.icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
+            to: "jalbarellos@genexus.com",
+            replyTo: "jalbarellos@genexus.com",
+            attachLog: true
+}
 return this
