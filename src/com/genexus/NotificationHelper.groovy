@@ -95,16 +95,16 @@ void sendEmail(Map args = [:]) {
         def changeLogSet = getChangeLogSet()
         Map emailConst = getBuildInfo()
 
-        String jobName = (JOB_NAME).replace(JOB_BASE_NAME, '')
+        String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
         String templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
         String jobFullDisplayName = currentBuild.fullDisplayName
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
         def jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
         def template = createTemplate(templateName, [
             "jenkinsJobName"    :   jobName,
-            "jenkinsUrl"        :   BUILD_URL,
-            "jenkinsTimestamp"  :   BUILD_TIMESTAMP,
-            "buildNumber"       :   BUILD_NUMBER,
+            "jenkinsUrl"        :   env.BUILD_URL,
+            "jenkinsTimestamp"  :   "${env.BUILD_TIMESTAMP}",
+            "buildNumber"       :   env.BUILD_NUMBER,
             "buildColor"        :   emailConst.buildColor,
             "buildResult"       :   emailConst.buildResult,
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
@@ -116,7 +116,7 @@ void sendEmail(Map args = [:]) {
 
         emailext body: template,
             mimeType: 'text/html',
-            subject: "${emailConst.icon} ${jobDisplayName.toString()} Build #${BUILD_NUMBER} » ${currentBuild.currentResult}",
+            subject: "${emailConst.icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
             to: "jalbarellos@genexus.com",
             replyTo: "jalbarellos@genexus.com",
             attachLog: true
