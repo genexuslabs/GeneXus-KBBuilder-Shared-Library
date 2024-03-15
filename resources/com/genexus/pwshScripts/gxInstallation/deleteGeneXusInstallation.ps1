@@ -13,7 +13,7 @@ if(Test-Path -Path $gxExeConfigPath) {
     [xml]$gxExeConfig = Get-Content $gxExeConfigPath 
     #$gxExeConfig
 	$keyValueTags = $gxExeConfig.configuration["appSettings"]
-    foreach($tag in $keyValueTags) {
+    foreach($tag in $keyValueTags.add) {
         if($tag.key -eq "ProgramDataPath") {
             $programDataPath = $tag.value
             if(Test-Path -Path $programDataPath) {
