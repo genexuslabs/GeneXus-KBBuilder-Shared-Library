@@ -18,7 +18,7 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
     writeFile file: 'properties.msbuild', text: fileContents
 
-    withCredentials([usernamePassword(credentialsId: dbServerCredentialsId, usernameVariable: 'dbUsername', passwordVariable: 'dbPassword')]) {
+    withCredentials([usernamePassword(credentialsId: args.dbServerCredentialsId, usernameVariable: 'dbUsername', passwordVariable: 'dbPassword')]) {
         bat script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
