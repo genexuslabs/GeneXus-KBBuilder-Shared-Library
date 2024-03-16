@@ -6,7 +6,6 @@ param (
 	[ValidateNotNullOrEmpty()]
     [string] $protectionServerType,
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
     [string] $protectionServerName,
     [Parameter(Mandatory=$True)]
     [string] $protectionServerUser
