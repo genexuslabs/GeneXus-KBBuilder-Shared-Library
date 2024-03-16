@@ -72,7 +72,7 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
         }
         else {
             echo "IN ELSE"
-            powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:''"
+            powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}'"
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
