@@ -63,7 +63,6 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
         writeFile file: 'configureProtectionServer.ps1', text: fileContents
         echo "protServerCredentialsId::${protServerCredentialsId}"
         if(protServerCredentialsId != null) {
-            echo "IN IF"
             withCredentials([
                 usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
             ]) {
@@ -71,7 +70,6 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
             }
         }
         else {
-            echo "IN ELSE"
             powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}'"
         }
     } catch (error) {
