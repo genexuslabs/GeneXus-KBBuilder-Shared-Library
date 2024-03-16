@@ -61,14 +61,18 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
     try{
         fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
         writeFile file: 'configureProtectionServer.ps1', text: fileContents
+        echo "protServerCredentialsId:${protServerCredentialsId}"
         def cred = credentials(protServerCredentialsId)
+        echo "cred::${cred}"
         if (cred != null) {
+            echo "IN IF"
             withCredentials([
                 usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
             ]) {
                 powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
             }
         } else {
+            echo "IN ELSE"
             powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:''"
         }
     } catch (error) {
