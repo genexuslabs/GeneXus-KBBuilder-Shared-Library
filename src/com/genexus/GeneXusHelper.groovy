@@ -59,12 +59,17 @@ void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String
  */
 void configureProtectionServer(String gxBasePath, String protServerType, String protServerName, String protServerCredentialsId) {
     try{
-        withCredentials([
-            usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
-        ]) {
-            fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
-            writeFile file: 'configureProtectionServer.ps1', text: fileContents
-            powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
+        fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
+        writeFile file: 'configureProtectionServer.ps1', text: fileContents
+        def cred = credentials(protServerCredentialsId)
+        if (cred != null) {
+            withCredentials([
+                usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')
+            ]) {
+                powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
+            }
+        } else {
+            powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:''"
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
