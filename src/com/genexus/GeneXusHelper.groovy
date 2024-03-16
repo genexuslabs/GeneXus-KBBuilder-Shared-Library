@@ -68,7 +68,7 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
                 powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:'${protectionServerUser}'"
             }
         }
-        else 
+        else {
             powershell script: ".\\configureProtectionServer.ps1 -gxBasePath:'${gxBasePath}' -protectionServerType:'${protServerType}' -protectionServerName:'${protServerName}' -protectionServerUser:''"
         }
     } catch (error) {
