@@ -7,7 +7,6 @@ param (
     [string] $protectionServerType,
     [Parameter(Mandatory=$True)]
     [string] $protectionServerName,
-    [Parameter(Mandatory=$True)]
     [string] $protectionServerUser
 )
 $ErrorActionPreference="Stop"
