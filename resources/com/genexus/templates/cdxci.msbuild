@@ -12,6 +12,7 @@
         <Message Text="BuildConfigurationEnv" />
         <Message Text="CustomBuild" />
         <Message Text="UpdateInstalledModule" />
+        <Message Text="RestoreInstalledModule" />
         <Message Text="TestObjTestSuite" />
         <Message Text="TestUIObj" />
         <Message Text="CheckReorgRequired" />
@@ -54,11 +55,14 @@
     </Target>
     
     <Target Name="UpdateInstalledModule">
-    <!-- CREAR SEPARADOR DE LIST STRING
-        CREAR ITEMGROUP (CHATBOT GEN)
-        -->
+        <Message Text="[DEBUG] $(ModuleName.Split(','))" Importance="high"/>
+        <ItemGroup>
+            <ModuleToGXVersion Include="$(ModuleName.Split(','))" />
+        </ItemGroup>
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
+        <Message Text="[DEBUG] %{ModuleToGXVersion.Identity}" Importance="high"/>
+		<UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
 	</Target>
     <Target Name="RestoreInstalledModule">
