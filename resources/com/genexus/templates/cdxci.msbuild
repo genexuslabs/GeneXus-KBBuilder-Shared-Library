@@ -61,6 +61,7 @@
         </ItemGroup>
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
+        <Message Text="[DEBUG] %{ModuleToGXVersion}" Importance="high"/>
         <Message Text="[DEBUG] %{ModuleToGXVersion.Identity}" Importance="high"/>
 		<UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
