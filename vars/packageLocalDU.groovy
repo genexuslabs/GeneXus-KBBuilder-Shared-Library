@@ -22,7 +22,7 @@ def call(Map args = [:]) {
             /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
             /p:ObjectNames="DeploymentUnitCategory:${args.duName}" \
             /p:ApplicationServer="${args.duAppServer}" \
-            /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
+            /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:CallTreeLogFile="${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log") \
             /p:USE_APPSERVER_DATASOURCE="False" \
             /p:DEPLOY_TYPE="BINARIES" \
@@ -44,8 +44,11 @@ def call(Map args = [:]) {
             /p:localKbPath="${args.localKBPath}" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
             /p:DeployFileFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}" \
-            /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
+            /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:AppName="${args.duName}" \
             /t:CreatePackage
         """
+    echo "DEBUG Shared Lib, DeployFileFullPath=${args.localKBPath}\\${args.targetPath}\\${args.duName}"
+    echo "DEBUG Shared Lib, FileName=${args.duName}_${env.BUILD_NUMBER}.zip"
+    echo "DEBUG Shared Lib, DeployFullPath=${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}"
 }

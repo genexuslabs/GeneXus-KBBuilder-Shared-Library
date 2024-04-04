@@ -88,6 +88,7 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
  *   - nugetServerName: Name or URL of the NuGet server.
  *   - nugetServerSource: NuGet server source URL.
  *
+ * TODO DEPRECATE
  */
 void configureNugetServer(Map args = [:]) {
     try{
