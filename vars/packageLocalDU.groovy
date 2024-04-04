@@ -48,7 +48,5 @@ def call(Map args = [:]) {
             /p:AppName="${args.duName}" \
             /t:CreatePackage
         """
-    echo "DEBUG Shared Lib, DeployFileFullPath=${args.localKBPath}\\${args.targetPath}\\${args.duName}"
-    echo "DEBUG Shared Lib, FileName=${args.duName}_${env.BUILD_NUMBER}.zip"
-    echo "DEBUG Shared Lib, DeployFullPath=${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}"
+    return "${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}_${env.BUILD_NUMBER}.zip"
 }
