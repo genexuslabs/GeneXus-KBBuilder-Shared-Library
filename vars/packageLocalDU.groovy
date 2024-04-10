@@ -49,5 +49,18 @@ def call(Map args = [:]) {
             /p:AppName="${args.duName}" \
             /t:CreatePackage
         """
-    return "${packageLocationPath}\\${args.duName}_${env.BUILD_NUMBER}.zip"
+
+    def generatedFile = powershell label: "Find generated file",
+    script: """
+        \$dirs = Get-ChildItem -Path \"${packageLocationPath}\" 
+        foreach(\$i in \$dirs) {
+            \$file = Get-ChildItem -Path \"${packageLocationPath}\"\\\$i | Where-Object { \$_.Name.StartsWith(\"${args.duName}_${env.BUILD_NUMBER}\" + \".\")}
+            \$aux = \$file.name
+            if(![string]::IsNullOrEmpty(\$aux)) {
+                \$aux.Replace(\"${args.duName}_${env.BUILD_NUMBER}\", \"\")
+            } 
+        }
+    """, returnStdout: true
+    
+    return "${packageLocationPath}\\${generatedFile.trim()}"
 }
