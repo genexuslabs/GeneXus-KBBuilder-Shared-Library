@@ -17,8 +17,8 @@ void createDockerContext(Map args = [:]) {
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
-                /p:ProjectName="${args.duName}_${params.buildJobNumber}" \
-                /p:DOCKER_WEBAPPLOCATION="${deploymentUnitDefinition.name}" \
+                /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
+                /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage
             """
     } catch (error) {
