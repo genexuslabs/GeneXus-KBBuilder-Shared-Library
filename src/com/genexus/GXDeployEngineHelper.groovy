@@ -19,6 +19,7 @@ void createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
+                /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage
             """
 //                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
