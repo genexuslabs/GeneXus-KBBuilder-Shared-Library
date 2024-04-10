@@ -10,9 +10,8 @@ package com.genexus
  *   - nugetServerName: Name or URL of the NuGet server.
  *   - nugetServerSource: NuGet server source URL.
  *
- * TODO USE THIS INSTED GeneXusHelper method
  */
-void configureNugetServer2(Map args = [:]) {
+void configureNugetServer(Map args = [:]) {
     try{
         if (!fileExists("${WORKSPACE}\\cdxci.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
