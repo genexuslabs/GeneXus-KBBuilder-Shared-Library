@@ -37,16 +37,17 @@ def call(Map args = [:]) {
             /t:CreateDeploy
         """
     gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
-        
+    
+    def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
     bat script: """
             "${args.msbuildExePath}" "${gxdprojFilePath}" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
-            /p:DeployFileFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}" \
+            /p:DeployFileFullPath="${packageLocationPath}" \
             /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:AppName="${args.duName}" \
             /t:CreatePackage
         """
-    return "${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}_${env.BUILD_NUMBER}.zip"
+    return "${packageLocationPath}\\${args.duName}_${env.BUILD_NUMBER}.zip"
 }
