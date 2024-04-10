@@ -43,7 +43,7 @@ def call(Map args = [:]) {
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
-            /p:DeployFileFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}" \
+            /p:DeployFileFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}" \
             /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:AppName="${args.duName}" \
             /t:CreatePackage

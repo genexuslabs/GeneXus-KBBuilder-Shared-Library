@@ -14,7 +14,6 @@ void createDockerContext(Map args = [:]) {
                 /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
                 /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
                 /p:DOCKER_BASE_IMAGE="${args.dockerBaseImage}" \
-                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\Integration${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
