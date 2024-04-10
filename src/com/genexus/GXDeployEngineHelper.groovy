@@ -14,6 +14,7 @@ void createDockerContext(Map args = [:]) {
                 /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
                 /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
                 /p:DOCKER_BASE_IMAGE="${args.dockerBaseImage}" \
+                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\Integration${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
@@ -22,7 +23,6 @@ void createDockerContext(Map args = [:]) {
                 /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage
             """
-//                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\${args.duName}\\${args.duName}\\${env.BUILD_NUMBER}" \
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo " ERROR ${error.getMessage()}"
