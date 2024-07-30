@@ -34,7 +34,7 @@ def call(Map args = [:]) {
             /p:TARGET_JRE="${args.duTargetJRE}" \
             /p:PACKAGE_FORMAT="Automatic" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
-            /l:FileLogger,Microsoft.Build.Engine
+            /l:FileLogger,Microsoft.Build.Engine \
             /t:CreateDeploy
         """
     gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
