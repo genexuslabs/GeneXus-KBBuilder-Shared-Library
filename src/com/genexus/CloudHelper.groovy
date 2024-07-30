@@ -10,7 +10,7 @@ package com.genexus
  */
 void awsConfigure(Map args = [:]) {
     try{
-        echo "Configure ${args.awsCredentialsId}"
+        echo "Configure AWS CLI profile: ${args.awsCredentialsId}"
         withCredentials([
             usernamePassword(
                 credentialsId: args.awsCredentialsId,

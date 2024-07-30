@@ -23,7 +23,7 @@ def call(Map args = [:]) {
             /p:ObjectNames="DeploymentUnitCategory:${args.duName}" \
             /p:ApplicationServer="${args.duAppServer}" \
             /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
-            /p:CallTreeLogFile="${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log") \
+            /p:CallTreeLogFile="${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log" \
             /p:USE_APPSERVER_DATASOURCE="False" \
             /p:DEPLOY_TYPE="BINARIES" \
             /p:APPLICATION_KEY="${args.duAppEncryKey}" \
@@ -34,7 +34,7 @@ def call(Map args = [:]) {
             /p:TARGET_JRE="${args.duTargetJRE}" \
             /p:PACKAGE_FORMAT="Automatic" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
-            /l:FileLogger,Microsoft.Build.Engine;logfile=c:\\fullgx\\temp\\CreateDeploy.log
+            /l:FileLogger,Microsoft.Build.Engine
             /t:CreateDeploy
         """
     gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
