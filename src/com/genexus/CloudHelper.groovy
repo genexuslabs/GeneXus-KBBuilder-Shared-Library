@@ -10,7 +10,7 @@ package com.genexus
  */
 void awsConfigure(Map args = [:]) {
     try{
-        echo "Configure AWS CLI profile: ${args.awsCredentialsId}"
+        echo "[INFO] Configure AWS CLI profile: ${args.awsCredentialsId}"
         withCredentials([
             usernamePassword(
                 credentialsId: args.awsCredentialsId,
@@ -22,6 +22,27 @@ void awsConfigure(Map args = [:]) {
             powershell script: "aws configure set region ${args.awsRegion} --profile ${args.awsCredentialsId} "
             powershell script: "aws configure set output ${args.awsOutput} --profile ${args.awsCredentialsId}"
         }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Uploads an artifact to an AWS S3 bucket
+ *
+ * @param args A map containing the following parameters:
+ *   - artifactFullPath: The full path to the artifact to be uploaded
+ *   - awsS3BucketName: The name of the AWS S3 bucket
+ *   - awsCredentialsId: AWS previously configured profile
+ */
+void awsUploadToS3Bucket(Map args = [:]) {
+    try{
+        echo "[INFO] Starting upload artifact to S3"
+        echo "[DEBUG] Artifact absolute path:\"${args.artifactFullPath}\""
+        echo "[DEBUG] AWS Bucket S3://${args.awsS3BucketName}"
+        echo "[DEBUG] AWS profile: ${args.awsCredentialsId}"
+        powershell script: "aws s3 cp \"${args.artifactFullPath}\" s3://${args.awsS3BucketName} --profile ${args.awsCredentialsId}"
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error

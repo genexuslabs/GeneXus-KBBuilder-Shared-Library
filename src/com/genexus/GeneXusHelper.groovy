@@ -61,7 +61,7 @@ void configureProtectionServer(String gxBasePath, String protServerType, String 
     try{
         fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
         writeFile file: 'configureProtectionServer.ps1', text: fileContents
-        echo "protServerCredentialsId::${protServerCredentialsId}"
+        echo "[DEBUG] protServerCredentialsId::${protServerCredentialsId}"
         if(protServerCredentialsId != null) {
             withCredentials([
                 usernamePassword(credentialsId: "${protServerCredentialsId}", passwordVariable: 'protectionServerPass', usernameVariable: 'protectionServerUser')

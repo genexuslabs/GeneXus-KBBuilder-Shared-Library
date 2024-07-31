@@ -40,7 +40,7 @@ def call(Map args = [:]) {
     gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
     
     def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
-    echo "DEBUG packageLocationPath::${packageLocationPath}"
+    echo "[DEBUG] packageLocationPath::${packageLocationPath}"
     bat script: """
             "${args.msbuildExePath}" "${gxdprojFilePath}" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \

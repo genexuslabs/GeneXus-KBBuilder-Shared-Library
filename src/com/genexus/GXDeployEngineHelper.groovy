@@ -24,7 +24,7 @@ void createDockerContext(Map args = [:]) {
             """
     } catch (error) {
         currentBuild.result = 'FAILURE'
-        echo " ERROR ${error.getMessage()}"
+        echo "[ERROR] ${error.getMessage()}"
         throw error
     }
 }

@@ -39,5 +39,5 @@ def call(Map args = [:]) {
     gxHelper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
 
     def gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
-    echo "Using GeneXus Installation version::${gxVersion}"
+    echo "[INFO] Using GeneXus Installation version::${gxVersion}"
 }

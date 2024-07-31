@@ -17,7 +17,7 @@ def call(Map args = [:], String reorgExportPath) {
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "localKbPath", args.localKBPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "SourcePath", "${args.localKBPath}\\${args.targetPath}")
-    echo " INFO export reorganization to ${reorgExportPath}"
+    echo "[INFO] export reorganization to ${reorgExportPath}"
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "ReorgDestination", reorgExportPath)
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "FileName", "${env.BUILD_NUMBER}_reorg.jar")
     msbuildGenArgs = concatMSBuildArgs(msbuildGenArgs, "Generator", args.generator)

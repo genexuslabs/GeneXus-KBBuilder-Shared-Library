@@ -27,9 +27,9 @@ def call(Map args = [:]) {
                 /p:environmentName="${args.environmentName}" \
                 /t:CheckReorgRequired
             """
-        echo "NOT found pending reorganization"
+        echo "[INFO] NOT found pending reorganization"
     } catch (error) {
-        echo "Found pending reorganization"
+        echo "[INFO] Found pending reorganization"
         foundReorganization = true
     }
     return foundReorganization
