@@ -59,7 +59,6 @@ String getAbsolutePathFromWS(String relativePath) {
     }
 }
 
-
 /**
  * This method forcefully removes a directory and its contents.
  *
@@ -73,6 +72,33 @@ void removeDirectoryPath(String dirPath) {
             script: """
                 if(Test-Path -Path '${dirPath}') {
                     Remove-Item -Path '${dirPath}' -Recurse -Force 
+                }
+            """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Compresses a directory using 7-Zip if available, otherwise uses PowerShell's Compress-Archive.
+ *
+ * @param sourceDir The full path to the directory to be compressed.
+ * @param destinationZip The path where the resulting zip file will be saved.
+ * @throws Exception if an error occurs during the compression process.
+ */
+void winCompressDirectory(String sourceDir, String destinationZip) {
+    try {
+        powershell label: "Remove path: ${dirPath}",
+            script: """
+                \$auxDestinationZip = \"${destinationZip}\\*\"
+                if(Test-Path -Path \$auxDestinationZip) { Remove-Item -Path \$auxDestinationZip}
+                if (Get-Command 7z -ErrorAction SilentlyContinue) {
+                    Write-Output "7z command found. Using 7z to compress the directory."
+                    & 7z a -tzip \$auxDestinationZip ${sourceDir}
+                } else {
+                    Write-Output "7z command not found. Using Compress-Archive to compress the directory."
+                    Compress-Archive -Path ${sourceDir} -DestinationPath \$auxDestinationZip
                 }
             """
     } catch (error) {
