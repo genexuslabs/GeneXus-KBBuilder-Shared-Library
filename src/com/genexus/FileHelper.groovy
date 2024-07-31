@@ -89,7 +89,7 @@ void removeDirectoryPath(String dirPath) {
  */
 void winCompressDirectory(String sourceDir, String destinationZip) {
     try {
-        powershell label: "Remove path: ${dirPath}",
+        powershell label: "Compress Directory",
             script: """
                 \$auxDestinationZip = \"${destinationZip}\\*\"
                 if(Test-Path -Path \$auxDestinationZip) { Remove-Item -Path \$auxDestinationZip}
