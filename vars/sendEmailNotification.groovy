@@ -87,7 +87,7 @@ def call(Map args = [:]) {
             mimeType: 'text/html',
             subject: "${icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
             to: args.notifyTo,
-            cc: "jalbarellos@genexus.com",
+            replyTo: "julian.albarellos@globant.com",
             attachLog: true
 
     } catch (def error) {
