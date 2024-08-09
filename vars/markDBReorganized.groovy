@@ -12,10 +12,10 @@
  *   - tomcatVersion: (String, optional) The version of Tomcat to be used, if applicable.
  *   - msbuildExePath: (String) Path to the MSBuild executable.
  */
-void markDBReorganized(Map args = [:]) {
+def markDBReorganized(Map args = [:]) {
     try {
         String target = "${args.customMSBuildScript} /t:UpdateInstallationModel"
-        String msbuildGenArgs = ''
+        String msbuildGenArgs = '' 
         msbuildGenArgs = concatArgs(msbuildGenArgs, "GX_PROGRAM_DIR", "${args.gxBasePath}")
         msbuildGenArgs = concatArgs(msbuildGenArgs, "localKbPath", "${args.localKBPath}")
         msbuildGenArgs = concatArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)

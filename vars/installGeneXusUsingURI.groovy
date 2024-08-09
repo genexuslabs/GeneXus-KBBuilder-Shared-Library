@@ -41,3 +41,4 @@ def call(Map args = [:]) {
     def gxVersion = gxHelper.getGeneXusInstallationVersion(args.gxBasePath)
     echo "[INFO] Using GeneXus Installation version::${gxVersion}"
 }
+
