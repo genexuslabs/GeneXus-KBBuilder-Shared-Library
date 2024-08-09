@@ -1,13 +1,4 @@
 /**
- * This methods 
- * @param filePath
- */
-String concatArgs(String msbuildGenArgs, String propName, String propValue) {
-    msbuildGenArgs = msbuildGenArgs + " /p:" + propName + "=" + "\"" + propValue + "\""
-    return msbuildGenArgs
-}
-
-/**
  * This method marks the database as reorganized using the provided arguments.
  * 
  * @param args a map containing the following keys:
@@ -23,23 +14,17 @@ String concatArgs(String msbuildGenArgs, String propName, String propValue) {
  */
 def call(Map args = [:]) {
     try {
-        String target = "${args.customMSBuildScript} /t:UpdateInstallationModel"
-        String msbuildGenArgs = '' 
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "GX_PROGRAM_DIR", "${args.gxBasePath}")
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "localKbPath", "${args.localKBPath}")
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "EnvironmentName", args.environmentName)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "Generator", args.generator)
-        msbuildGenArgs = concatArgs(msbuildGenArgs, "DataSource", args.dataSource)
-        if(args.generator == "Java") {
-            String jdkToolPath = tool name: args.jdkInstallationId, type: 'jdk'
-            msbuildGenArgs = concatArgs(msbuildGenArgs, "JavaPath", jdkToolPath)
-            if(args.tomcatVersion) {
-                msbuildGenArgs = concatArgs(msbuildGenArgs, "TomcatVersionName", parseTomcatVersion(args.tomcatVersion))
-            }
-        } 
-        bat label: "Apply reorganization", 
-            script: "\"${args.msbuildExePath}\" ${target} ${msbuildGenArgs} /nologo "
+        def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+        writeFile file: 'cdxci.msbuild', text: fileContents
 
+        bat label: "MarkDBReorganized",
+            script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:EnvironmentName="${args.environmentName}" \
+                /t:UpdateInstallationModel
+            """
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo " ERROR ${error.getMessage()}"
