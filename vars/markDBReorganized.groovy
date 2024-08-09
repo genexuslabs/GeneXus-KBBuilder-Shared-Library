@@ -1,4 +1,13 @@
 /**
+ * This methods 
+ * @param filePath
+ */
+String concatArgs(String msbuildGenArgs, String propName, String propValue) {
+    msbuildGenArgs = msbuildGenArgs + " /p:" + propName + "=" + "\"" + propValue + "\""
+    return msbuildGenArgs
+}
+
+/**
  * This method marks the database as reorganized using the provided arguments.
  * 
  * @param args a map containing the following keys:
