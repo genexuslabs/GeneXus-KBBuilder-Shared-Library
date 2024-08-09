@@ -12,7 +12,7 @@
  *   - tomcatVersion: (String, optional) The version of Tomcat to be used, if applicable.
  *   - msbuildExePath: (String) Path to the MSBuild executable.
  */
-def markDBReorganized(Map args = [:]) {
+def call(Map args = [:]) {
     try {
         String target = "${args.customMSBuildScript} /t:UpdateInstallationModel"
         String msbuildGenArgs = '' 
