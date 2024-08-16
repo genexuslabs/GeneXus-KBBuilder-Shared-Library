@@ -38,7 +38,7 @@ def call(Map args = [:]) {
         echo "[DEBUG] Running MSBuild to export reorganization script"
         bat label: "Export reorganization::${args.environmentName}", 
         script: """
-            "${args.msbuildExePath}\\${args.gxBasePath}\\deploy.msbuild"
+            "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild"
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
@@ -48,9 +48,9 @@ def call(Map args = [:]) {
             /p:Generator="${args.generator}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
-            /p:SQLServer="${!isMySQL}" \
+            /p:SQLServer="${!isMySQL}" \ 
             /t:ExportReorganization
-        """
+        """ 
         
         echo "[DEBUG] Copying reorganization script"
         powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${args.BUILD_NUMBER}_ReorganizationScript.txt\""
