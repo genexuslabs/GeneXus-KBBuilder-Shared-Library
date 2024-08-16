@@ -48,9 +48,9 @@ def call(Map args = [:]) {
             /p:Generator="${args.generator}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
-            /p:SQLServer="${!isMySQL}" \ 
+            /p:SQLServer="${!isMySQL}" \
             /t:ExportReorganization
-        """ 
+        """
         
         echo "[DEBUG] Copying reorganization script"
         powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${args.BUILD_NUMBER}_ReorganizationScript.txt\""
