@@ -28,7 +28,7 @@
 def call(Map args = [:]) {
     boolean isMySQL = false;
     if (args.dataSource == "MySQL") {
-        isMySQL = true;
+        isMySQL = true; 
     }
 
     echo "[DEBUG] Data source is MySQL: ${isMySQL}"
@@ -44,7 +44,7 @@ def call(Map args = [:]) {
             /p:environmentName="${args.environmentName}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:ReorgDestination="${args.reorgExportPath}" \
-            /p:FileName="${args.BUILD_NUMBER}_reorg.jar" \
+            /p:FileName="${env.BUILD_NUMBER}_reorg.jar" \
             /p:Generator="${args.generator}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
@@ -53,7 +53,7 @@ def call(Map args = [:]) {
         """
         
         echo "[DEBUG] Copying reorganization script"
-        powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${args.BUILD_NUMBER}_ReorganizationScript.txt\""
+        powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
     } catch (error) {
         echo "[ERROR] An error occurred during the reorganization export process: ${error}"
         throw error
