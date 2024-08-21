@@ -15,7 +15,7 @@ def call(Map args = [:]) {
     bat script: """
             "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-            /p:TargetId="STATICFRONTEND " \
+            /p:TargetId="STATICFRONTEND" \
             /p:KBPath="${args.localKBPath}" \
             /p:KBEnvironment="${args.environmentName}" \
             /p:DeploymentUnit="${args.duName}" \
@@ -47,7 +47,7 @@ def call(Map args = [:]) {
             "${args.msbuildExePath}" "${args.gxBasePath}\\CreateFrontendPackage.msbuild" \
             /p:"GX_PROGRAM_DIR"="${args.gxBasePath}" \
             /p:"GXDeployFileProject"="${gxdprojFilePath}" \
-            /p:"ProjectRootDirectory"="${args.targetPath}\\mobile\\Angular" \
+            /p:"ProjectRootDirectory"="${args.localKBPath}\\${args.targetPath}\\mobile\\Angular" \
             /p:"GenExtensionName"="Angular" \
             /p:"DeploymentScriptDocker"="deploy.angular.docker.msbuild" \
             /p:"STATICFRONTEND_DOCKER_APPLOCATION"="app" \
