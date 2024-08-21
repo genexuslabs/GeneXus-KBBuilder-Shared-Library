@@ -57,14 +57,5 @@ def call(Map args = [:]) {
             /t:CreatePackage
         """
 
-        def generatedFile = powershell label: "Find generated file",
-        script: """
-            \$deployPath = \"${packageLocationPath}\"
-            \$dirs = Get-ChildItem -Path \$deployPath 
-            foreach(\$i in \$dirs) {
-                \$file = Get-ChildItem -Path \$deployPath\\\$i | Where-Object { \$_.Name.StartsWith(\"${args.duName}_${env.BUILD_NUMBER}\" + \".\")}
-                Write-Output(\$file.name)
-            }
-        """, returnStdout: true
-    return "${packageLocationPath}\\${generatedFile.trim()}"
+    return "${packageLocationPath}\\context"
 }
