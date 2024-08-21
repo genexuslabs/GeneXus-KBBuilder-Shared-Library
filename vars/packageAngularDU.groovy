@@ -45,15 +45,15 @@ def call(Map args = [:]) {
 
     bat script: """
             "${args.msbuildExePath}" "${args.gxBasePath}\\CreateFrontendPackage.msbuild" \
-            /p:GX_PROGRAM_DIR"="${args.gxBasePath}" \
-            /p:GXDeployFileProject"="${gxdprojFilePath}" \
-            /p:ProjectRootDirectory"="${args.targetPath}\\mobile\\Angular" \
-            /p:GenExtensionName"="Angular" \
-            /p:DeploymentScriptDocker"="deploy.angular.docker.msbuild" \
-            /p:STATICFRONTEND_DOCKER_APPLOCATION"="app" \
-            /p:STATICFRONTEND_PROVIDER"="docker" \
-            /p:DeployFullPath"="${packageLocationPath}" \
-            /p:DeployDirectory"="${packageLocationPath}" \
+            /p:"GX_PROGRAM_DIR"="${args.gxBasePath}" \
+            /p:"GXDeployFileProject"="${gxdprojFilePath}" \
+            /p:"ProjectRootDirectory"="${args.targetPath}\\mobile\\Angular" \
+            /p:"GenExtensionName"="Angular" \
+            /p:"DeploymentScriptDocker"="deploy.angular.docker.msbuild" \
+            /p:"STATICFRONTEND_DOCKER_APPLOCATION"="app" \
+            /p:"STATICFRONTEND_PROVIDER"="docker" \
+            /p:"DeployFullPath"="${packageLocationPath}" \
+            /p:"DeployDirectory"="${packageLocationPath}" \
             /t:CreatePackage
         """
 
