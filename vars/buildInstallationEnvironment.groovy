@@ -1,21 +1,23 @@
-/*
- * Job buildConfigurationEnvironment >> This method executes the 'BuildAll' task after configuring specific properties to customize the build environment.
+ /*
+ * Job: BuildInstallationEnvironment
  *
- * Custom Configuration:
- * - "Keep GAM database updated" = false
- * - "Deploy business processes on build" = No
- * - "Populate Data" = false
- * - "Reorganize server tables" = No
- * - "Deploy to cloud" = No
+ * Description:
+ * This job synchronizes the `cdxci.msbuild` file from the library resource and builds the project using
+ * MSBuild. It reads the necessary parameters from the `args` map and executes the build all task, specifying
+ * the environment and rebuild options.
  *
  * Parameters:
  * - args: A map containing the following parameters:
+ *   - msbuildExePath: The path to the MSBuild executable.
  *   - gxBasePath: The base path of the GeneXus installation.
  *   - localKBPath: The local path of the Knowledge Base.
- *   - environmentName: The name of the environment.
- *   - msbuildExePath: The path to the MSBuild executable.
- *   - forceRebuild: A boolean indicating whether to force a rebuild.
+ *   - environmentName: The name of the environment to be used.
+ *   - forceRebuild: Boolean flag indicating whether to force a rebuild of the project.
  *
+ * Workflow Steps:
+ * 1. Sync the `cdxci.msbuild` file from the library resource.
+ * 2. Write the file to the workspace.
+ * 3. Execute the MSBuild process with the specified parameters and targets.
  */
  
 def call(Map args = [:]) {

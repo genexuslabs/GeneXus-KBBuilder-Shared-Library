@@ -1,5 +1,9 @@
-/**
- * Job: configureDataStore >> This job configures the GAM Data Store.
+/*
+ * Job: configureGamDataStore
+ *
+ * Description:
+ * This job configures the GAM (GeneXus Access Manager) Data Store. It synchronizes the properties file
+ * and sets up the data store with the provided database credentials and configuration details.
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -10,7 +14,12 @@
  *   - dbServerName: The name of the database server.
  *   - dbServerPort: The port of the database server.
  *   - dbServerCredentialsId: The credentials ID containing the username and password for the database server.
+ *   - msbuildExePath: The path to the MSBuild executable.
  *
+ * Workflow Steps:
+ * 1. Synchronize the properties.msbuild file from the template.
+ * 2. Retrieve database credentials using the provided credentials ID.
+ * 3. Execute the MSBuild script to configure the GAM Data Store with the given parameters.
  */
 
 def call(Map args = [:]) {

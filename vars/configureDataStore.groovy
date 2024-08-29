@@ -1,5 +1,10 @@
-/**
- * Job: configureDataStore >> This job configures only one Data Store.
+/*
+ * Job: configureDataStore
+ *
+ * Description:
+ * This job configures a single Data Store within a specified GeneXus environment. It synchronizes
+ * the properties.msbuild file and uses the provided credentials to set up the database connection
+ * for the Data Store.
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -11,6 +16,11 @@
  *   - dbServerName: The name of the database server.
  *   - dbServerPort: The port of the database server.
  *   - dbServerCredentialsId: The credentials ID containing the username and password for the database server.
+ *
+ * Workflow Steps:
+ * 1. Sync properties.msbuild with the template file from the library resources.
+ * 2. Retrieve database server credentials using the provided credentials ID.
+ * 3. Execute msbuild with the required parameters to configure the Data Store.
  *
  */
 

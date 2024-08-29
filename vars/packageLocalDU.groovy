@@ -1,12 +1,33 @@
 /*
- * Job reorganizeDatabase >> Read properties from environment
+ * Job: PackageLocalDU
  *
- * @Param args = [:]
- * +- gxBasePath
- * +- localKBPath
- * +- environmentName
- * +- propertiesFilePath
- * +- machineFilePath
+ * Description:
+ * This job compiles and deploys
+ * a GeneXus Knowledge Base (KB) project using the provided paths and parameters. The method generates
+ * a deployment package for the specified deployment unit (DU) and returns the path of the generated file.
+ *
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - gxBasePath: The base path of the GeneXus installation.
+ *   - localKBPath: The local path of the Knowledge Base.
+ *   - environmentName: The name of the environment to be used.
+ *   - propertiesFilePath: The path to the properties file.
+ *   - machineFilePath: The path to the machine configuration file.
+ *   - msbuildExePath: The path to the MSBuild executable.
+ *   - duName: The name of the deployment unit.
+ *   - duAppServer: The application server for the deployment unit.
+ *   - targetPath: The target path for the deployment.
+ *   - duAppEncryKey: The application encryption key for the deployment unit.
+ *   - duIncludeGAM: Boolean flag indicating whether to include GAM (GeneXus Access Manager).
+ *   - duIncludeGXFlowBackoffice: Boolean flag indicating whether to include GXFlow Backoffice.
+ *   - duAppUpdate: Boolean flag indicating whether to update the application.
+ *   - duEnableKBN: Boolean flag indicating whether to enable KBN (Knowledge Base Navigator).
+ *   - duTargetJRE: The target JRE for the deployment unit.
+ *
+ * Workflow Steps:
+ * 1. Compile and deploy the GeneXus KB project using MSBuild.
+ * 2. Generate the deployment package for the specified deployment unit.
+ * 3. Return the path of the generated deployment package file.
  */
 
 def call(Map args = [:]) {
