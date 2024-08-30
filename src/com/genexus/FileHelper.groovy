@@ -116,7 +116,7 @@ String standarizeVersion(String version, String label, int position){
                 \$modifiedVersion = \$versionParts -join '.'
                 Write-Output \$modifiedVersion
             """, returnStdout: true
-    return standarizedVersion
+    return standarizedVersion.trim()
 }
 
 return this
