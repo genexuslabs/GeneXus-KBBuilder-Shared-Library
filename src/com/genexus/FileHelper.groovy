@@ -110,7 +110,7 @@ void winCompressDirectory(String sourceDir, String destinationZip) {
 String standarizeVersion(String version, String label, int position){
     def standarizedVersion = powershell label: "Add Label to Given Position",
             script: """
-                \$auxVersionParts = \"${version}\\*\"
+                \$auxVersionParts = ${version}
                 \$versionParts = \$auxVersionParts.Split('.')
                 \$versionParts[${position}] = "\$(\$auxVersionParts[${position}])-${label}"
                 \$modifiedVersion = \$versionParts -join '.'
