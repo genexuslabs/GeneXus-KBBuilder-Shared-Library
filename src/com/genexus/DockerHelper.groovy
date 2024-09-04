@@ -18,7 +18,6 @@ void performDockerLogin(Map args = [:]) {
             sh label: "Login to registry ${args.registryEndpoint}",
                 script: "docker login ${args.registryEndpoint} -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
         }
-        }
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
