@@ -23,7 +23,7 @@ def createDockerContext(Map args = [:]) {
                 /t:CreatePackage
             """
             
-    return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}","context")
+    return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo "[ERROR] ${error.getMessage()}"
