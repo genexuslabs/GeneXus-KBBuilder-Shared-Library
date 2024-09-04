@@ -11,7 +11,7 @@ void performDockerLogin(Map args = [:]) {
     try {
         withCredentials([
             usernamePassword(
-                credentialsId: args.credentialsId,
+                credentialsId: args.registryCredentialsId,
                 usernameVariable: 'DOCKER_USERNAME',
                 passwordVariable: 'DOCKER_PASSWORD')
         ]) {
@@ -34,8 +34,8 @@ void performDockerLogin(Map args = [:]) {
 void performDockerBuild(Map args = [:]) {
     try {
         echo "[INFO] WORKSPACE in Docker helper: ${WORKSPACE}"
-        echo "Build ./Dockerfile --> ${args.dockerImageName}:latest"
-        sh script: "docker build . -t ${args.dockerImageName}:latest"
+        echo "Build ./context/Dockerfile --> ${args.dockerImageName}:latest"
+        sh script: "docker build ./context/Dockerfile -t ${args.dockerImageName}:latest"
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
