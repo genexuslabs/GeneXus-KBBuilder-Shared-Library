@@ -26,6 +26,24 @@ void performDockerLogin(Map args = [:]) {
 }
 
 /**
+ * Build a Docker image from a Dockerfile and tag it as the latest.
+ *
+ * @param args A map containing the following parameters:
+ *   - dockerfileRootPath: The root path where the Dockerfile is located
+ *   - imageTagName: The tag name for the Docker image
+ */
+void performDockerBuild(Map args = [:]) {
+    try {
+        echo "[INFO] WORKSPACE in Docker helper: ${WORKSPACE}"
+        echo "Build ./Dockerfile --> ${args.dockerImageName}:latest"
+        sh script: "docker build . -t ${args.dockerImageName}:latest"
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+}
+
+/**
  * Create a Docker image tag.
  *
  * @param args A map containing the following parameters:
