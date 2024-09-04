@@ -34,8 +34,8 @@ void performDockerLogin(Map args = [:]) {
 void performDockerBuild(Map args = [:]) {
     try {
         echo "[INFO] WORKSPACE in Docker helper: ${WORKSPACE}"
-        echo "Build ./context/Dockerfile --> ${args.dockerImageName}:latest"
-        sh script: "docker build ./context/Dockerfile -t ${args.dockerImageName}:latest"
+        echo "Build ./context --> ${args.dockerImageName}:latest"
+        sh script: "docker build ./context -t ${args.dockerImageName}:latest"
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
