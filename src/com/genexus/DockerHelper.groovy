@@ -52,8 +52,8 @@ void performDockerBuild(Map args = [:]) {
  */
 void performDockerImageTag(Map args = [:]) {
     try {
-        sh label: "Tag ${args.dockerImageName}:latest --> ${args.publishDockerImageName}:${args.version}",
-           script: "docker tag ${args.dockerImageName}:latest ${args.publishDockerImageName}:${args.version}"
+        sh label: "Tag ${args.dockerImageName}:latest --> ${args.dockerImageName}:${args.version}",
+           script: "docker tag ${args.dockerImageName}:latest ${args.dockerImageName}:${args.version}"
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
@@ -68,7 +68,7 @@ void performDockerImageTag(Map args = [:]) {
  */
 void performDockerPushImage(Map args = [:]) {
     try {
-        sh script: "docker push ${args.publishDockerImageName}:${args.version}"
+        sh script: "docker push ${args.dockerImageName}:${args.version}"
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
