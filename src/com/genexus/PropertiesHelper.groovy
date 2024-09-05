@@ -252,10 +252,10 @@ String getVersionProperty(Map args = [:], String verPropName) {
             /p:verPropName="${verPropName}" \
             /p:propFileAbsolutePath="${propsFile}" \
             /p:helperName="aux" \
-            /t:GetObjectProperty
+            /t:GetVersionProperty
         """
         def commiteableGenPropValue = readJSON file: propsFile
-        echo "[READ] Object property `${objPropName}` = ${commiteableGenPropValue.aux}"
+        echo "[READ] Version property `${objPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
