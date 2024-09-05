@@ -102,9 +102,9 @@ void removeUnusedImages() {
 void performDockerPullImageFromPrivateRegistry(Map args = [:]) {
     try {
         String registryInsecureUrl = args.registryEndpoint.replace('https://', '')
-        docker.withRegistry("${args.registryEndpoint}/", args.credentialsId) {
+        docker.withRegistry("${args.registryEndpoint}/", args.registryCredentialsId) {
             sh label: "Download Docker image",
-               script: "docker pull ${registryInsecureUrl}/${args.imageName}:${args.version}"
+               script: "docker pull ${registryInsecureUrl}/${args.dockerImageName}:${args.version}"
         }
     } catch (e) {
         currentBuild.result = 'FAILURE'
