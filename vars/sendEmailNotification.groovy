@@ -12,17 +12,27 @@ String createTemplate(String templateName, def params) {
 }
 
 
-/*
- * Job readPipelineProperties >> Read properties from build.properties
- *
- * @Param args = [:]
- * +- gitUrl
- * +- gitBranch
- * +- gitCredentialsId
- * +- propertiesFilePath
- * +- machineFilePath
- */
 
+/*
+ * Job: sendEmailNotification
+ *
+ * Description:
+ * This job sends an email notification with the build result of a Jenkins job. It uses a template to format 
+ * the email content and includes various details about the build, such as job name, URL, timestamp, duration, 
+ * and change log.
+ *
+ * Parameters:
+ * - args: A map containing the following parameters:
+ *   - notifyTo: The email address to send the notification to.
+ *
+ * Workflow Steps:
+ * 1. Initialize the NotificationHelper and obtain the change log set.
+ * 2. Determine the build result and set the corresponding icon, color, and result string.
+ * 3. Define the email template and populate it with build and job details.
+ * 4. Send the email using the `emailext` plugin, attaching the build log.
+ * 5. Handle any exceptions by setting the build result to 'FAILURE' and rethrowing the error.
+ *
+ */
 def call(Map args = [:]) {
     try {
         def engine2 = new NotificationHelper()

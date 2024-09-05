@@ -1,5 +1,10 @@
-/**
- * Job: runUnitTestSuite >> This job reads properties from the environment and runs a unit test suite using the 'TestObjTestSuite' MSBuild task.
+/*
+ * Job: runUnitTestSuite
+ *
+ * Description:
+ * This job reads properties from the environment and runs a unit test suite using the 'TestObjTestSuite' 
+ * MSBuild task. It syncs the `cdxci.msbuild` template, executes the tests, and stores the results in 
+ * the specified path.
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -12,7 +17,13 @@
  *   - gxserverUSR: The username for GeneXus Server authentication.
  *   - gxserverPWD: The password for GeneXus Server authentication.
  *   - localUnitTestPath: The local path where unit test results are stored.
+ *   - msbuildExePath: The path to the MSBuild executable.
  *
+ * Workflow Steps:
+ * 1. Sync the `cdxci.msbuild` template from the library resources.
+ * 2. Run the unit tests using MSBuild with the specified parameters.
+ * 3. Store the unit test results in the specified path.
+ * 4. Publish the unit test results using JUnit.
  */
 
 def call(Map args = [:]) {

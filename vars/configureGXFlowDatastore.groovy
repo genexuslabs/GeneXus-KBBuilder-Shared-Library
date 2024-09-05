@@ -1,5 +1,10 @@
 /**
- * Job: configureDataStore >> This job configures the GXFlow Data Store.
+ * Job: configureGxFlowDataStore
+ *
+ * Description:
+ * This job configures the GXFlow Data Store for a GeneXus Knowledge Base (KB) by synchronizing
+ * and applying the necessary settings and parameters. It uses an MSBuild script to configure
+ * the data store with the specified database details.
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -10,7 +15,12 @@
  *   - dbServerName: The name of the database server.
  *   - dbServerPort: The port of the database server.
  *   - dbServerCredentialsId: The credentials ID containing the username and password for the database server.
+ *   - msbuildExePath: The path to the MSBuild executable.
  *
+ * Workflow Steps:
+ * 1. Sync the properties.msbuild file from the library resources.
+ * 2. Use the provided database server credentials to configure the GXFlow Data Store.
+ * 3. Execute the MSBuild script to apply the configuration.
  */
 
 def call(Map args = [:]) {

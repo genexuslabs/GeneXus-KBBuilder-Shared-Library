@@ -3,7 +3,7 @@ package com.genexus
  * This methods
  * @param localGXPath
  */
-void createDockerContext(Map args = [:]) {
+def createDockerContext(Map args = [:]) {
     try {
         bat label: "Create Docker context",
             script: """
@@ -22,6 +22,8 @@ void createDockerContext(Map args = [:]) {
                 /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage
             """
+            
+    return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo "[ERROR] ${error.getMessage()}"

@@ -1,6 +1,10 @@
 /*
- * Job publishModule >> This job publishes a GeneXus module using the PublishGXModule MSBuild task. 
- * -- >> For detailed information on the task refer to the documentation https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PublishModule+Task
+ * Job: publishModule
+ *
+ * Description:
+ * This job publishes a GeneXus module using the PublishGXModule MSBuild task. For detailed information 
+ * on the task, refer to the documentation at 
+ * https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PublishModule+Task
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -9,7 +13,12 @@
  *   - moduleServerCredentialsId: The credentials ID containing the username and password for the module server.
  *   - localModulePackage: The local path to the module package.
  *   - moduleServerId: The ID of the module server.
+ *   - msbuildExePath: The path to the MSBuild executable.
  *
+ * Workflow Steps:
+ * 1. Synchronize the properties file (properties.msbuild).
+ * 2. Retrieve the module server credentials.
+ * 3. Execute the PublishGXModule MSBuild task to publish the module.
  */
 
 def call(Map args = [:]) {

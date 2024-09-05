@@ -1,6 +1,10 @@
-/**
- * Job: packageModule >> This job executes the 'PackageGXModule' task to publish a module from the working model to a local path.
- * -- >> For detailed information on the task, refer to the documentation: https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PackageModule+Task
+/*
+ * Job: packageModule
+ *
+ * Description:
+ * This job executes the 'PackageGXModule' task to publish a module from the working model to a local path.
+ * For detailed information on the task, refer to the documentation:
+ * https://wiki.genexus.com/commwiki/wiki?55011,Modules%20MsBuild%20Tasks%20%28GeneXus%2018%20Upgrade%203%20or%20prior%29#PackageModule+Task
  *
  * Parameters:
  * - args: A map containing the following parameters:
@@ -12,10 +16,9 @@
  *   - netCoreEnvName: The .NET Core environment name.
  *
  * Additional Information:
- *  - propsFile: An auxiliary file where the 'GetObjectProperty' task writes the module version.
- *  - moduleTargetPath: The local path inside the Knowledge Base where the packaged module is intended to be stored.
- *  - packageModuleName: The module version is read from the 'propsFile' file during the execution.
- *
+ * - propsFile: An auxiliary file where the 'GetObjectProperty' task writes the module version.
+ * - moduleTargetPath: The local path inside the Knowledge Base where the packaged module is intended to be stored.
+ * - packageModuleName: The module version is read from the 'propsFile' file during the execution.
  */
 
 def call(Map args = [:]) {
