@@ -361,8 +361,8 @@ void addDockerComposeLoggingTags(Map args = [:]) {
  */
 void addExtraVariablesToFile (String filePath, Map vars = [:]) {
     def envFile = new File(filePath)
-    if (!envFile.exists()) {
-        error "El archivo '${filePath}' no existe."
+    if (!fileExists(filePath)) {
+        error "The file '${filePath}' does not exist."
         return
     }
 
