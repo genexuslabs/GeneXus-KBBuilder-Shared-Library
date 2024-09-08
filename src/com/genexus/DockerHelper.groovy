@@ -360,13 +360,13 @@ void addDockerComposeLoggingTags(Map args = [:]) {
  * @param vars A map containing the key-value pairs to add to the file.
  */
 void addExtraVariablesToFile (String filePath, Map vars = [:]) {
-    if (!fileExists(file)) {
-        error "The file '${file}' does not exist."
-        return
-    }
-
     sh label: "List files" 
         script: "ls -la"
+        
+    if (!fileExists(filePath)) {
+        error "The file '${filePath}' does not exist."
+        return
+    }
 
     def existingContent = readFile(filePath)
     def varsString = vars.collect { key, value -> "${key}=${value}" }.join("\n")
