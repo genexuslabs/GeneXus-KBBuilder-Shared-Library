@@ -360,9 +360,6 @@ void addDockerComposeLoggingTags(Map args = [:]) {
  * @param vars A map containing the key-value pairs to add to the file.
  */
 void addExtraVariablesToFile (String filePath, Map vars = [:]) {
-    sh label: "List files",
-        script: "ls -la"
-
     if (!fileExists(filePath)) {
         error "The file '${filePath}' does not exist."
         return
