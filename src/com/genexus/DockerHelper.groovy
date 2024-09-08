@@ -365,6 +365,9 @@ void addExtraVariablesToFile (String filePath, Map vars = [:]) {
         return
     }
 
+    sh label: "List files" 
+        script: "ls -la"
+
     def existingContent = readFile(filePath)
     def varsString = vars.collect { key, value -> "${key}=${value}" }.join("\n")
 
