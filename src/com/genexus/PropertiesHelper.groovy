@@ -218,7 +218,7 @@ void setObjectProperty(Map args = [:], String objName, String objPropName, Strin
                 /p:objectPropValue="${objPropValue}" \
                 /t:SetObjectProperty
             """
-    } catch (error) {
+    } catch (error) { 
         currentBuild.result = 'FAILURE'
         throw error
     }

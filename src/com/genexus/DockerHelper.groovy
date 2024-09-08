@@ -356,4 +356,26 @@ void addDockerComposeLoggingTags(Map args = [:]) {
     }
 }
 
+/**
+ * Add key-value pairs to the end of an environment variables file.
+ *
+ * @param filePath The path to the environment variables file.
+ * @param vars A map containing the key-value pairs to add to the file.
+ */
+void addExtraVariablesToFile (String filePath, Map vars = [:]) {
+    def envFile = new File(filePath)
+    if (!envFile.exists()) {
+        error "The file '${filePath}' does not exist."
+        return
+    }
+
+    envFile.withWriterAppend { writer ->
+        vars.each { key, value ->
+            writer.writeLine("${key}=${value}")
+        }
+    }
+
+    echo "[INFO] Key value pairs added to '${filePath}' successfully."
+}
+
 return this
