@@ -360,7 +360,7 @@ void addDockerComposeLoggingTags(Map args = [:]) {
  * @param vars A map containing the key-value pairs to add to the file.
  */
 void addExtraVariablesToFile (String filePath, Map vars = [:]) {
-    sh label: "List files" 
+    sh label: "List files",
         script: "ls -la"
 
     if (!fileExists(filePath)) {
@@ -368,13 +368,13 @@ void addExtraVariablesToFile (String filePath, Map vars = [:]) {
         return
     }
 
-    // def existingContent = readFile(filePath)
-    // def varsString = vars.collect { key, value -> "${key}=${value}" }.join("\n")
+    def existingContent = readFile(filePath)
+    def varsString = vars.collect { key, value -> "${key}=${value}" }.join("\n")
 
-    // def newContent = existingContent + "\n" + varsString
+    def newContent = existingContent + "\n" + varsString
 
-    // writeYaml file: filePath, data: newContent, overwrite: true
-    // echo "[INFO] Key value pairs added to '${filePath}' successfully."
+    writeYaml file: filePath, data: newContent, overwrite: true
+    echo "[INFO] Key value pairs added to '${filePath}' successfully."
 }
 
 return this
