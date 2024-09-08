@@ -368,9 +368,10 @@ void addExtraVariablesToFile (String filePath, Map vars = [:]) {
     def existingContent = readFile(filePath)
     def varsString = vars.collect { key, value -> "${key}=${value}" }.join("\n")
 
-    def newContent = existingContent + "\n" + varsString
+    echo "[INFO] Read from file: ${varsString}"
+    def newContent = existingContent + varsString
 
-    writeYaml file: filePath, data: newContent, overwrite: true
+    writeFile file: filePath, text: newContent
     echo "[INFO] Key value pairs added to '${filePath}' successfully."
 }
 
