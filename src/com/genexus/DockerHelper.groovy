@@ -102,9 +102,9 @@ void removeUnusedImages() {
 void performDockerPullImageFromPrivateRegistry(Map args = [:]) {
     try {
         String registryInsecureUrl = args.registryEndpoint.replace('https://', '')
-        docker.withRegistry("${args.registryEndpoint}/", args.credentialsId) {
+        docker.withRegistry("${args.registryEndpoint}/", args.registryCredentialsId) {
             sh label: "Download Docker image",
-               script: "docker pull ${registryInsecureUrl}/${args.imageName}:${args.version}"
+               script: "docker pull ${registryInsecureUrl}/${args.dockerImageName}:${args.version}"
         }
     } catch (e) {
         currentBuild.result = 'FAILURE'
@@ -179,38 +179,37 @@ void performDockerComposeStart(Map args = [:]) {
  *   - javaPackageName: The name of the Java package
  */
 void createJavaEnvVarFile(Map args = [:]) {
-    String packageName = args.javaPackageName.replace('.', '_').toUpperCase()
-    FileHelper file = new FileHelper()
     String extraEnvVariables = ""
-    def dbStorage = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.databaseId)
-    withCredentials([
-        usernamePassword(credentialsId: dbStorage.credentialsId, usernameVariable: 'dbStorageUser', passwordVariable: 'dbStoragePwd')
-    ]) {
-        switch (args.dataSource) {
-            case 'SQL Server':
-                extraEnvVariables += "GX_${packageName}_DEFAULT_DB_URL=jdbc:sqlserver://${dbStorage.endpoint}:${dbStorage.port};databaseName=${dbStorage.name};encrypt=true;trustServerCertificate=true\n"
-                break
-            case 'MySQL':
-                extraEnvVariables += "GX_${packageName}_DEFAULT_DB_URL=jdbc:mysql://${dbStorage.endpoint}:${dbStorage.port}/${dbStorage.name}?useSSL=false\n"
-                break
-            default:
-                error "Invalid dataSource input: ${args.dataSource}"
-                break
-        }
-        extraEnvVariables += "GX_${packageName}_DEFAULT_USER_ID=${dbStorageUser}\n"
-        extraEnvVariables += "GX_${packageName}_DEFAULT_USER_PASSWORD=${dbStoragePwd}\n"
-    }
-    if (args.deploymentDefinition.gam) {
-        def dbGAM = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.gam.databaseId)
+    String packageName = args.javaPackageName.replace('.', '_').toUpperCase()
+    if(args.dbStorageName) {
         withCredentials([
-            usernamePassword(credentialsId: dbGAM.credentialsId, usernameVariable: 'dbGAMUser', passwordVariable: 'dbGAMPwd')
+            usernamePassword(credentialsId: args.dbStorageCredentialsId, usernameVariable: 'dbStorageUser', passwordVariable: 'dbStoragePwd')
         ]) {
             switch (args.dataSource) {
                 case 'SQL Server':
-                    extraEnvVariables += "GX_${packageName}_GAM_DB_URL=jdbc:sqlserver://${dbGAM.endpoint}:${dbStorage.port};databaseName=${dbGAM.name};encrypt=true;trustServerCertificate=true\n"
+                    extraEnvVariables += "GX_${packageName}_DEFAULT_DB_URL=jdbc:sqlserver://${args.dbStorageEndpoint}:${args.dbStoragePort};databaseName=${args.dbStorageName};encrypt=true;trustServerCertificate=true\n"
                     break
                 case 'MySQL':
-                    extraEnvVariables += "GX_${packageName}_GAM_DB_URL=jdbc:mysql://${dbGAM.endpoint}:${dbStorage.port}/${dbGAM.name}?useSSL=false\n"
+                    extraEnvVariables += "GX_${packageName}_DEFAULT_DB_URL=jdbc:mysql://${args.dbStorageEndpoint}:${args.dbStoragePort}/${args.dbStorageName}?useSSL=false\n"
+                    break
+                default:
+                    error "Invalid dataSource input: ${args.dataSource}"
+                    break
+            }
+            extraEnvVariables += "GX_${packageName}_DEFAULT_USER_ID=${dbStorageUser}\n"
+            extraEnvVariables += "GX_${packageName}_DEFAULT_USER_PASSWORD=${dbStoragePwd}\n"
+        }
+    }
+    if (args.dbGAMName) {
+        withCredentials([
+            usernamePassword(credentialsId: args.dbGAMCredentialsId, usernameVariable: 'dbGAMUser', passwordVariable: 'dbGAMPwd')
+        ]) {
+            switch (args.dataSource) {
+                case 'SQL Server':
+                    extraEnvVariables += "GX_${packageName}_GAM_DB_URL=jdbc:sqlserver://${args.dbGAMEndpoint}:${args.dbGAMPort};databaseName=${args.dbGAMName};encrypt=true;trustServerCertificate=true\n"
+                    break
+                case 'MySQL':
+                    extraEnvVariables += "GX_${packageName}_GAM_DB_URL=jdbc:mysql://${args.dbGAMEndpoint}:${args.dbGAMPort}/${args.dbGAMName}?useSSL=false\n"
                     break
                 default:
                     error "Invalid dataSource input: ${args.dataSource}"
@@ -219,19 +218,18 @@ void createJavaEnvVarFile(Map args = [:]) {
             extraEnvVariables += "GX_${packageName}_GAM_USER_ID=${dbGAMUser}\n"
             extraEnvVariables += "GX_${packageName}_GAM_USER_PASSWORD=${dbGAMPwd}\n"
         }
-        extraEnvVariables += "GX_GAMCONNECTIONKEY=${args.deploymentDefinition.gam.connectionKey}\n"
+        extraEnvVariables += "GX_GAMCONNECTIONKEY=${args.dbGAMConnKey}\n"
     }
-    if (args.deploymentDefinition.gxflow) {
-        def dbGXFlow = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.gxflow.databaseId)
+    if (args.dbGXFlowName) {
         withCredentials([
-            usernamePassword(credentialsId: dbGXFlow.credentialsId, usernameVariable: 'dbGXFlowUser', passwordVariable: 'dbGXFlowPwd')
+            usernamePassword(credentialsId: args.dbGXFlowCredentialsId, usernameVariable: 'dbGXFlowUser', passwordVariable: 'dbGXFlowPwd')
         ]) {
             switch (args.dataSource) {
                 case 'SQL Server':
-                    extraEnvVariables += "GX_${packageName}_GXFLOW_DB_URL=jdbc:sqlserver://${dbGXFlow.endpoint}:${dbStorage.port};databaseName=${dbGXFlow.name};encrypt=true;trustServerCertificate=true\n"
+                    extraEnvVariables += "GX_${packageName}_GXFLOW_DB_URL=jdbc:sqlserver://${args.dbGXFlowEndpoint}:${args.dbGXFlowPort};databaseName=${args.dbGXFlowName};encrypt=true;trustServerCertificate=true\n"
                     break
                 case 'MySQL':
-                    extraEnvVariables += "GX_${packageName}_GXFLOW_DB_URL=jdbc:mysql://${dbGXFlow.endpoint}:${dbStorage.port}/${dbGXFlow.name}?useSSL=false\n"
+                    extraEnvVariables += "GX_${packageName}_GXFLOW_DB_URL=jdbc:mysql://${args.dbGXFlowEndpoint}:${args.dbGXFlowPort}/${args.dbGXFlowName}?useSSL=false\n"
                     break
                 default:
                     error "Invalid dataSource input: ${args.dataSource}"
@@ -241,22 +239,22 @@ void createJavaEnvVarFile(Map args = [:]) {
             extraEnvVariables += "GX_${packageName}_GXFLOW_USER_PASSWORD=${dbGXFlowPwd}\n"
         }
     }
-    if (args.deploymentDefinition.logLevel) {
-        extraEnvVariables += "GX_LOG_LEVEL=${args.deploymentDefinition.logLevel}\n"
-        extraEnvVariables += "GX_LOG_LEVEL_USER=${args.deploymentDefinition.logLevel}\n"
+    if (args.logLevel) {
+        extraEnvVariables += "GX_LOG_LEVEL=${args.logLevel}\n"
+        extraEnvVariables += "GX_LOG_LEVEL_USER=${args.logLevel}\n"
     }
     extraEnvVariables += "GX_LOG_OUTPUT=ConsoleAppender\n"
-    args.deploymentDefinition.envs.each { envVariable ->
-        extraEnvVariables += "${envVariable.name}=${envVariable.value}\n"
-    }
-    args.deploymentDefinition.secretsEnvs.each { secretEnvVariable ->
-        withCredentials([
-            usernamePassword(credentialsId: secretEnvVariable.credentialsId, usernameVariable: 'secretUser', passwordVariable: 'secretPass')
-        ]) {
-            extraEnvVariables += "${secretEnvVariable.userName}=${secretUser}\n"
-            extraEnvVariables += "${secretEnvVariable.passName}=${secretPass}\n"
-        }
-    }
+    // args.deploymentDefinition.envs.each { envVariable ->
+    //     extraEnvVariables += "${envVariable.name}=${envVariable.value}\n"
+    // }
+    // args.deploymentDefinition.secretsEnvs.each { secretEnvVariable ->
+    //     withCredentials([
+    //         usernamePassword(credentialsId: secretEnvVariable.credentialsId, usernameVariable: 'secretUser', passwordVariable: 'secretPass')
+    //     ]) {
+    //         extraEnvVariables += "${secretEnvVariable.userName}=${secretUser}\n"
+    //         extraEnvVariables += "${secretEnvVariable.passName}=${secretPass}\n"
+    //     }
+    // }
     writeFile file: 'variables.env', text: extraEnvVariables
 }
 
@@ -268,63 +266,62 @@ void createJavaEnvVarFile(Map args = [:]) {
  *   - deploymentDefinition: The deployment definition map
  */
 void createNetCoreEnvVarFile(Map args = [:]) {
-    FileHelper file = new FileHelper()
     String extraEnvVariables = ""
-    def dbStorage = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.databaseId)
-    withCredentials([
-        usernamePassword(credentialsId: dbStorage.credentialsId, usernameVariable: 'dbStorageUser', passwordVariable: 'dbStoragePwd')
-    ]) {
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-DATASOURCE=${dbStorage.endpoint}\n"
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-DB=${dbStorage.name}\n"
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-USER=${dbStorageUser}\n"
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-PASSWORD=${dbStoragePwd}\n"
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-SCHEMA=dbo\n"
-        extraEnvVariables += "GX_CONNECTION-DEFAULT-OPTS=;Integrated Security=no;\n"
-    }
-    if (args.deploymentDefinition.gam) {
-        def dbGAM = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.gam.databaseId)
+    if(args.dbStorageName) {
         withCredentials([
-            usernamePassword(credentialsId: dbGAM.credentialsId, usernameVariable: 'dbGAMUser', passwordVariable: 'dbGAMPwd')
+            usernamePassword(credentialsId: args.dbStorageCredentialsId, usernameVariable: 'dbStorageUser', passwordVariable: 'dbStoragePwd')
         ]) {
-            extraEnvVariables += "GX_CONNECTION-GAM-DATASOURCE=${dbGAM.endpoint}\n"
-            extraEnvVariables += "GX_CONNECTION-GAM-DB=${dbGAM.name}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-DATASOURCE=${args.dbStorageEndpoint}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-DB=${args.dbStorageName}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-USER=${dbStorageUser}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-PASSWORD=${dbStoragePwd}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-SCHEMA=${args.dbStorageSchema}\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-OPTS=;Integrated Security=no;\n"
+        }
+
+    }
+    if (args.dbGAMName) {
+        withCredentials([
+            usernamePassword(credentialsId: args.dbGAMCredentialsId, usernameVariable: 'dbGAMUser', passwordVariable: 'dbGAMPwd')
+        ]) {
+            extraEnvVariables += "GX_CONNECTION-GAM-DATASOURCE=${args.dbGAMEndpoint}\n"
+            extraEnvVariables += "GX_CONNECTION-GAM-DB=${args.dbGAMName}\n"
             extraEnvVariables += "GX_CONNECTION-GAM-USER=${dbGAMUser}\n"
             extraEnvVariables += "GX_CONNECTION-GAM-PASSWORD=${dbGAMPwd}\n"
-            extraEnvVariables += "GX_CONNECTION-GAM-SCHEMA=gam\n"
+            extraEnvVariables += "GX_CONNECTION-GAM-SCHEMA=${args.dbGAMSchema}\n"
             extraEnvVariables += "GX_CONNECTION-GAM-OPTS=;Integrated Security=no;\n"
         }
-        extraEnvVariables += "GX_GAMCONNECTIONKEY=${args.deploymentDefinition.gam.connectionKey}\n"
+        extraEnvVariables += "GX_GAMCONNECTIONKEY=${args.dbGAMConnKey}\n"
     }
-    if (args.deploymentDefinition.gxflow) {
-        def dbGXFlow = file.getDatabaseConnection(args.pipelineDefinition, args.deploymentDefinition.gxflow.databaseId)
+    if (args.dbGXFlowName) {
         withCredentials([
-            usernamePassword(credentialsId: dbGXFlow.credentialsId, usernameVariable: 'dbGXFlowUser', passwordVariable: 'dbGXFlowPwd')
+            usernamePassword(credentialsId: args.dbGXFlowCredentialsId, usernameVariable: 'dbGXFlowUser', passwordVariable: 'dbGXFlowPwd')
         ]) {
-            extraEnvVariables += "GX_CONNECTION-GXFLOW-DATASOURCE=${dbGXFlow.endpoint}\n"
-            extraEnvVariables += "GX_CONNECTION-GXFLOW-DB=${dbGXFlow.name}\n"
+            extraEnvVariables += "GX_CONNECTION-GXFLOW-DATASOURCE=${args.dbGXFlowEndpoint}\n"
+            extraEnvVariables += "GX_CONNECTION-GXFLOW-DB=${args.dbGXFlowName}\n"
             extraEnvVariables += "GX_CONNECTION-GXFLOW-USER=${dbGXFlowUser}\n"
             extraEnvVariables += "GX_CONNECTION-GXFLOW-PASSWORD=${dbGXFlowPwd}\n"
-            extraEnvVariables += "GX_CONNECTION-GXFLOW-SCHEMA=gxflow\n"
+            extraEnvVariables += "GX_CONNECTION-GXFLOW-SCHEMA=${args.dbGXFlowSchema}\n"
             extraEnvVariables += "GX_CONNECTION-GXFLOW-OPTS=;Integrated Security=no;\n"
         }
     }
-    if (args.deploymentDefinition.logLevel) {
-        extraEnvVariables += "GX_LOG_LEVEL=${args.deploymentDefinition.logLevel}\n"
-        extraEnvVariables += "GX_LOG_LEVEL_USER=${args.deploymentDefinition.logLevel}\n"
+    if (args.logLevel) {
+        extraEnvVariables += "GX_LOG_LEVEL=${args.logLevel}\n"
+        extraEnvVariables += "GX_LOG_LEVEL_USER=${args.logLevel}\n"
     }
     extraEnvVariables += "GX_LOG_OUTPUT=ConsoleAppender\n"
     extraEnvVariables += "ASPNETCORE_URLS=http://*:80\n"
-    args.deploymentDefinition.envs.each { envVariable ->
-        extraEnvVariables += "${envVariable.name}=${envVariable.value}\n"
-    }
-    args.deploymentDefinition.secretsEnvs.each { secretEnvVariable ->
-        withCredentials([
-            usernamePassword(credentialsId: secretEnvVariable.credentialsId, usernameVariable: 'secretUser', passwordVariable: 'secretPass')
-        ]) {
-            extraEnvVariables += "${secretEnvVariable.userName}=${secretUser}\n"
-            extraEnvVariables += "${secretEnvVariable.passName}=${secretPass}\n"
-        }
-    }
+    // args.deploymentDefinition.envs.each { envVariable ->
+    //     extraEnvVariables += "${envVariable.name}=${envVariable.value}\n"
+    // }
+    // args.deploymentDefinition.secretsEnvs.each { secretEnvVariable ->
+    //     withCredentials([
+    //         usernamePassword(credentialsId: secretEnvVariable.credentialsId, usernameVariable: 'secretUser', passwordVariable: 'secretPass')
+    //     ]) {
+    //         extraEnvVariables += "${secretEnvVariable.userName}=${secretUser}\n"
+    //         extraEnvVariables += "${secretEnvVariable.passName}=${secretPass}\n"
+    //     }
+    // }
     writeFile file: 'variables.env', text: extraEnvVariables
 }
 
