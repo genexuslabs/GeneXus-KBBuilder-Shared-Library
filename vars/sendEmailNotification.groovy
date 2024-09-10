@@ -1,5 +1,6 @@
 import groovy.text.StreamingTemplateEngine
 import com.genexus.NotificationHelper
+import com.genexus.GeneXusHelper
 
 /**
  * This method
@@ -36,7 +37,9 @@ String createTemplate(String templateName, def params) {
 def call(Map args = [:]) {
     try {
         def engine2 = new NotificationHelper()
+        def file = new GeneXusHelper()
         def changeLogSet = engine2.getChangeLogSet()
+        def gxVersion = file.getGeneXusInstallationVersion(args.gxBasePath)
         def icon
         String template
         String templateName
@@ -90,7 +93,7 @@ def call(Map args = [:]) {
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
             "changeLogSet"      :   changeLogSet,
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
-            "gxversion"         :   "18.0.0.0"//gxVersion
+            "gxversion"         :   gxVersion
         ]);
 
         emailext body: template,

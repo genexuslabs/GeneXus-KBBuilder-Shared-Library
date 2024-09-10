@@ -1,5 +1,6 @@
 package com.genexus
 import groovy.text.StreamingTemplateEngine
+import com.genexus.GeneXusHelper
 
 /**
  * This method
@@ -54,7 +55,6 @@ return this
 
 // package com.genexus
 // import groovy.text.StreamingTemplateEngine
-// import com.genexus.GeneXusHelper
 
 // /**
 //  * This method
