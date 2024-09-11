@@ -142,10 +142,10 @@
 	</Target>
 
     <Target Name="AddNugetServer">
-        <AddModulesServer Type="NexusNuGet" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="NexusNuGet" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
     <Target Name="AddMavenServer">
-        <AddModulesServer Type="Nexus - Maven" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="Nexus - Maven" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">

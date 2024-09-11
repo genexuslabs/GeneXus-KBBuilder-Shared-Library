@@ -7,7 +7,7 @@ package com.genexus
  * @param args A map containing the following parameters:
  *   - gxBasePath: The base path of the GeneXus installation.
  *   - nugetServerCredentialsId: Jenkins credentials ID for NuGet server authentication.
- *   - nugetServerName: Name or URL of the NuGet server.
+ *   - nugetServerId: Name or URL of the NuGet server.
  *   - nugetServerSource: NuGet server source URL.
  *
  */
@@ -23,7 +23,7 @@ void configureNugetServer(Map args = [:]) {
             bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:ServerName="${args.nugetServerName}" \
+                /p:ServerId="${args.nugetServerId}" \
                 /p:ServerSource="${args.nugetServerSource}" \
                 /p:ServerUsername="${nugetServerUser}" \
                 /p:ServerPassword="${nugetServerPass}" \
@@ -59,7 +59,7 @@ void configureMavenServer(Map args = [:]) {
             bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:ServerName="${args.mavenServerName}" \
+                /p:ServerId="${args.mavenServerId}" \
                 /p:ServerSource="${args.mavenServerSource}" \
                 /p:ServerUsername="${mavenServerUser}" \
                 /p:ServerPassword="${mavenServerPass}" \
