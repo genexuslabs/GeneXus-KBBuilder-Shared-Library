@@ -141,12 +141,8 @@
         <CloseKnowledgeBase/>
 	</Target>
 
-    <Target Name="AddNugetServer">
-        <AddModulesServer Type="NexusNuGet" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
-    </Target>
-
-    <Target Name="AddMavenServer">
-        <AddModulesServer Type="Nexus" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+    <Target Name="AddModuleServer">
+        <AddModulesServer Type="${ServerType}" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">
