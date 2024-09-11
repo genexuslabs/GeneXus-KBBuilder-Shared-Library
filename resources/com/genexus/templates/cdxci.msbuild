@@ -144,6 +144,9 @@
     <Target Name="AddNugetServer">
         <AddModulesServer Type="NexusNuGet" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
+    <Target Name="AddMavenServer">
+        <AddModulesServer Type="Nexus - Maven" Name="$(ServerName)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+    </Target>
 
     <Target Name="PackageGXModule">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>

@@ -8,12 +8,12 @@
  *
  * Parameters:
  * - args: A map containing the following parameters:
+ *   - msbuildExePath: The path to the MSBuild executable.
  *   - gxBasePath: The path of the GeneXus installation.
  *   - localKBPath: The local path of the Knowledge Base.
- *   - moduleServerCredentialsId: The credentials ID containing the username and password for the module server.
  *   - localModulePackage: The local path to the module package.
  *   - moduleServerId: The ID of the module server.
- *   - msbuildExePath: The path to the MSBuild executable.
+ *   - moduleServerCredentialsId: The credentials ID containing the username and password for the module server.
  *
  * Workflow Steps:
  * 1. Synchronize the properties file (properties.msbuild).
