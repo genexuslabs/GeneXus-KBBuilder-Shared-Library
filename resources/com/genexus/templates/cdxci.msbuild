@@ -142,7 +142,7 @@
 	</Target>
 
     <Target Name="AddModuleServer">
-        <AddModulesServer Type="asdfghjk" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="${ServerType}" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">
