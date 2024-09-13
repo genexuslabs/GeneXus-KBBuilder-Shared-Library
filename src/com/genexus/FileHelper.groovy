@@ -107,6 +107,35 @@ void winCompressDirectory(String sourceDir, String destinationZip) {
     }
 }
 
+
+/**
+ * Removes a directory and its contents if it exists.
+ *
+ * @param directoryFullPath The full path to the directory to be removed.
+ * @throws Exception if an error occurs during the removal process.
+ */
+void removeDirectoryPath(String directoryFullPath) {
+    try {
+        // Check if the path is not null or empty before proceeding
+        if (directoryFullPath == null || directoryFullPath.isEmpty()) {
+            throw new IllegalArgumentException("The provided path is null or empty.");
+        }
+
+        powershell label: "Remove path: ${directoryFullPath}",
+            script: """
+                if (Test-Path -Path '${directoryFullPath}') {
+                    Remove-Item -Path '${directoryFullPath}' -Recurse -Force
+                    Write-Output "Directory removed successfully."
+                } else {
+                    Write-Output "Directory does not exist: ${directoryFullPath}"
+                }
+            """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 String standarizeVersion(String version, String label, int position){
     def standarizedVersion = powershell label: "Add Label to Given Position",
             script: """
