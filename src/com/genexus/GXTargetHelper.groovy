@@ -6,7 +6,6 @@ package com.genexus
  *
  * @param args A map containing the following parameters:
  *   - gxBasePath: The base path of the GeneXus installation.
- *   - moduleServerType: Admit types: [Nexus, NexusNuget].
  *   - moduleServerId: Name or URL of the module server.
  *   - moduleServerSource: module server source URL.
  *   - moduleServerCredentialsId: Jenkins credentials ID for module server authentication.
@@ -22,7 +21,6 @@ void configureNexusServer(Map args = [:]) {
             bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:ServerType="${args.moduleServerType}" \
                 /p:ServerId="${args.moduleServerId}" \
                 /p:ServerSource="${args.moduleServerSource}" \
                 /p:ServerUsername="${moduleServerUser}" \
