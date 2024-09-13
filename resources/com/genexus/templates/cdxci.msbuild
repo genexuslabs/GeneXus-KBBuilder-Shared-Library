@@ -141,11 +141,7 @@
         <CloseKnowledgeBase/>
 	</Target>
 
-    <Target Name="AddModuleServer">
-        <Message Text="[DEBUG] ServerType = $(ServerType)"/>
-        <Message Text="[DEBUG] ServerId = $(ServerId)"/>
-        <Message Text="[DEBUG] ServerSource = $(ServerSource)"/>
-        <Message Text="[DEBUG] ServerUsername = $(ServerUsername)"/>
+    <Target Name="AddNugetServer">
         <AddModulesServer Type="NexusNuGet" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 

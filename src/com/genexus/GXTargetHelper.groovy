@@ -12,7 +12,7 @@ package com.genexus
  *   - moduleServerCredentialsId: Jenkins credentials ID for module server authentication.
  *
  */
-void configureModuleServer(Map args = [:]) {
+void configureNexusServer(Map args = [:]) {
     try{
         def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
         writeFile file: 'cdxci.msbuild', text: fileContents
@@ -27,7 +27,7 @@ void configureModuleServer(Map args = [:]) {
                 /p:ServerSource="${args.moduleServerSource}" \
                 /p:ServerUsername="${moduleServerUser}" \
                 /p:ServerPassword="${moduleServerPass}" \
-                /t:AddModuleServer
+                /t:AddNugetServer
             """
         }
     } catch (error) {
