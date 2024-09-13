@@ -146,7 +146,7 @@
         <Message Text="[DEBUG] ServerId = $(ServerId)"/>
         <Message Text="[DEBUG] ServerSource = $(ServerSource)"/>
         <Message Text="[DEBUG] ServerUsername = $(ServerUsername)"/>
-        <AddModulesServer Type="${ServerType}" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="NexusNuGet" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">
