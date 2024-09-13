@@ -60,27 +60,6 @@ String getAbsolutePathFromWS(String relativePath) {
 }
 
 /**
- * This method forcefully removes a directory and its contents.
- *
- * @param dirPath The relative path of the directory to be removed.
- *                If the directory exists, it will be deleted along with all its contents.
- *                If the directory does not exist, no action will be taken.
- */
-void removeDirectoryPath(String dirPath) {
-    try {
-        powershell label: "Remove path: ${dirPath}",
-            script: """
-                if(Test-Path -Path '${dirPath}') {
-                    Remove-Item -Path '${dirPath}' -Recurse -Force 
-                }
-            """
-    } catch (error) {
-        currentBuild.result = 'FAILURE'
-        throw error
-    }
-}
-
-/**
  * Compresses a directory using 7-Zip if available, otherwise uses PowerShell's Compress-Archive.
  *
  * @param sourceDir The full path to the directory to be compressed.
@@ -111,23 +90,23 @@ void winCompressDirectory(String sourceDir, String destinationZip) {
 /**
  * Removes a directory and its contents if it exists.
  *
- * @param directoryFullPath The full path to the directory to be removed.
+ * @param dirPath The full path to the directory to be removed.
  * @throws Exception if an error occurs during the removal process.
  */
-void removeDirectoryPath(String directoryFullPath) {
+void removeDirectoryPath(String dirPath) {
     try {
         // Check if the path is not null or empty before proceeding
-        if (directoryFullPath == null || directoryFullPath.isEmpty()) {
+        if (dirPath == null || dirPath.isEmpty()) {
             throw new IllegalArgumentException("The provided path is null or empty.");
         }
 
-        powershell label: "Remove path: ${directoryFullPath}",
+        powershell label: "Remove path: ${dirPath}",
             script: """
-                if (Test-Path -Path '${directoryFullPath}') {
-                    Remove-Item -Path '${directoryFullPath}' -Recurse -Force
+                if (Test-Path -Path '${dirPath}') {
+                    Remove-Item -Path '${dirPath}' -Recurse -Force
                     Write-Output "Directory removed successfully."
                 } else {
-                    Write-Output "Directory does not exist: ${directoryFullPath}"
+                    Write-Output "Directory does not exist: ${dirPath}"
                 }
             """
     } catch (error) {
