@@ -10,7 +10,7 @@
 
     <Target Name="ShowTargets">
         <Message Text="BuildConfigurationEnv" />
-        <Message Text="CustomBuild" />
+        <Message Text="BuildCustomEnv" />
         <Message Text="UpdateInstalledModule" />
         <Message Text="RestoreInstalledModule" />
         <Message Text="TestObjTestSuite" />
@@ -49,7 +49,8 @@
         <CloseKnowledgeBase/>
     </Target>
 
-    <Target Name="CustomBuild" DependsOnTargets="OpenKB">
+    <Target Name="BuildCustomEnv">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
         <CustomBuild Name="$(customBuildName)" ContinueOnError="ErrorAndContinue" />
         <CloseKnowledgeBase/>
     </Target>
