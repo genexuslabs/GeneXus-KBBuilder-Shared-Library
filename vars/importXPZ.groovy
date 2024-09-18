@@ -14,23 +14,21 @@
  *   - xpzFilePath: The path to the XPZ file to be imported.
  *
  * Workflow Steps:
- * 1. Check if `localKBPath` and `xpzFilePath` are provided.
- * 2. Sync `import.msbuild` from the library resources and write it to the workspace.
- * 3. Execute the MSBuild script to import the XPZ file into the Knowledge Base.
+ * 1. Sync `cdxci.msbuild` from the library resources and write it to the workspace.
+ * 2. Execute the MSBuild script to import the XPZ file into the Knowledge Base.
  */
 
 def call(Map args = [:]) {
-        // Sync cdxci.msbuild
-        def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
-        writeFile file: 'cdxci.msbuild', text: fileContents
-        
-        bat label: "Import XPZ",
-            script: """
-                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:localKbPath="${args.localKBPath}" \
-                /p:xpzFilePath="${args.xpzFilePath}" \
-                /t:importXPZ
-            """
-    }
+    // Sync cdxci.msbuild
+    def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+    writeFile file: 'cdxci.msbuild', text: fileContents
+    
+    bat label: "Import XPZ",
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:xpzFilePath="${args.xpzFilePath}" \
+            /t:importXPZ
+        """
 }
