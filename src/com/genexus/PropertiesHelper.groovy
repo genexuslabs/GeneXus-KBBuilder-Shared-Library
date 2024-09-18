@@ -85,7 +85,7 @@ void setEnvironmentProperty(Map args = [:], String envPropName, String envPropVa
  * executes MSBuild to obtain the requested generator property value. The properties file
  * is used to store temporary values during the execution of the MSBuild command.
  */
-String getGeneratorProperty(Map args = [:], String generatorName, String genPropName) {
+String getGeneratorProperty(Map args = [:], String genName, String genPropName) {
     try {
         
         if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
