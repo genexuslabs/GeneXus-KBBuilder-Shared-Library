@@ -20,6 +20,7 @@
         <Message Text="ApplyReorg" />
         <Message Text="PackageGXModule" />
         <Message Text="PublishGXModule" />
+        <Message Text="ImportXPZ" />
         <Message Text="CloseKB" />
     </Target>
 
@@ -196,6 +197,13 @@
 		<CloseKnowledgeBase/>
     </Target>
     
+    <Target Name="ImportXPZ">
+		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+		<Import File="$(xpzFilePath)" AutomaticBackup="false"/>
+
+		<CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="CloseKB">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<CloseKnowledgeBase/>
