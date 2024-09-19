@@ -117,7 +117,7 @@ void removeDirectoryPath(String dirPath) {
 
 void updateFromZip(String sourceUri, String sourceFolder, String targetPath) {
     try{
-        fileContents = libraryResource '/com/genexus/pwshScripts/common/update-from-zip.ps1'
+        fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
         writeFile file: 'update-from-zip.ps1', text: fileContents
         powershell script: ".\\update-from-zip.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'"
     } catch (error) {
