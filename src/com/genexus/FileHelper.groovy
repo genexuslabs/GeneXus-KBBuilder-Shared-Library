@@ -120,10 +120,10 @@ void updateFromZip(String sourceUri, String sourceFolder, String targetPath) {
         fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
         writeFile file: 'update-from-zip.ps1', text: fileContents
         try{
-            powershell script: ".\\update-from-zip.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'"
+            def exitCode = powershell(script: ".\\update-from-zip.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'", returnStatus: true)
         }
         catch (e) {
-            echo "capture el error"
+            echo "ROBOCOPY EXIT CODE: ${exitCode}"
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
