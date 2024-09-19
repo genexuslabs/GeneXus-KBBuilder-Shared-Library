@@ -107,9 +107,6 @@ function Copy-Files {
 	if ($LASTEXITCODE -gt 8) {
 		Write-Error "robocopy encountered an error. Exit code: $LASTEXITCODE"
 	}
-	else {
-		$LASTEXITCODE = 0
-	}
 }
 
 try {
