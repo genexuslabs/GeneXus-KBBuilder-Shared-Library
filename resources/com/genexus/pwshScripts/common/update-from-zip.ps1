@@ -29,9 +29,8 @@ param (
 	[ValidateNotNullOrEmpty()]
 	[string] $SourceUri,
 	[ValidateNotNullOrEmpty()]
-	[string] $SourceFolder,
-	[ValidateNotNullOrEmpty()]
-	[string] $TargetPath
+	[string] $TargetPath,
+	[string] $SourceFolder
 )
 
 $ErrorActionPreference = "Stop"
