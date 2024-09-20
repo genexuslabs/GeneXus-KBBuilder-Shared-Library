@@ -51,12 +51,12 @@ def call(Map args = [:]) {
         echo "[DEBUG] Job Name: ${jobName}"
         echo "[DEBUG] Job Base Name: ${env.JOB_BASE_NAME}"
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
+        def jobDisplayName = "${jobFullDisplayName}"
         if (splitJobDisplayName[-1].toLowerCase().contains('build')) {
-            def jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
-        } else {
-            def jobDisplayName = "${jobFullDisplayName}"
+            jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
         }
         echo "[DEBUG] Split Job Display Name Last Element: ${splitJobDisplayName[-1].toLowerCase()}"
+        echo "[DEBUG] Job Display Name: ${jobDisplayName}"
         switch (currentBuild.currentResult) {
             case 'SUCCESS':
                 icon = "✅"
