@@ -47,16 +47,15 @@ def call(Map args = [:]) {
         String buildResult
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
         String jobFullDisplayName = currentBuild.fullDisplayName
-        echo "[DEBUG] Job Full Display Name: ${jobFullDisplayName}"
-        echo "[DEBUG] Job Name: ${jobName}"
-        echo "[DEBUG] Job Base Name: ${env.JOB_BASE_NAME}"
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
-        def jobDisplayName = "${jobFullDisplayName}"
+        def jobDisplayName = ''
         if (splitJobDisplayName[-1].toLowerCase().contains('build')) {
             jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
+        }else{
+            //Replaces anything that matches the pattern /#\d+/ with an empty string and trims the string
+            //For example in this string: BETA » Modules » super_apps_module #20 the result is: BETA » Modules » super_apps_module
+            jobDisplayName = jobFullDisplayName.replaceAll('/#\d+/', '').trim()
         }
-        echo "[DEBUG] Split Job Display Name Last Element: ${splitJobDisplayName[-1].toLowerCase()}"
-        echo "[DEBUG] Job Display Name: ${jobDisplayName}"
         switch (currentBuild.currentResult) {
             case 'SUCCESS':
                 icon = "✅"
