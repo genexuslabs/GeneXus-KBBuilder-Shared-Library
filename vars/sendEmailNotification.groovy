@@ -47,6 +47,9 @@ def call(Map args = [:]) {
         String buildResult
         String jobName = (env.JOB_NAME).replace(env.JOB_BASE_NAME, '')
         String jobFullDisplayName = currentBuild.fullDisplayName
+        echo "[DEBUG] Job Full Display Name: ${jobFullDisplayName}"
+        echo "[DEBUG] Job Name: ${jobName}"
+        echo "[DEBUG] Job Base Name: ${env.JOB_BASE_NAME}"
         def splitJobDisplayName = currentBuild.fullDisplayName.split(' » ')
         def jobDisplayName = "${jobFullDisplayName.replace(splitJobDisplayName[splitJobDisplayName.length - 1], '')}"
         switch (currentBuild.currentResult) {
