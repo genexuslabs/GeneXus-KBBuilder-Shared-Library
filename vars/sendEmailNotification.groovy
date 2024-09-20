@@ -54,7 +54,7 @@ def call(Map args = [:]) {
         }else{
             //Replaces anything that matches the pattern /#\d+/ with an empty string and trims the string
             //For example in this string: BETA » Modules » super_apps_module #20 the result is: BETA » Modules » super_apps_module
-            jobDisplayName = jobFullDisplayName.replaceAll('/#\d+/', '').trim()
+            jobDisplayName = jobFullDisplayName.replaceAll('//#\d+//', '').trim()
         }
         switch (currentBuild.currentResult) {
             case 'SUCCESS':
