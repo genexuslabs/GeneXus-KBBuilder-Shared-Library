@@ -55,7 +55,6 @@ def call(Map args = [:]) {
             //Replaces anything that matches the pattern /#\d+/ with an empty string and trims the string
             //For example in this string: BETA » Modules » super_apps_module #20 the result is: BETA » Modules » super_apps_module
             jobDisplayName = jobFullDisplayName.replaceAll(/#\d+/, ' ').trim()  + ' >> '
-            echo "[DEBUG] Job display name: ${jobDisplayName}"
         }
         switch (currentBuild.currentResult) {
             case 'SUCCESS':
