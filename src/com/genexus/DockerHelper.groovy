@@ -271,7 +271,7 @@ void createNetCoreEnvVarFile(Map args = [:]) {
         withCredentials([
             usernamePassword(credentialsId: args.dbStorageCredentialsId, usernameVariable: 'dbStorageUser', passwordVariable: 'dbStoragePwd')
         ]) {
-            extraEnvVariables += "\"GX_CONNECTION-DEFAULT-DATASOURCE=${args.dbStorageEndpoint}\"\n"
+            extraEnvVariables += "GX_CONNECTION-DEFAULT-DATASOURCE=${args.dbStorageEndpoint}\n"
             extraEnvVariables += "GX_CONNECTION-DEFAULT-DB=${args.dbStorageName}\n"
             extraEnvVariables += "GX_CONNECTION-DEFAULT-USER=${dbStorageUser}\n"
             extraEnvVariables += "GX_CONNECTION-DEFAULT-PASSWORD=${dbStoragePwd}\n"
