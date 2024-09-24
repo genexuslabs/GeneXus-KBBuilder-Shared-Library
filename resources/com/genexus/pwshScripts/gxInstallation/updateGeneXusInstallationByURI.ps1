@@ -87,7 +87,7 @@ if ($flag) {
     $xml.Save($gxExeConfigPath)
 
     Write-Output((Get-Date -Format G) + " [DEBUG] runGXInstall=$runGXInstall")
-    if($runGXInstall == $False) {
+    if($runGXInstall -eq $False) {
         Write-Output((Get-Date -Format G) + " [INFO] Avoid genexus.com /install execution")
     } else {
         $gxInstallationPth = "$gxBasePath\GeneXus.com"
