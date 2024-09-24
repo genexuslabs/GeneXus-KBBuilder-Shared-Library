@@ -9,7 +9,6 @@ param (
 	[ValidateNotNullOrEmpty()]
     [string] $localAndroidSDKPath,
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
     [boolean] $runGXInstall
 )
 $ErrorActionPreference="Stop"
@@ -87,7 +86,10 @@ if ($flag) {
 
     $xml.Save($gxExeConfigPath)
 
-    if($runGXInstall) {
+    Write-Output((Get-Date -Format G) + " [DEBUG] runGXInstall=$runGXInstall")
+    if($runGXInstall == $False) {
+        Write-Output((Get-Date -Format G) + " [INFO] Avoid genexus.com /install execution")
+    } else {
         $gxInstallationPth = "$gxBasePath\GeneXus.com"
         Write-Output((Get-Date -Format G) + " INFO executing genexus.com /install")
         powershell "$gxInstallationPth /install"
