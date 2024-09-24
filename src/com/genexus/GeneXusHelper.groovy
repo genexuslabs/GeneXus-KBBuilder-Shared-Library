@@ -21,15 +21,19 @@ void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
 }
 
 /**
- * This method updates the GeneXus installation from a public URI.
+ * Updates the GeneXus installation from a public URI.
  *
  * @param gxBasePath The base path of the existing GeneXus installation to be updated.
  * @param genexusURI The public URI from which to update the GeneXus installation.
  * @param localAndroidSDKPath The local path of the Android SDK associated with the GeneXus installation.
+ * @param runGXInstall Boolean flag indicating whether to execute the GeneXus installation command after the update.
  *
  * This method ensures the existence of a supporting PowerShell script for uninstallation,
  * downloads an update script, and executes it to update the specified GeneXus installation
  * using the provided public URI. It also considers the associated Android SDK path during the update.
+ * 
+ * Note: The boolean parameter 'runGXInstall' is passed as a string with a double dollar sign ($$) 
+ * to translate it correctly into the PowerShell variable context.
  */
 void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath, Boolean runGXInstall) {
     try{

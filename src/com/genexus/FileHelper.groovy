@@ -115,15 +115,91 @@ void removeDirectoryPath(String dirPath) {
     }
 }
 
+/**
+ * Updates files at the target path by downloading and extracting a ZIP archive from a specified URI.
+ *
+ * This method retrieves a PowerShell script from the shared library, executes it to update files
+ * at the specified target path using a ZIP file from the provided source URI. It also handles the exit code 
+ * from the robocopy command to determine if the file copying was successful.
+ *
+ * @param sourceUri The URI of the ZIP archive to download and extract. This parameter is mandatory.
+ * @param sourceFolder The name of the folder within the ZIP archive to copy. Optional; if not provided, 
+ *                     the entire contents of the ZIP archive will be copied.
+ * @param targetPath The path where the extracted files will be copied. This parameter is mandatory.
+ *
+ * @throws Exception if there is an error during script execution or file operations.
+ *
+ * @example
+ * // Update files in the target path from a ZIP archive at the specified URI.
+ * updateFromZip("https://example.com/archive.zip", null, "C:\\Program Files\\MyApp");
+ */
 void updateFromZip(String sourceUri, String sourceFolder, String targetPath) {
-    try{
+    try {
+        // Load the PowerShell script from the shared library
         fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
         writeFile file: 'update-from-zip.ps1', text: fileContents
-        try{
+
+        try {
+            // Execute the PowerShell script and capture the exit code
             def exitCode = powershell(script: ".\\update-from-zip.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'", returnStatus: true)
+
+            // Check the exit code of the robocopy command
+            if (exitCode >= 0 && exitCode < 8) {
+                echo "ROBOCOPY completed successfully with exit code: ${exitCode}"
+            } else {
+                echo "ROBOCOPY encountered an error. Exit code: ${exitCode}"
+                // Optionally, you can throw an error or handle it as required
+                throw new Exception("ROBOCOPY failed with exit code: ${exitCode}")
+            }
+        } catch (e) {
+            echo "Error executing PowerShell script: ${e.getMessage()}"
+            throw e
         }
-        catch (e) {
-            echo "ROBOCOPY EXIT CODE: ${exitCode}" //TODO if(exitCode menor a 8) throw error
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Updates files at the target path by downloading and extracting a ZIP archive from an AWS S3 bucket.
+ *
+ * This method retrieves a PowerShell script from the shared library, executes it to update files
+ * at the specified target path using a ZIP file from an S3 URI. It also handles the exit code 
+ * from the robocopy command to determine if the file copying was successful.
+ *
+ * @param sourceUri The S3 URI of the ZIP archive to download and extract. This parameter is mandatory.
+ * @param sourceFolder The name of the folder within the ZIP archive to copy. Optional; if not provided, 
+ *                     the entire contents of the ZIP archive will be copied.
+ * @param targetPath The path where the extracted files will be copied. This parameter is mandatory.
+ *
+ * @throws Exception if there is an error during script execution or file operations.
+ *
+ * @example
+ * // Update files in the target path from a ZIP archive in an S3 bucket.
+ * updateFromS3("s3://example-bucket/archive.zip", null, "C:\\Program Files\\MyApp");
+ */
+void updateFromS3(String sourceUri, String sourceFolder, String targetPath) {
+    try {
+        // Load the PowerShell script from the shared library
+        fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-s3.ps1'
+        writeFile file: 'update-from-s3.ps1', text: fileContents
+
+        try {
+            // Execute the PowerShell script and capture the exit code
+            def exitCode = powershell(script: ".\\update-from-s3.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'", returnStatus: true)
+
+            // Check the exit code of the robocopy command
+            if (exitCode >= 0 && exitCode < 8) {
+                echo "ROBOCOPY completed successfully with exit code: ${exitCode}"
+            } else {
+                echo "ROBOCOPY encountered an error. Exit code: ${exitCode}"
+                // Optionally, you can throw an error or handle it as required
+                throw new Exception("ROBOCOPY failed with exit code: ${exitCode}")
+            }
+        } catch (e) {
+            echo "Error executing PowerShell script: ${e.getMessage()}"
+            throw e
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
