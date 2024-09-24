@@ -39,7 +39,7 @@ void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String
         }
         fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/updateGeneXusInstallationByURI.ps1'
         writeFile file: 'updateGeneXusInstallationByURI.ps1', text: fileContents
-        powershell script: ".\\updateGeneXusInstallationByURI.ps1 -gxBasePath:'${gxBasePath}' -genexusURI:'${genexusURI}' -localAndroidSDKPath:'${localAndroidSDKPath}' -runGXInstall:${runGXInstall}"
+        powershell script: ".\\updateGeneXusInstallationByURI.ps1 -gxBasePath:'${gxBasePath}' -genexusURI:'${genexusURI}' -localAndroidSDKPath:'${localAndroidSDKPath}' -runGXInstall:\$${runGXInstall}"
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
