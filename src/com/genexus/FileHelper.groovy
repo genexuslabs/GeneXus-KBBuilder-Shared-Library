@@ -123,7 +123,7 @@ void updateFromZip(String sourceUri, String sourceFolder, String targetPath) {
             def exitCode = powershell(script: ".\\update-from-zip.ps1 -SourceUri:'${sourceUri}' -SourceFolder:'${sourceFolder}' -TargetPath:'${targetPath}'", returnStatus: true)
         }
         catch (e) {
-            echo "ROBOCOPY EXIT CODE: ${exitCode}"
+            echo "ROBOCOPY EXIT CODE: ${exitCode}" //TODO if(exitCode menor a 8) throw error
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'

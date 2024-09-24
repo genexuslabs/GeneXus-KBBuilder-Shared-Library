@@ -7,7 +7,10 @@ param (
     [string] $genexusURI,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $localAndroidSDKPath
+    [string] $localAndroidSDKPath,
+    [Parameter(Mandatory=$True)]
+	[ValidateNotNullOrEmpty()]
+    [boolean] $runGXInstall
 )
 $ErrorActionPreference="Stop"
 #
@@ -84,9 +87,11 @@ if ($flag) {
 
     $xml.Save($gxExeConfigPath)
 
-    $gxInstallationPth = "$gxBasePath\GeneXus.com"
-    Write-Output((Get-Date -Format G) + " INFO executing genexus.com /install")
-    powershell "$gxInstallationPth /install"
+    if($runGXInstall) {
+        $gxInstallationPth = "$gxBasePath\GeneXus.com"
+        Write-Output((Get-Date -Format G) + " INFO executing genexus.com /install")
+        powershell "$gxInstallationPth /install"
+    }
     if(Test-Path -Path $lastURIFilePath) { Remove-Item -Path $lastURIFilePath }
     $null = New-Item -Path $lastURIFilePath
     Set-Content -Path $lastURIFilePath -Value "$genexusURI"

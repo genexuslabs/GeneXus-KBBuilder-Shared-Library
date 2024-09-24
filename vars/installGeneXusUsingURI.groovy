@@ -16,12 +16,13 @@
  *   - protServerType: Type of Protection Server.
  *   - protServerName: Name or address of the Protection Server.
  *   - protServerCredentialsId: Credentials ID containing username and password for the Protection Server.
+ *   - runGXInstall: Boolean flag indicating whether to run the GeneXus installation command. Defaults to true if not provided.
  *
  * Workflow Steps:
  * 1. If ${forceUpdateGX} is true, delete the existing GeneXus installation.
  * 2. Compare genexusURI with ${gxBasePath}\LastURI.txt and update the installation accordingly.
  * 3. Configure ProgramData and UserData directories.
- * 4. Execute ${gxBasePath}\genexus.com /install
+ * 4. Execute ${gxBasePath}\genexus.com /install if ${runGXInstall} is true.
  * 5. If ${localAndroidSDKPath} is provided, download Android SDK using ${gxBasePath}\AndroidRequirements.exe.
  * 6. Configure Protection Server.
  * 7. Print the GeneXus installation version.
@@ -34,7 +35,10 @@ def call(Map args = [:]) {
     if(Boolean.valueOf(args.forceUpdateGX)) {
         gxHelper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
     }
-    gxHelper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath)
+    if (!args.runGXInstall) {
+        args.runGXInstall = true
+    }
+    gxHelper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath, args.runGXInstall)
 
     gxHelper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)
 

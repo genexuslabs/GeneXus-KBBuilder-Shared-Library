@@ -31,9 +31,9 @@ void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
  * downloads an update script, and executes it to update the specified GeneXus installation
  * using the provided public URI. It also considers the associated Android SDK path during the update.
  */
-void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath) {
+void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath, Boolean runGXInstall) {
     try{
-        if (!fileExists("${WORKSPACE}\\deleteGeneXusInstallation.ps1")) {
+        if (!fileExists("${WORKSPACE}\\deleteGeneXusInstallation.ps1")) {.
             fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
             writeFile file: 'deleteGeneXusInstallation.ps1', text: fileContents
         }
