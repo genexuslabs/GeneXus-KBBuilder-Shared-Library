@@ -35,7 +35,7 @@ def call(Map args = [:]) {
     if(Boolean.valueOf(args.forceUpdateGX)) {
         gxHelper.deleteGeneXusInstallation(args.gxBasePath, args.localAndroidSDKPath)
     }
-    
+    if (args.runGXInstall == null) { args.runGXInstall = true }
     gxHelper.updateGeneXusInstallationByURI(args.gxBasePath, args.genexusURI, args.localAndroidSDKPath, args.runGXInstall)
 
     gxHelper.configureProtectionServer(args.gxBasePath, args.protServerType, args.protServerName, args.protServerCredentialsId)

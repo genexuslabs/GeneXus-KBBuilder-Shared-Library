@@ -9,6 +9,7 @@ param (
 	[ValidateNotNullOrEmpty()]
     [string] $localAndroidSDKPath,
     [Parameter(Mandatory=$True)]
+	[ValidateNotNullOrEmpty()]
     [boolean] $runGXInstall
 )
 $ErrorActionPreference="Stop"
