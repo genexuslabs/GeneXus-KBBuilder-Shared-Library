@@ -36,8 +36,8 @@ def createDockerContext(Map args = [:]) {
             }else{
                 msBuildCommand = msBuildCommand + " /p:WarName=\"ROOT\""
             }
-            echo [INFO] "Java Generator detected"
-            echo [DEBUG] "get file extension: ${getFileExtension(args.packageLocation)}"
+            echo "[INFO] Java Generator detected"
+            echo "[DEBUG] get file extension: ${getFileExtension(args.packageLocation)}"
         }
 
         bat label: "Create Docker context",
