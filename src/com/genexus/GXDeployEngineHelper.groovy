@@ -41,7 +41,7 @@ def createDockerContext(Map args = [:]) {
         }
 
         bat label: "Create Docker context",
-            script: msbuildCommand
+            script: "${msBuildCommand}"
             
     return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
     } catch (error) {
