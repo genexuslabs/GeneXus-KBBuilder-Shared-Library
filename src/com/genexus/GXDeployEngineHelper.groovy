@@ -27,19 +27,19 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
-                /p:GENERATOR="${args.generator}" \
-                /t:CreatePackage
+                /p:GENERATOR="${args.generator}" 
             """
         if (args.generator.toLowerCase().contains("java")) {
             if (getFileExtension(args.packageLocation) == "jar"){
-                msBuildCommand = msBuildCommand + " /p:JarName=\"ROOT\""
+                msBuildCommand += " /p:JarName=\"ROOT\""
             }else{
-                msBuildCommand = msBuildCommand + " /p:WarName=\"ROOT\""
+                msBuildCommand += " /p:WarName=\"ROOT\""
             }
             echo "[INFO] Java Generator detected"
             echo "[DEBUG] get file extension: ${getFileExtension(args.packageLocation)}"
         }
-
+        msBuildCommand += " /t:CreatePackage"
+        
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
             
