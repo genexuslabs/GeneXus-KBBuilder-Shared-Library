@@ -30,7 +30,7 @@ def createDockerContext(Map args = [:]) {
                 /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage
             """
-        if (args.generator == "Java") {
+        if (args.generator.toLowerCase().contains("java")) {
             if (getFileExtension(args.packageLocation) == "jar"){
                 msBuildCommand = msBuildCommand + " /p:JarName=\"ROOT\""
             }else{
