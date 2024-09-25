@@ -1,12 +1,20 @@
 package com.genexus
+
+/**
+ * Extracts the file extension from a given file path.
+ * @param filePath The full path of the file.
+ * @return The file extension.
+ */
+def getFileExtension(String filePath) {
+    return filePath.substring(filePath.lastIndexOf('.') + 1)
+}
 /**
  * This methods
  * @param localGXPath
  */
 def createDockerContext(Map args = [:]) {
     try {
-        bat label: "Create Docker context",
-            script: """
+        def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:localKbPath="${args.localKBPath}" \
@@ -22,6 +30,18 @@ def createDockerContext(Map args = [:]) {
                 /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage
             """
+        if (args.generator == "Java") {
+            if (getFileExtension(args.packageLocation) == "jar"){
+                msBuildCommand = msBuildCommand + " /p:JarName=\"ROOT\""
+            }else{
+                msBuildCommand = msBuildCommand + " /p:WarName=\"ROOT\""
+            }
+            echo [INFO] "Java Generator detected"
+            echo [DEBUG] "get file extension: ${getFileExtension(args.packageLocation)}"
+        }
+
+        bat label: "Create Docker context",
+            script: msbuildCommand
             
     return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
     } catch (error) {
