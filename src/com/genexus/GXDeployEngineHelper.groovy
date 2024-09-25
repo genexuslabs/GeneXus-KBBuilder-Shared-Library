@@ -19,9 +19,9 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
-                /p:GENERATOR="${args.generator}" 
-                /p:JarName="${args.jarName}" 
-                /p:WarName="${args.warName}" 
+                /p:GENERATOR="${args.generator}" \
+                /p:JarName="${args.jarName}" \
+                /p:WarName="${args.warName}" \
                 /t:CreatePackage
             """
 
