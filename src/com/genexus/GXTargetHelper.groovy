@@ -34,7 +34,7 @@ void configureNexusServer(Map args = [:]) {
     }
 }
 
-void deleteObjects(Map args = [:]) {
+void deleteObjects(Map args = [:], String objects) {
     try{
         def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
         writeFile file: 'cdxci.msbuild', text: fileContents
@@ -43,7 +43,7 @@ void deleteObjects(Map args = [:]) {
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
-            /p:ObjsToDelete="${args.objectsToDelete}" \
+            /p:ObjsToDelete="${args.objects}" \
             /t:DeleteLocalObject
         """
         
@@ -52,7 +52,7 @@ void deleteObjects(Map args = [:]) {
         throw error
     }
 }
-void deleteObjectsByCategory(Map args = [:]) {
+void deleteObjectsByCategory(Map args = [:], String category) {
     try{
         def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
         writeFile file: 'cdxci.msbuild', text: fileContents
@@ -61,7 +61,7 @@ void deleteObjectsByCategory(Map args = [:]) {
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
-            /p:ObjCategory="${moduleServerUser}" \
+            /p:ObjCategory="${category}" \
             /t:DeleteLocalObjectsByCategory
         """
 
