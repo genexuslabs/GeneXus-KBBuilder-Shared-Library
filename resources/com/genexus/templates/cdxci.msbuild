@@ -204,6 +204,25 @@
 		<CloseKnowledgeBase/>
     </Target>
 
+    <Target Name="DeleteLocalObject">
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <DeleteObject Objects="$(ObjToDelete)" IncludeChildren="true"/>
+		<CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="DeleteLocalObjectsByCategory">
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <GetCategoryObjects CategoryName="$(ObjCategory)">
+            <Output TaskParameter="Objects" PropertyName="ObjListToDelete"/>
+        </GetCategoryObjects>
+        <ItemGroup>
+            <ItemsToDelete Include="$(ObjListToDelete.Split(';'))" />
+        </ItemGroup>
+        <DeleteObject Objects="$(ObjListToDelete)" IncludeChildren="true" Condition="'@(ItemsToDelete->Count())' != '0'"/>
+		<CloseKnowledgeBase/>
+    </Target>
+
+
     <Target Name="CloseKB">
 		<OpenKnowledgeBase Directory="$(localKbPath)"/>
 		<CloseKnowledgeBase/>

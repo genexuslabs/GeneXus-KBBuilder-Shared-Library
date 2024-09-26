@@ -34,4 +34,41 @@ void configureNexusServer(Map args = [:]) {
     }
 }
 
+void deleteObjects(Map args = [:]) {
+    try{
+        def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+        writeFile file: 'cdxci.msbuild', text: fileContents
+
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:ObjsToDelete="${args.objectsToDelete}" \
+            /t:DeleteLocalObject
+        """
+        
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+void deleteObjectsByCategory(Map args = [:]) {
+    try{
+        def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+        writeFile file: 'cdxci.msbuild', text: fileContents
+
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:ObjCategory="${moduleServerUser}" \
+            /t:DeleteLocalObjectsByCategory
+        """
+
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this
