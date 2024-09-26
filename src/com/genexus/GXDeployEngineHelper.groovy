@@ -22,7 +22,7 @@ def createDockerContext(Map args = [:]) {
                 /t:CreatePackage \
             """
 
-            def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.packageLocation}')"
+            def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.packageLocation}')", returnStdout: true
             extension = extension.trim().toLowerCase()
             echo "[INFO] Package extension: ${extension}"
             switch (extension) {
