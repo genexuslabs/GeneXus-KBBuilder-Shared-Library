@@ -26,8 +26,10 @@ Specifies the path where the extracted files will be copied. This parameter is m
 
 [CmdletBinding()]
 param (
+    [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
 	[string] $SourceUri,
+    [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
 	[string] $TargetPath,
 	[string] $SourceFolder

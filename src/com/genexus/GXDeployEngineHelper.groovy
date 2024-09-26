@@ -19,11 +19,17 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
-                /p:GENERATOR="${args.generator}" \
                 /p:JarName="${args.jarName}" \
                 /p:WarName="${args.warName}" \
                 /t:CreatePackage
             """
+
+
+            if ((powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim() == '.war') {
+                msBuildCommand += ' /p:WarName="asdfghjhgfds"'
+            }
+            // #TODO USER SWITCH, SI ES WAR --> .WAR, SI ES ZIP --> .ZIP, SI ES JAR --> .JAR, DEFAULT --> THROW ERROR
+
 
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
