@@ -19,18 +19,23 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
-                /p:JarName="${args.jarName}" \
-                /p:WarName="${args.warName}" \
-                /t:CreatePackage
+                /t:CreatePackage \
             """
 
-
-            // if ((powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim() == '.war') {
-            //     msBuildCommand += ' /p:WarName="asdfghjhgfds"'
-            // }
-            // #TODO USER SWITCH, SI ES WAR --> .WAR, SI ES ZIP --> .ZIP, SI ES JAR --> .JAR, DEFAULT --> THROW ERROR
-
-
+            String extension = (powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim().toLowerCase()
+            echo "[INFO] Package extension: ${extension}"
+            switch (extension) {
+                case '.war':
+                    msBuildCommand += ' /p:WarName="${args.warName}" \\'
+                    break
+                case '.jar':
+                    msBuildCommand += ' /p:JarName="${args.jarName}" \\'
+                    break
+                case '.zip':
+                default:
+                    throw new Exception("[ERROR] Unsupported package extension: ${extension}")
+            }
+    
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
             
