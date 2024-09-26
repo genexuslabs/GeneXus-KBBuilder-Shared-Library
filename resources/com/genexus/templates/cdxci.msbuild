@@ -206,7 +206,7 @@
 
     <Target Name="DeleteLocalObject">
         <OpenKnowledgeBase Directory="$(localKbPath)"/>
-        <DeleteObject Objects="$(ObjToDelete)" IncludeChildren="true"/>
+        <DeleteObject Objects="$(ObjsToDelete)" IncludeChildren="true"/>
 		<CloseKnowledgeBase/>
     </Target>
 
