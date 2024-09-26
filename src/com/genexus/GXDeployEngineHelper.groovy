@@ -25,9 +25,9 @@ def createDockerContext(Map args = [:]) {
             """
 
 
-            if ((powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim() == '.war') {
-                msBuildCommand += ' /p:WarName="asdfghjhgfds"'
-            }
+            // if ((powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim() == '.war') {
+            //     msBuildCommand += ' /p:WarName="asdfghjhgfds"'
+            // }
             // #TODO USER SWITCH, SI ES WAR --> .WAR, SI ES ZIP --> .ZIP, SI ES JAR --> .JAR, DEFAULT --> THROW ERROR
 
 
