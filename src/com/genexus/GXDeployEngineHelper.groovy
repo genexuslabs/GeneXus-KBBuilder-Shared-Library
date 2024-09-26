@@ -27,10 +27,10 @@ def createDockerContext(Map args = [:]) {
             echo "[INFO] Package extension: ${extension}"
             switch (extension) {
                 case '.war':
-                    msBuildCommand += ' /p:WarName="${args.warName}" \\'
+                    msBuildCommand += ' /p:WarName="${args.warName}"'
                     break
                 case '.jar':
-                    msBuildCommand += ' /p:JarName="${args.jarName}" \\'
+                    msBuildCommand += ' /p:JarName="${args.jarName}"'
                     break
                 case '.zip':
                 default:
