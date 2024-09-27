@@ -10,6 +10,7 @@
  *   - gxBasePath: The base path of the GeneXus installation.
  *   - localKBPath: The local path of the Knowledge Base.
  *   - moduleName: The name of the module to be updated.
+ *   - version: The version of the module to be updated. If empty, the module is updated to the latest version.
  *   - msbuildExePath: The path to the MSBuild executable.
  *
  * Workflow Steps:
@@ -29,6 +30,7 @@ def call(Map args = [:]) {
         /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
         /p:localKbPath="${args.localKBPath}" \
         /p:moduleName="${args.moduleName}" \
+        /p:version="${args.moduleVersion}" \
         /t:UpdateInstalledModule
     """
 }
