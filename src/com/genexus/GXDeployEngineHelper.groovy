@@ -18,23 +18,34 @@ def createDockerContext(Map args = [:]) {
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
+                /p:GENERATOR="${args.generator}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
-                /p:JarName="${args.jarName}" \
-                /p:WarName="${args.warName}" \
-                /t:CreatePackage
+                /t:CreatePackage \
             """
 
-
-            // if ((powershell script: "return [System.IO.Path]::GetExtension(${args.packageLocation})").trim() == '.war') {
-            //     msBuildCommand += ' /p:WarName="asdfghjhgfds"'
-            // }
-            // #TODO USER SWITCH, SI ES WAR --> .WAR, SI ES ZIP --> .ZIP, SI ES JAR --> .JAR, DEFAULT --> THROW ERROR
-
-
+            def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.packageLocation}')", returnStdout: true
+            def contextLocation = ''
+            extension = extension.trim().toLowerCase()
+            echo "[INFO] Package extension: ${extension}" 
+            switch (extension) {
+                case '.war':
+                    msBuildCommand += " /p:WarName=\"${args.warName}\""
+                    contextLocation = args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.war","context")
+                    break
+                case '.jar':
+                    msBuildCommand += " /p:JarName=\"${args.jarName}\""
+                    contextLocation = args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.jar","context")
+                    break
+                case '.zip':
+                    contextLocation = args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
+                default:
+                    throw new Exception("[ERROR] Unsupported package extension: ${extension}")
+            }
+    
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
             
-    return args.packageLocation.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
+        return  contextLocation
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo "[ERROR] ${error.getMessage()}"
