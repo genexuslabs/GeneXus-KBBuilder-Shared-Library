@@ -45,6 +45,12 @@
         <SetGeneratorProperty Condition="'$(android)'=='True'" Generator="Frontend" Name="Android SDK directory" Value="$(androidSDKpath)" />
     </Target>
 
+    <Target Name="CreateLocalEnvironment">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <CreateEnvironment Name="$(EnvironmentName)" Template="$(localKBTemplate)" />
+        <CloseKnowledgeBase/>
+    </Target>
+
     <Target Name="BuildConfigurationEnv">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <BuildAll ForceRebuild="$(rebuild)" CompileMains="true" ContinueOnError="ErrorAndContinue"/>
@@ -69,6 +75,7 @@
 		<UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
 	</Target>
+    
     <Target Name="RestoreInstalledModule">
     <!-- CREAR SEPARADOR DE LIST STRING
         CREAR ITEMGROUP (CHATBOT GEN)
