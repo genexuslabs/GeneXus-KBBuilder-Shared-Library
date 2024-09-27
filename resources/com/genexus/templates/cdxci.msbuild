@@ -22,6 +22,7 @@
         <Message Text="PublishGXModule" />
         <Message Text="ImportXPZ" />
         <Message Text="CloseKB" />
+        <Error Text="Error: You are seeing the default target." />
     </Target>
 
     <Target Name="OpenKB">
