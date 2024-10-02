@@ -47,11 +47,14 @@ void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, Strin
 
 String getAppToken(String githubAppCredentialsId) {
     try {
+        def githubAppToken = ''
+        
         withCredentials([
             usernamePassword(credentialsId: "${githubAppCredentialsId}",
                 usernameVariable: 'githubClientId',
-                passwordVariable: 'githubPrivateKey')
+                passwordVariable: 'GITHUB_PRIVATE_KEY')
         ]) {
+            // Generar el JWT
             def jwt = powershell(script: """
                 \$ErrorActionPreference = "Stop"
 
@@ -64,7 +67,14 @@ String getAppToken(String githubAppCredentialsId) {
                 \$payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$payload)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
                 \$jwt = "\$header64.\$payload64"
 
-                \$signedJwt = & openssl dgst -sha256 -sign <(echo "\$env:githubPrivateKey") <<< \$jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\\n'
+                # Guardar la clave privada en un archivo temporal
+                \$privateKeyPath = [System.IO.Path]::GetTempFileName()
+                Set-Content -Path \$privateKeyPath -Value \$env:GITHUB_PRIVATE_KEY
+
+                # Firmar el JWT con la clave privada
+                \$signedJwt = & openssl dgst -sha256 -sign \$privateKeyPath -outform DER | openssl base64 -A
+                Remove-Item \$privateKeyPath
+
                 return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
 
