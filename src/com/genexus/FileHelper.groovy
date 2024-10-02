@@ -219,13 +219,13 @@ String standarizeVersion(String version, String label, int position){
     return standarizedVersion.trim()
 }
 
-String standarizeVersionForSemVer(String version, int buildNumber, String label){
+String standarizeVersionForSemVer(String version, String buildNumber, String label){
     if (version == null || version.isEmpty()) {
         throw new IllegalArgumentException("Version cannot be null or empty")
     }
-    if (buildNumber < 0) {
-        throw new IllegalArgumentException("Build number must be a non-negative integer")
-    }
+    // if (buildNumber < 0) {
+    //     throw new IllegalArgumentException("Build number must be a non-negative integer")
+    // }
     def standarizedVersion = powershell label: "Add Label to Given Position",
             script: """
                 \$versionParts = ${version}.Split('.')
