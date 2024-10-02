@@ -67,13 +67,15 @@ String getAppToken(String githubAppCredentialsId) {
                 \$payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$payload)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
                 \$jwt = "\$header64.\$payload64"
 
-                # Guardar la clave privada en un archivo temporal
                 \$privateKeyPath = [System.IO.Path]::GetTempFileName()
                 Set-Content -Path \$privateKeyPath -Value \$env:GITHUB_PRIVATE_KEY
 
-                # Firmar el JWT con la clave privada
-                \$signedJwt = & openssl dgst -sha256 -sign \$privateKeyPath -outform DER | openssl base64 -A
+                \$jwtPath = [System.IO.Path]::GetTempFileName()
+                Set-Content -Path \$jwtPath -Value \$jwt
+
+                \$signedJwt = & 'openssl' 'dgst' '-sha256' '-sign' \$privateKeyPath '-out' \$jwtPath.signed | openssl base64 -A
                 Remove-Item \$privateKeyPath
+                Remove-Item \$jwtPath
 
                 return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
