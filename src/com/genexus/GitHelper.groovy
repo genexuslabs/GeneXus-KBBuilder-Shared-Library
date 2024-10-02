@@ -47,39 +47,43 @@ void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, Strin
 
 String getAppToken(String githubAppCredentialsId) {
     try {
+        def githubAppToken = ''
+        
         withCredentials([
             usernamePassword(credentialsId: "${githubAppCredentialsId}",
                 passwordVariable: 'githubPrivateKey')
         ]) {
+            // Generar el JWT
             def jwt = powershell(script: """
                 \$ErrorActionPreference = "Stop"
 
-                $header = @{ alg = 'RS256'; typ = 'JWT' } | ConvertTo-Json -Compress
-                $iat = [int][double]::Parse((Get-Date -UFormat %s))
-                $exp = $iat + 600
-                $payload = @{ iat = $iat; exp = $exp; iss = '${githubAppCredentialsId}' } | ConvertTo-Json -Compress
+                \$header = @{ alg = 'RS256'; typ = 'JWT' } | ConvertTo-Json -Compress
+                \$iat = [int][double]::Parse((Get-Date -UFormat %s))
+                \$exp = \$iat + 600
+                \$payload = @{ iat = \$iat; exp = \$exp; iss = '${githubAppCredentialsId}' } | ConvertTo-Json -Compress
 
-                $header64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($header)) -replace '=', '' -replace '\+', '-' -replace '/', '_'
-                $payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($payload)) -replace '=', '' -replace '\+', '-' -replace '/', '_'
-                $jwt = "$header64.$payload64"
+                \$header64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$header)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
+                \$payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$payload)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
+                \$jwt = "\$header64.\$payload64"
 
                 # Firmar el JWT con la clave privada
-                $privateKey = '${githubPrivateKey}'
-                $signedJwt = & openssl dgst -sha256 -sign <(echo "$privateKey") <<< $jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\n'
-                return "$jwt.$signedJwt"
+                \$privateKey = '${githubPrivateKey}'
+                \$signedJwt = & openssl dgst -sha256 -sign <(echo "\$privateKey") <<< \$jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\\n'
+                return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
 
-            def githubAppToken = powershell(script: """
-                $url = 'https://api.github.com/app/installations/:installation_id/access_tokens' # Reemplaza con el ID real
-                $response = Invoke-RestMethod -Uri $url -Method Post -Headers @{
-                    'Authorization' = "Bearer $jwt"
+            // Obtener el token de la aplicación GitHub
+            githubAppToken = powershell(script: """
+                \$url = 'https://api.github.com/app/installations/:installation_id/access_tokens' # Reemplaza con el ID real
+                \$response = Invoke-RestMethod -Uri \$url -Method Post -Headers @{
+                    'Authorization' = "Bearer \$jwt"
                     'Accept' = 'application/vnd.github.v3+json'
                 }
-                return $response.token
+                return \$response.token
             """, returnStdout: true).trim()
-
-            return githubAppToken
         }
+
+        return githubAppToken
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
