@@ -49,24 +49,22 @@ String getAppToken(String githubAppCredentialsId) {
     try {
         withCredentials([
             usernamePassword(credentialsId: "${githubAppCredentialsId}",
+                usernameVariable: 'githubClientId')
                 passwordVariable: 'githubPrivateKey')
         ]) {
-            // Generar el JWT
             def jwt = powershell(script: """
                 \$ErrorActionPreference = "Stop"
 
                 \$header = @{ alg = 'RS256'; typ = 'JWT' } | ConvertTo-Json -Compress
                 \$iat = [int][double]::Parse((Get-Date -UFormat %s))
                 \$exp = \$iat + 600
-                \$payload = @{ iat = \$iat; exp = \$exp; iss = "${githubAppCredentialsId}" } | ConvertTo-Json -Compress
+                \$payload = @{ iat = \$iat; exp = \$exp; iss = "\$env:githubClientId" } | ConvertTo-Json -Compress
 
                 \$header64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$header)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
                 \$payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$payload)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
                 \$jwt = "\$header64.\$payload64"
 
-                # Firmar el JWT con la clave privada
-                \$privateKey = \"\$env:githubPrivateKey\"
-                \$signedJwt = & openssl dgst -sha256 -sign <(echo "\$privateKey") <<< \$jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\\n'
+                \$signedJwt = & openssl dgst -sha256 -sign <(echo "\$env:githubPrivateKey") <<< \$jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\\n'
                 return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
 
