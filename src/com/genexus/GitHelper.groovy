@@ -65,7 +65,7 @@ String getAppToken(String githubAppCredentialsId) {
                 \$jwt = "\$header64.\$payload64"
 
                 # Firmar el JWT con la clave privada
-                \$privateKey = "${githubPrivateKey}"
+                \$privateKey = \"\$env:githubPrivateKey\"
                 \$signedJwt = & openssl dgst -sha256 -sign <(echo "\$privateKey") <<< \$jwt | openssl base64 | tr -d '=' | tr '+/' '-_' | tr -d '\\n'
                 return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
