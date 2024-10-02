@@ -49,7 +49,7 @@ String getAppToken(String githubAppCredentialsId) {
     try {
         withCredentials([
             usernamePassword(credentialsId: "${githubAppCredentialsId}",
-                usernameVariable: 'githubClientId')
+                usernameVariable: 'githubClientId',
                 passwordVariable: 'githubPrivateKey')
         ]) {
             def jwt = powershell(script: """
