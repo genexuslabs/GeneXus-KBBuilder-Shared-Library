@@ -68,8 +68,9 @@ String getAppToken(String githubAppCredentialsId) {
                 }))).TrimEnd('=').Replace('\\+', '-').Replace('/', '_');
 
                 \$pem_content = "${githubPrivateKey}"
+                \$publicKeyBytes = [Convert]::FromBase64String(\$pem_content)
                 \$rsa = [System.Security.Cryptography.RSA]::Create()
-                \$rsa.ImportFromPem(\$pem_content)
+                \$rsa.ImportRSAPublicKey(\$publicKeyBytes, [ref]\$null)
 
                 \$signature = [Convert]::ToBase64String(\$rsa.SignData([System.Text.Encoding]::UTF8.GetBytes("\$header.\$payload"), [System.Security.Cryptography.HashAlgorithmName]::SHA256, [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)).TrimEnd('=').Replace('\\+', '-').Replace('/', '_')
                 \$jwt = "\$header.\$payload.\$signature"
