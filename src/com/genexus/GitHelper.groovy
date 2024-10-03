@@ -52,39 +52,35 @@ String getAppToken(String githubAppCredentialsId) {
         withCredentials([
             usernamePassword(credentialsId: "${githubAppCredentialsId}",
                 usernameVariable: 'githubClientId',
-                passwordVariable: 'GITHUB_PRIVATE_KEY')
+                passwordVariable: 'githubPrivateKey')
         ]) {
-            // Generar el JWT
             def jwt = powershell(script: """
                 \$ErrorActionPreference = "Stop"
+                \$header = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
+                    alg = "RS256"
+                    typ = "JWT"
+                }))).TrimEnd('=').Replace('\\+', '-').Replace('/', '_');
 
-                \$header = @{ alg = 'RS256'; typ = 'JWT' } | ConvertTo-Json -Compress
-                \$iat = [int][double]::Parse((Get-Date -UFormat %s))
-                \$exp = \$iat + 600
-                \$payload = @{ iat = \$iat; exp = \$exp; iss = "\$env:githubClientId" } | ConvertTo-Json -Compress
+                \$payload = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject @{
+                    iat = [System.DateTimeOffset]::UtcNow.AddSeconds(-10).ToUnixTimeSeconds()
+                    exp = [System.DateTimeOffset]::UtcNow.AddMinutes(10).ToUnixTimeSeconds()
+                    iss = "${githubClientId}"
+                }))).TrimEnd('=').Replace('\\+', '-').Replace('/', '_');
 
-                \$header64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$header)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
-                \$payload64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(\$payload)) -replace '=', '' -replace '\\+', '-' -replace '/', '_'
-                \$jwt = "\$header64.\$payload64"
 
-                \$privateKeyPath = [System.IO.Path]::GetTempFileName()
-                Set-Content -Path \$privateKeyPath -Value \$env:GITHUB_PRIVATE_KEY
+                \$rsa = "${githubPrivateKey}"
 
-                \$jwtPath = [System.IO.Path]::GetTempFileName()
-                Set-Content -Path \$jwtPath -Value \$jwt
+                \$signature = [Convert]::ToBase64String(\$rsa.SignData([System.Text.Encoding]::UTF8.GetBytes("\$header.\$payload"), [System.Security.Cryptography.HashAlgorithmName]::SHA256, [System.Security.Cryptography.RSASignaturePadding]::Pkcs1)).TrimEnd('=').Replace('\\+', '-').Replace('/', '_')
+                \$jwt = "\$header.\$payload.\$signature"
+                return \$jwt
 
-                \$signedJwt = & 'openssl' 'dgst' '-sha256' '-sign' \$privateKeyPath '-out' \$jwtPath.signed | openssl base64 -A
-                Remove-Item \$privateKeyPath
-                Remove-Item \$jwtPath
-
-                return "\$jwt.\$signedJwt"
             """, returnStdout: true).trim()
 
             // Obtener el token de la aplicación GitHub
             githubAppToken = powershell(script: """
                 \$url = 'https://api.github.com/app/installations/:installation_id/access_tokens' # Reemplaza con el ID real
                 \$response = Invoke-RestMethod -Uri \$url -Method Post -Headers @{
-                    'Authorization' = "Bearer \$jwt"
+                    'Authorization' = "Bearer ${jwt}"
                     'Accept' = 'application/vnd.github.v3+json'
                 }
                 return \$response.token
