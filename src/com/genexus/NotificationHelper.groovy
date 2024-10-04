@@ -17,15 +17,20 @@ def getCommitInfo() {
     try {
         def changeLogSets = currentBuild.changeSets
         if(changeLogSets.size() != 0) {
+            echo changeLogSets
             for (def entry in changeLogSets) {
+                echo entry
                 for (def revision in entry.items) {
+                    echo revision
                     def date = new Date(revision.timestamp)
                     echo " [DEBUG] read revision date::${date.toString()}"
                     echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
                     echo " [DEBUG] read revision author::${revision.author.toString()}"
                     echo " [DEBUG] read revision msg::${revision.msg.toString()}"
                     def files = new ArrayList(revision.affectedFiles)
+                    echo files
                     for (def file in files) {
+                        echo file
                         echo " [DEBUG] read editType::${file.editType.name}"
                         echo " [DEBUG] read file path::${file.path}"
                     }
