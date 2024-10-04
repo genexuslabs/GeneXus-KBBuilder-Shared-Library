@@ -13,28 +13,68 @@ String createTemplate(String templateName, def params) {
 }
 
 @NonCPS
-def getCommitInfo() {
+def getRepositoryChanges() {
     try {
         def changeLogSets = currentBuild.changeSets
         if(changeLogSets.size() != 0) {
-            echo "changeLogSets::${changeLogSets}"
-            for (def entry in changeLogSets) {
-                echo "entry::${entry}"
-                for (def revision in entry.items) {
-                    echo "revision::${revision}"
-                    def date = new Date(revision.timestamp)
-                    echo " [DEBUG] read revision date::${date.toString()}"
-                    echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
-                    echo " [DEBUG] read revision author::${revision.author.toString()}"
-                    echo " [DEBUG] read revision msg::${revision.msg.toString()}"
-                    def files = new ArrayList(revision.affectedFiles)
-                    echo "files::${files}"
-                    for (def file in files) {
-                        echo "file::${file}"
-                        echo " [DEBUG] read editType::${file.editType.name}"
-                        echo " [DEBUG] read file path::${file.path}"
+            if (entry instanceof hudson.plugins.git.GitChangeSetList) {
+                echo "changeLogSets::${changeLogSets}"
+                for (def entry in changeLogSets) {
+                    echo "entry::${entry}"
+                    for (def revision in entry.items) {
+                        echo "revision::${revision}"
+                        def date = new Date(revision.timestamp)
+                        echo " [DEBUG] read revision date::${date.toString()}"
+                        echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
+                        echo " [DEBUG] read revision author::${revision.author.toString()}"
+                        echo " [DEBUG] read revision msg::${revision.msg.toString()}"
+                        def files = new ArrayList(revision.affectedFiles)
+                        echo "files::${files}"
+                        for (def file in files) {
+                            echo "file::${file}"
+                            echo " [DEBUG] read editType::${file.editType.name}"
+                            echo " [DEBUG] read file path::${file.path}"
+                        }
                     }
                 }
+            } else {
+                echo " [DEBUG] no commits from github"
+            }
+        } else {
+            echo " [DEBUG] no commits"
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+@NonCPS
+def getKnowledgeBaseChanges() {
+    try {
+        def changeLogSets = currentBuild.changeSets
+        if(changeLogSets.size() != 0) {
+            if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
+                echo "changeLogSets::${changeLogSets}"
+                for (def entry in changeLogSets) {
+                    echo "entry::${entry}"
+                    for (def revision in entry.items) {
+                        echo "revision::${revision}"
+                        def date = new Date(revision.timestamp)
+                        echo " [DEBUG] read revision date::${date.toString()}"
+                        echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
+                        echo " [DEBUG] read revision author::${revision.author.toString()}"
+                        echo " [DEBUG] read revision msg::${revision.msg.toString()}"
+                        def files = new ArrayList(revision.affectedFiles)
+                        echo "files::${files}"
+                        for (def file in files) {
+                            echo "file::${file}"
+                            echo " [DEBUG] read editType::${file.editType.name}"
+                            echo " [DEBUG] read file path::${file.path}"
+                        }
+                    }
+                }
+            } else {
+                echo " [DEBUG] no commits"
             }
         } else {
             echo " [DEBUG] no commits"
