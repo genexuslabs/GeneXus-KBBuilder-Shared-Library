@@ -45,7 +45,7 @@ void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, Strin
     }
 }
 
-void dispatchBuiltinModuleToGeneXusDependencySync(Map args = [:]) {
+void dispatchToGeneXusDependencySync(Map args = [:]) {
     try {
         withCredentials([
             usernamePassword(credentialsId: "${args.githubAppCredentialsId}",
@@ -57,7 +57,7 @@ void dispatchBuiltinModuleToGeneXusDependencySync(Map args = [:]) {
                 -H \"Accept: application/vnd.github+json\" ^
                 -H \"Authorization: Bearer ${githubAccessToken}\" ^
                 https://api.github.com/repos/${args.gitOrganization}/${args.gitRepoName}/actions/workflows/${args.gitWorkflowName}/dispatches ^
-                -d "{ \\"ref\\": \\"${args.gitBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.packageModuleName}\\", \\"BRANCH\\": \\"${args.dispathBranch}\\", \\"VERSION\\": \\"${args.moduleVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
+                -d "{ \\"ref\\": \\"${args.syncGitBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.componentName}\\", \\"BRANCH\\": \\"${args.genexusGitBranch}\\", \\"PACKAGE_NAMES\\":\\"${args.packageName}\\", \\"VERSION\\": \\"${args.moduleVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
             """
         }
     } catch (error) {

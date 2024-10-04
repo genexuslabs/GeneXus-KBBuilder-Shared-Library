@@ -28,7 +28,6 @@ def getCommitInfo() {
                     for (def file in files) {
                         echo " [DEBUG] read editType::${file.editType.name}"
                         echo " [DEBUG] read file path::${file.path}"
-                        count += 1
                     }
                 }
             }
