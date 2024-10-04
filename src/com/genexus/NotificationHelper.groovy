@@ -12,6 +12,43 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
+@NonCPS
+def getCommitInfo() {
+    try {
+        def changeLogSets = currentBuild.changeSets
+        if(changeLogSets.size() != 0) {
+            for (def entry in changeLogSets) {
+                for (def revision in entry.items) {
+                    def date = new Date(revision.timestamp)
+                    echo " [DEBUG] read revision date::${date.toString()}"
+                    echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
+                    echo " [DEBUG] read revision author::${revision.author.toString()}"
+                    echo " [DEBUG] read revision msg::${revision.msg.toString()}"
+                    def files = new ArrayList(revision.affectedFiles)
+                    for (def file in files) {
+                        echo " [DEBUG] read editType::${file.editType.name}"
+                        echo " [DEBUG] read file path::${file.path}"
+                        count += 1
+                    }
+                }
+            }
+        } else {
+            echo " [DEBUG] no commits"
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+void printCommit(Map args = [:]) {
+    try{
+        getChangeLogSet()
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 /**
  * This methods 
  * @param 
