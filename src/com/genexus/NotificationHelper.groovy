@@ -40,7 +40,7 @@ def getCommitInfo() {
         throw error
     }
 }
-void printCommit(Map args = [:]) {
+void printCommit() {
     try{
         getChangeLogSet()
     } catch (error) {
