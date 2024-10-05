@@ -266,4 +266,51 @@ String standarizeVersionForSemVer(String version, String buildNumber, String lab
     return standarizedVersion.trim()
 }
 
+/**
+ * Constructs a standardized semantic version expression with four components:
+ * major, minor, revision, and patch (build number). The major, minor, and revision 
+ * values are derived from the provided version string, while the build number 
+ * serves as the patch version component. An optional offset can be added to the 
+ * build number, allowing for versioning flexibility.
+ *
+ * @param {string} version - The version string in the format "major.minor.revision" 
+ *                           (e.g., "1.3.5"). If the revision is omitted, it defaults to "0".
+ * @param {string} buildNumber - The base build number to be used as the patch version 
+ *                               (e.g., "88"). It must be a numeric string.
+ * @param {int} offset - An integer value that will be added to the build number. 
+ *                       This allows for versioning adjustments (e.g., "100").
+ *
+ * @throws {Error} Throws an error if the provided version string does not conform 
+ *                 to the expected format of "major.minor.revision" or is invalid 
+ *                 in any way (e.g., non-numeric values).
+ *
+ * @returns {string} The constructed version expression in the format 
+ *                   "major.minor.revision.build" (e.g., "1.3.5.88").
+ *
+ * @example
+ * // Standard version without an offset
+ * const version1 = getFourDigitVersion("1.3.5", "88", 0); // Returns "1.3.5.88"
+ *
+ * // Version with minor and no revision, using an offset
+ * const version2 = getFourDigitVersion("2.1", "10", 100); // Returns "2.1.0.110"
+ *
+ * // Version with an existing revision and a build number offset
+ * const version3 = getFourDigitVersion("3.4.2", "50", 25); // Returns "3.4.2.75"
+ */
+String getFourDigitVersion(String version, String buildNumber, int buildOffset){
+    def standarizedVersion = powershell label: "Define a four digit version with the BuildNumber",
+            script: """
+                \$versionParts = "${version}".Split('.')
+
+                \$majorNumber = @("1", \$versionParts[0])[-not [string]::IsNullOrEmpty(\$versionParts[0])]
+                \$minorNumber = @("0", \$versionParts[1])[\$versionParts.Length -gt 1]
+                \$revisionNumber = @("0", \$versionParts[2])[\$versionParts.Length -gt 2]
+                \$buildVer = [int]\$buildNumber + ${buildOffset}
+
+                \$standarizedVersion = @(\$majorNumber, \$minorNumber, \$revisionNumber, \$buildVer) -join "."
+                Write-Output \$standarizedVersion
+            """, returnStdout: true
+    return standarizedVersion.trim()
+}
+
 return this
