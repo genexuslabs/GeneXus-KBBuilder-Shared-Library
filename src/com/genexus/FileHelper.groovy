@@ -297,7 +297,7 @@ String standarizeVersionForSemVer(String version, String buildNumber, String lab
  * // Version with an existing revision and a build number offset
  * const version3 = getFourDigitVersion("3.4.2", "50", 25); // Returns "3.4.2.75"
  */
-String getFourDigitVersion(String version, String buildNumber, int buildOffset){
+String getFourDigitVersion(String version, String buildNumber, String buildOffset){
     def standarizedVersion = powershell label: "Define a four digit version with the BuildNumber",
             script: """
                 \$versionParts = "${version}".Split('.')
@@ -305,8 +305,10 @@ String getFourDigitVersion(String version, String buildNumber, int buildOffset){
                 \$majorNumber = @("1", \$versionParts[0])[-not [string]::IsNullOrEmpty(\$versionParts[0])]
                 \$minorNumber = @("0", \$versionParts[1])[\$versionParts.Length -gt 1]
                 \$revisionNumber = @("0", \$versionParts[2])[\$versionParts.Length -gt 2]
-                \$buildVer = [int]\$buildNumber + ${buildOffset}
-
+                \$buildVer = [int]\$buildNumber
+                if (-not [string]::IsNullOrEmpty("${buildOffset}")) {
+                    \$buildVer += [int]${buildOffset}
+                }
                 \$standarizedVersion = @(\$majorNumber, \$minorNumber, \$revisionNumber, \$buildVer) -join "."
                 Write-Output \$standarizedVersion
             """, returnStdout: true
