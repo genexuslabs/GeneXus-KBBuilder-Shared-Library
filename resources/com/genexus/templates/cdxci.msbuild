@@ -159,8 +159,8 @@
 	<OpenKnowledgeBase Directory="$(localKbPath)"/>
         <Message Text="Packaging Module:$(PackageModuleName)"/>
 	<PropertyGroup>
-		<packageNameProp Condition="'$(packageNameProp)'==''">packageName<packageNameProp>
-	<PropertyGroup>
+		<packageNameProp Condition="'$(packageNameProp)'==''">packageName</packageNameProp>
+	</PropertyGroup>
         <GetObjectProperty Object="Module:$(PackageModuleName)" Name="Package Name">
             <Output TaskParameter="PropertyValue" PropertyName="ModulePackageName" />
         </GetObjectProperty>
