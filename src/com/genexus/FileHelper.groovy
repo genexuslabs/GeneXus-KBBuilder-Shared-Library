@@ -223,12 +223,16 @@ String standarizeVersion(String version, String label, int position){
  * Constructs a Semantic Versioning (SemVer) expression based on the provided version string.
  * The major and minor values are derived from the given version, while the build number 
  * serves as the patch version component. An optional label can be specified to indicate 
- * the development stage, such as 'beta', 'preview', or any other identifier.
+ * the development stage, such as 'beta', 'preview', or any other identifier. An optional 
+ * int argument can be provided to increase the major version with an offset, useful when the
+ * version cannot handle a label and there is a need to generate different versions for different
+ * channels (g.e. Beta and Preview).
  *
  * @param {string} version - The version string in the format "major.minor.patch" (e.g., "1.3.5").
  * @param {string} buildNumber - The build number to be used as the patch version (e.g., "88").
  * @param {string} [label] - An optional label to denote the version stage (e.g., "beta"). 
  *                           If provided, it will be appended to the version string.
+ * @param {int} [majorOffset] - An optional value to add to the major version.
  *
  * @throws {Error} Throws an error if the provided version string is not in a valid SemVer format 
  *                 (digits separated by dots).
@@ -239,30 +243,32 @@ String standarizeVersion(String version, String label, int position){
  * // Standard version without a label
  * const version1 = standarizeVersionForSemVer("1.3.5", "88", ""); // Returns "1.3.88"
  *
- * // Version with a 'beta' label
- * const version2 = standarizeVersionForSemVer("2.1.5", "457", "beta"); // Returns "2.1.5-beta.457"
+ * // Version with a 'beta' label but without increasing major version
+ * const version2 = standarizeVersionForSemVer("2.1.5", "457", "beta", 100); // Returns "2.1.0-beta.457"
+ *
+ * // Increase major version by 100 when no label is defined
+ * const version3 = standarizeVersionForSemVer("1.3.5", "88", "", 100); // Returns "101.3.88"
  */
-String standarizeVersionForSemVer(String version, String buildNumber, String label){
-    // if (version == null || version.isEmpty()) {
-    //     throw new IllegalArgumentException("Version cannot be null or empty")
-    // }
-    // if (buildNumber < 0) {
-    //     throw new IllegalArgumentException("Build number must be a non-negative integer")
-    // }
+String standarizeVersionForSemVer(String version, String buildNumber, String label, int majorOffset = 0) {
     def standarizedVersion = powershell label: "Define a SemVer expression with the BuildNumber",
             script: """
-                \$auxVersion = "${version}"
-                \$versionParts = \$auxVersion.Split('.')
+                \$versionParts = "${version}".Split('.')
+                \$majorVersion = [int]\$versionParts[0]
+                if ([string]::IsNullOrEmpty("${label}")) {
+                    \$majorVersion += ${majorOffset}
+                }
+                \$minorVersion = [int]\$versionParts[1]
                 if (-not [string]::IsNullOrEmpty("${label}")) {
                     \$buildVer = "0-${label}.${buildNumber}"
                 }
                 else {
                     \$buildVer = "${buildNumber}"
                 }
-                \$versionList = @(\$versionParts[0], \$versionParts[1], \$buildVer)
+                \$versionList = @(\$majorVersion, \$minorVersion, \$buildVer)
                 \$standarizedVersion = \$versionList -join "."
                 Write-Output \$standarizedVersion
             """, returnStdout: true
+    
     return standarizedVersion.trim()
 }
 
