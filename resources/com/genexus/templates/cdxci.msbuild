@@ -156,8 +156,14 @@
     </Target>
 
     <Target Name="PackageGXModule">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+	<OpenKnowledgeBase Directory="$(localKbPath)"/>
         <Message Text="Packaging Module:$(PackageModuleName)"/>
+	<PropertyGroup>
+		<PackageNameProp Condition="'$(PackageNameProp)'==''">packageName<PackageNameProp>
+	<PropertyGroup>
+        <GetObjectProperty Object="Module:$(PackageModuleName)" Name="Package Name">
+            <Output TaskParameter="PropertyValue" PropertyName="ModulePackageName" />
+        </GetObjectProperty>
         <GetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion">
             <Output TaskParameter="PropertyValue" PropertyName="ModuleVersionValue" />
         </GetObjectProperty>
@@ -169,16 +175,16 @@
         <!-- Task to create .json file with property name n value-->
         <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
-        <!-- <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(ModuleVersionValue)+$(PipelineBuildNumber)"' /> -->
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(PackageNameProp)":"$(ModulePackageName)",' />
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(ModuleVersionValue)"' />
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
         <!-- Task to create .json file with property name n value-->
-		<ItemGroup>
-			<EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
-			<EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
-			<EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
-		</ItemGroup>
-		<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
+	<ItemGroup>
+		<EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
+		<EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
+		<EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
+	</ItemGroup>
+	<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
 
