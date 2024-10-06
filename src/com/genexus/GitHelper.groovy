@@ -57,7 +57,7 @@ void dispatchToGeneXusDependencySync(Map args = [:]) {
                 -H \"Accept: application/vnd.github+json\" ^
                 -H \"Authorization: Bearer ${githubAccessToken}\" ^
                 https://api.github.com/repos/${args.dispatchRepoOrganization}/${args.dispatchRepoName}/actions/workflows/${args.dispatchWorkflowName}/dispatches ^
-                -d "{ \\"ref\\": \\"${args.dispatchRepoBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.componentName}\\", \\"BRANCH\\": \\"${args.genexusGitBranch}\\", \\"PACKAGE_NAMES\\":\\"${args.packageNames}\\", \\"VERSION\\": \\"${args.componentVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
+                -d "{ \\"ref\\": \\"${args.dispatchRepoBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.componentName}\\", \\"BRANCH\\": \\"${args.dispatchMapGXGitBranch}\\", \\"PACKAGE_NAMES\\":\\"${args.packageNames}\\", \\"VERSION\\": \\"${args.componentVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
             """
         }
     } catch (error) {
