@@ -151,9 +151,9 @@
 
     <Target Name="AddModuleServer">
 	<PropertyGroup>
-		<serverType Condition="'$(serverType)'==''">NexusNuGet</serverType>
+		<ServerType Condition="'$(ServerType)'==''">NexusNuGet</ServerType>
 	</PropertyGroup>
-        <AddModulesServer Type="$(serverType)" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <AddModulesServer Type="$(ServerType)" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
     </Target>
 
     <Target Name="PackageGXModule">
