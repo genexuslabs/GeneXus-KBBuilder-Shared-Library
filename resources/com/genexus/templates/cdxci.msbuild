@@ -64,14 +64,12 @@
     </Target>
     
     <Target Name="UpdateInstalledModule">
-        <Message Text="[DEBUG] $(ModuleName.Split(','))" Importance="high"/>
         <ItemGroup>
             <ModuleToGXVersion Include="$(ModuleName.Split(','))" />
         </ItemGroup>
         <OpenKnowledgeBase Directory="$(localKbPath)"/>
         <UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
-        <Message Text="[DEBUG] %{ModuleToGXVersion}" Importance="high"/>
-        <Message Text="[DEBUG] %{ModuleToGXVersion.Identity}" Importance="high"/>
+        <Message Text="[DEBUG] Updating module(s): @(ModuleToGXVersion, ',')" Importance="high"/>
         <UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
