@@ -171,6 +171,8 @@
   &lt;/servers&gt;
 &lt;/settings&gt;</settingsXmlContent>
 	</PropertyGroup>
+        <Message Text="[info] Creating '$(settingsXmlPath)', required for module publishing to a Maven repository" Importance="high" Condition="!Exists('$(settingsXmlPath)')"/>
+        <Message Text="[info] '$(settingsXmlPath)' already exists, use it for module publishing to a Maven repository" Condition="Exists('$(settingsXmlPath)')"/>
         <WriteLinesToFile Lines="$(settingsXmlContent)" File="$(settingsXmlPath)" Condition="!Exists('$(settingsXmlPath)')"/>
     </Target>
 
