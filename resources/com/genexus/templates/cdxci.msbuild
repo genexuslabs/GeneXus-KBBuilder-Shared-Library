@@ -155,6 +155,23 @@
 		<srvType Condition="'$(srvType)'==''">NexusNuGet</srvType>
 	</PropertyGroup>
         <AddModulesServer Type="$(srvType)" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <CallTarget Targets="CreateSettingsXml" Condition="'$(srvType)'=='Nexus'"/>
+    </Target>
+
+    <Target Name="CreateSettingsXml">
+        <PropertyGroup>
+            <settingsXmlPath>$([MSBuild]::EnsureTrailingSlash('$(USERPROFILE)')).m2\settings.xml</settingsXmlPath>
+            <settingsXmlContent>&lt;settings&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;${repo.id}&lt;/id&gt;
+      &lt;username&gt;${repo.login}&lt;/username&gt;
+      &lt;password&gt;${repo.pwd}&lt;/password&gt; 
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;</settingsXmlContent>
+	</PropertyGroup>
+        <WriteLinesToFile Lines="$(settingsXmlContent)" File="$(settingsXmlPath)" Condition="!Exists('$(settingsXmlPath)')"/>
     </Target>
 
     <Target Name="PackageGXModule">
