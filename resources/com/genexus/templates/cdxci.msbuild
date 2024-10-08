@@ -151,7 +151,7 @@
 
     <Target Name="AddModuleServer">
 	<PropertyGroup>
-		<srvType Condition="'$(ServerType)'!='' and '$(ServerType)'!='null'">$(ServerType)</ServerType>
+		<srvType Condition="'$(ServerType)'!='' and '$(ServerType)'!='null'">$(ServerType)</srvType>
 		<srvType Condition="'$(srvType)'==''">NexusNuGet</srvType>
 	</PropertyGroup>
         <AddModulesServer Type="$(srvType)" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
