@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project DefaultTargets="ShowTargets" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<PropertyGroup>
-		<!-- Path of GeneXus installation -->
-		<GX_PROGRAM_DIR Condition="'$(GX_PROGRAM_DIR)'==''"></GX_PROGRAM_DIR>
-	</PropertyGroup>
+    <PropertyGroup>
+        <!-- Path of GeneXus installation -->
+        <GX_PROGRAM_DIR Condition="'$(GX_PROGRAM_DIR)'==''"></GX_PROGRAM_DIR>
+    </PropertyGroup>
 
-	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
+    <Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
         <Message Text="AvoidDatastoreConnections" />
@@ -14,12 +14,16 @@
         <Message Text="ConfigureGAMDataStore" />
         <Message Text="GetEnvironmentProperty" />
         <Message Text="SetEnvironmentProperty" />
+        <Message Text="ResetEnvironmentProperty" />
         <Message Text="GetGeneratorProperty" />
         <Message Text="SetGeneratorProperty" />
+        <Message Text="ResetGeneratorProperty" />
         <Message Text="GetObjectProperty" />
         <Message Text="SetObjectProperty" />
-        <Message Text="SetVersionProperty"/>
+        <Message Text="ResetObjectProperty" />
         <Message Text="GetVersionProperty"/>
+        <Message Text="SetVersionProperty"/>
+        <Message Text="ResetVersionProperty"/>
         <Message Text="CloseKB" />
         <Error Text="Error: You are seeing the default target." />
     </Target>
@@ -72,7 +76,14 @@
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <SetEnvironmentProperty Name="$(environmentPropName)" Value="$(environmentPropValue)" />
-		<CloseKnowledgeBase/>
+	<CloseKnowledgeBase/>
+    </Target>
+    
+    <Target Name="ResetEnvironmentProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
+        <ResetEnvironmentProperty Name="$(environmentPropName)" />
+	<CloseKnowledgeBase/>
     </Target>
     
     <Target Name="GetGeneratorProperty">
@@ -104,12 +115,18 @@
         END TRUNK
         -->
         <SetGeneratorProperty Generator="$(generatorName)" Name="$(generatorPropName)" Value="$(generatorPropValue)" />
-		<CloseKnowledgeBase/>
+	<CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="ResetGeneratorProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <ResetGeneratorProperty Generator="$(generatorName)" Name="$(generatorPropName)" />
+	<CloseKnowledgeBase/>
     </Target>
 
     <Target Name="GetObjectProperty">
         <!-- Task to create .json file with property name n value-->
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+	<OpenKnowledgeBase Directory="$(localKbPath)"/>
         <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
         <GetObjectProperty Object="$(objectName)" Name="$(objectPropName)">
@@ -122,24 +139,37 @@
     <Target Name="SetObjectProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetObjectProperty Object="$(objectName)" Name="$(objectPropName)" Value="$(objectPropValue)" />
-		<CloseKnowledgeBase/>
+	<CloseKnowledgeBase/>
     </Target>
-    
-    <Target Name="SetVersionProperty">
+
+    <Target Name="ResetObjectProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetVersionProperty Name="$(verPropName)" Value="$(versionPropValue)"/>
-		<CloseKnowledgeBase/>
+        <ResetObjectProperty Object="$(objectName)" Name="$(objectPropName)" />
+	<CloseKnowledgeBase/>
     </Target>
 
     <Target Name="GetVersionProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-            <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
-            <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
-            <GetVersionProperty Name="$(verPropName)">
+        <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
+        <GetVersionProperty Name="$(verPropName)">
             <Output TaskParameter="PropertyValue" PropertyName="verPropValue"/>
-            </GetVersionProperty>
-            <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(verPropValue)"' />
-            <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
-		<CloseKnowledgeBase/>
+        </GetVersionProperty>
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(verPropValue)"' />
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
+        <CloseKnowledgeBase/>
     </Target>
+
+    <Target Name="SetVersionProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetVersionProperty Name="$(verPropName)" Value="$(versionPropValue)"/>
+	<CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="ResetVersionProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <ResetVersionProperty Name="$(verPropName)" />
+	<CloseKnowledgeBase/>
+    </Target>
+
 </Project>
