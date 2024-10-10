@@ -101,6 +101,7 @@
     
     <Target Name="SetGeneratorProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <!-- 
         START TRUNK
         <HasGenerator GeneratorName="Frontend">
@@ -120,6 +121,7 @@
 
     <Target Name="ResetGeneratorProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <ResetGeneratorProperty Generator="$(generatorName)" Name="$(generatorPropName)" />
 	<CloseKnowledgeBase/>
     </Target>
