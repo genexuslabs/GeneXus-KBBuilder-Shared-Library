@@ -48,7 +48,7 @@ void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, Strin
 void dispatchToGeneXusDependencySync(Map args = [:]) {
     try {
         withCredentials([
-            usernamePassword(credentialsId: "${args.githubAppCredentialsId}",
+            usernamePassword(credentialsId: "${args.dispatchGitHubAppCredentialsId}",
                 usernameVariable: 'githubClientId',
                 passwordVariable: 'githubAccessToken'
         )]) {
@@ -56,8 +56,8 @@ void dispatchToGeneXusDependencySync(Map args = [:]) {
                 curl -X POST ^
                 -H \"Accept: application/vnd.github+json\" ^
                 -H \"Authorization: Bearer ${githubAccessToken}\" ^
-                https://api.github.com/repos/${args.gitOrganization}/${args.gitRepoName}/actions/workflows/${args.gitWorkflowName}/dispatches ^
-                -d "{ \\"ref\\": \\"${args.syncGitBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.componentName}\\", \\"BRANCH\\": \\"${args.genexusGitBranch}\\", \\"PACKAGE_NAMES\\":\\"${args.packageName}\\", \\"VERSION\\": \\"${args.moduleVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
+                https://api.github.com/repos/${args.dispatchRepoOrganization}/${args.dispatchRepoName}/actions/workflows/${args.dispatchWorkflowName}/dispatches ^
+                -d "{ \\"ref\\": \\"${args.dispatchRepoBranch}\\", \\"inputs\\": { \\"COMPONENT_NAME\\": \\"${args.componentName}\\", \\"BRANCH\\": \\"${args.componentBranch}\\", \\"PACKAGE_NAMES\\":\\"${args.packageNames}\\", \\"VERSION\\": \\"${args.componentVersion}\\", \\"COMMIT_MESSAGE\\": \\"${args.commitMessage}\\", \\"COMMITTER\\": \\"${args.committer}\\" } }"
             """
         }
     } catch (error) {

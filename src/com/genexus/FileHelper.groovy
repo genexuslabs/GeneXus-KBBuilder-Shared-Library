@@ -223,12 +223,16 @@ String standarizeVersion(String version, String label, int position){
  * Constructs a Semantic Versioning (SemVer) expression based on the provided version string.
  * The major and minor values are derived from the given version, while the build number 
  * serves as the patch version component. An optional label can be specified to indicate 
- * the development stage, such as 'beta', 'preview', or any other identifier.
+ * the development stage, such as 'beta', 'preview', or any other identifier. An optional 
+ * int argument can be provided to increase the major version with an offset, useful when the
+ * version cannot handle a label and there is a need to generate different versions for different
+ * channels (g.e. Beta and Preview).
  *
  * @param {string} version - The version string in the format "major.minor.patch" (e.g., "1.3.5").
  * @param {string} buildNumber - The build number to be used as the patch version (e.g., "88").
  * @param {string} [label] - An optional label to denote the version stage (e.g., "beta"). 
  *                           If provided, it will be appended to the version string.
+ * @param {int} [majorOffset] - An optional value to add to the major version.
  *
  * @throws {Error} Throws an error if the provided version string is not in a valid SemVer format 
  *                 (digits separated by dots).
@@ -239,28 +243,79 @@ String standarizeVersion(String version, String label, int position){
  * // Standard version without a label
  * const version1 = standarizeVersionForSemVer("1.3.5", "88", ""); // Returns "1.3.88"
  *
- * // Version with a 'beta' label
- * const version2 = standarizeVersionForSemVer("2.1.5", "457", "beta"); // Returns "2.1.5-beta.457"
+ * // Version with a 'beta' label but without increasing major version
+ * const version2 = standarizeVersionForSemVer("2.1.5", "457", "beta", 100); // Returns "2.1.0-beta.457"
+ *
+ * // Increase major version by 100 when no label is defined
+ * const version3 = standarizeVersionForSemVer("1.3.5", "88", "", 100); // Returns "101.3.88"
  */
-String standarizeVersionForSemVer(String version, String buildNumber, String label){
-    // if (version == null || version.isEmpty()) {
-    //     throw new IllegalArgumentException("Version cannot be null or empty")
-    // }
-    // if (buildNumber < 0) {
-    //     throw new IllegalArgumentException("Build number must be a non-negative integer")
-    // }
+String standarizeVersionForSemVer(String version, String buildNumber, String label, int majorOffset = 0) {
     def standarizedVersion = powershell label: "Define a SemVer expression with the BuildNumber",
             script: """
-                \$auxVersion = "${version}"
-                \$versionParts = \$auxVersion.Split('.')
+                \$versionParts = "${version}".Split('.')
+                \$majorVersion = [int]\$versionParts[0]
+                if ([string]::IsNullOrEmpty("${label}")) {
+                    \$majorVersion += ${majorOffset}
+                }
+                \$minorVersion = [int]\$versionParts[1]
                 if (-not [string]::IsNullOrEmpty("${label}")) {
                     \$buildVer = "0-${label}.${buildNumber}"
                 }
                 else {
                     \$buildVer = "${buildNumber}"
                 }
-                \$versionList = @(\$versionParts[0], \$versionParts[1], \$buildVer)
+                \$versionList = @(\$majorVersion, \$minorVersion, \$buildVer)
                 \$standarizedVersion = \$versionList -join "."
+                Write-Output \$standarizedVersion
+            """, returnStdout: true
+    
+    return standarizedVersion.trim()
+}
+
+/**
+ * Constructs a standardized semantic version expression with four components:
+ * major, minor, revision, and patch (build number). The major, minor, and revision 
+ * values are derived from the provided version string, while the build number 
+ * serves as the patch version component. An optional offset can be added to the 
+ * build number, allowing for versioning flexibility.
+ *
+ * @param {string} version - The version string in the format "major.minor.revision" 
+ *                           (e.g., "1.3.5"). If the revision is omitted, it defaults to "0".
+ * @param {string} buildNumber - The base build number to be used as the patch version 
+ *                               (e.g., "88"). It must be a numeric string.
+ * @param {int} offset - An integer value that will be added to the build number. 
+ *                       This allows for versioning adjustments (e.g., "100").
+ *
+ * @throws {Error} Throws an error if the provided version string does not conform 
+ *                 to the expected format of "major.minor.revision" or is invalid 
+ *                 in any way (e.g., non-numeric values).
+ *
+ * @returns {string} The constructed version expression in the format 
+ *                   "major.minor.revision.build" (e.g., "1.3.5.88").
+ *
+ * @example
+ * // Standard version without an offset
+ * const version1 = getFourDigitVersion("1.3.5", "88", 0); // Returns "1.3.5.88"
+ *
+ * // Version with minor and no revision, using an offset
+ * const version2 = getFourDigitVersion("2.1", "10", 100); // Returns "2.1.0.110"
+ *
+ * // Version with an existing revision and a build number offset
+ * const version3 = getFourDigitVersion("3.4.2", "50", 25); // Returns "3.4.2.75"
+ */
+String getFourDigitVersion(String version, String buildNumber, String buildOffset){
+    def standarizedVersion = powershell label: "Define a four digit version with the BuildNumber",
+            script: """
+                \$versionParts = "${version}".Split('.')
+
+                \$majorNumber = @("1", \$versionParts[0])[-not [string]::IsNullOrEmpty(\$versionParts[0])]
+                \$minorNumber = @("0", \$versionParts[1])[\$versionParts.Length -gt 1]
+                \$revisionNumber = @("0", \$versionParts[2])[\$versionParts.Length -gt 2]
+                \$buildVer = [int]\$buildNumber
+                if (-not [string]::IsNullOrEmpty("${buildOffset}")) {
+                    \$buildVer += [int]${buildOffset}
+                }
+                \$standarizedVersion = @(\$majorNumber, \$minorNumber, \$revisionNumber, \$buildVer) -join "."
                 Write-Output \$standarizedVersion
             """, returnStdout: true
     return standarizedVersion.trim()

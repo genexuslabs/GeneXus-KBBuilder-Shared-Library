@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project DefaultTargets="ShowTargets" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<PropertyGroup>
-		<!-- Path of GeneXus installation -->
-		<GX_PROGRAM_DIR Condition="'$(GX_PROGRAM_DIR)'==''"></GX_PROGRAM_DIR>
-	</PropertyGroup>
+    <PropertyGroup>
+        <!-- Path of GeneXus installation -->
+        <GX_PROGRAM_DIR Condition="'$(GX_PROGRAM_DIR)'==''"></GX_PROGRAM_DIR>
+    </PropertyGroup>
 
-	<Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
+    <Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
 
     <Target Name="ShowTargets">
         <Message Text="BuildConfigurationEnv" />
@@ -64,26 +64,24 @@
     </Target>
     
     <Target Name="UpdateInstalledModule">
-        <Message Text="[DEBUG] $(ModuleName.Split(','))" Importance="high"/>
         <ItemGroup>
             <ModuleToGXVersion Include="$(ModuleName.Split(','))" />
         </ItemGroup>
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-		<UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
-        <Message Text="[DEBUG] %{ModuleToGXVersion}" Importance="high"/>
-        <Message Text="[DEBUG] %{ModuleToGXVersion.Identity}" Importance="high"/>
-		<UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
+        <Message Text="[DEBUG] Updating module(s): @(ModuleToGXVersion, ',')" Importance="high"/>
+        <UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
-	</Target>
+    </Target>
     
     <Target Name="RestoreInstalledModule">
-    <!-- CREAR SEPARADOR DE LIST STRING
+        <!-- CREAR SEPARADOR DE LIST STRING
         CREAR ITEMGROUP (CHATBOT GEN)
         -->
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-		<RestoreModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <RestoreModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
-	</Target>
+    </Target>
 
     <Target Name="TestObjTestSuite">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
@@ -96,10 +94,10 @@
             <Output TaskParameter="SkippedCount" PropertyName="SkippedCount"/>
             <Output TaskParameter="ResultsFile" PropertyName="ResultsFile"/>
         </RunTests>
-        		<JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
-			<Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
-		</JUnitExportTests>
-		<Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
+        <JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
+            <Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
+        </JUnitExportTests>
+        <Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
         <CloseKnowledgeBase/>
     </Target>
 
@@ -114,10 +112,10 @@
             <Output TaskParameter="SkippedCount" PropertyName="SkippedCount"/>
             <Output TaskParameter="ResultsFile" PropertyName="ResultsFile"/>
         </RunTests>
-        		<JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
-			<Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
-		</JUnitExportTests>
-		<Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
+        <JUnitExportTests ServerUserName="$(gxsUsername)" ServerPassword="$(gxsPassword)">  
+            <Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
+        </JUnitExportTests>
+        <Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(fullTestResultsFile)"/>
         <CloseKnowledgeBase/>
     </Target>
 
@@ -125,18 +123,18 @@
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
         <!-- DoNotExecuteReorg = false, otherwise it performs a Copy Model
-			 FailIfReorg = true, so that it doesn't execute it (we just want to
-				a) know whether a Reorg is needed
-				b) get the reorganization script it would execute
-		-->
-		<Reorganize DoNotExecuteReorg="false" FailIfReorg="true" ContinueOnError="WarnAndContinue" />
+             FailIfReorg = true, so that it doesn't execute it (we just want to
+                 a) know whether a Reorg is needed
+                 b) get the reorganization script it would execute
+        -->
+        <Reorganize DoNotExecuteReorg="false" FailIfReorg="true" ContinueOnError="WarnAndContinue" />
         <PropertyGroup>
-			<ReorgRequired>false</ReorgRequired>
-			<ReorgRequired Condition="'$(MSBuildLastTaskResult)' == 'False'">true</ReorgRequired>
-		</PropertyGroup>
+            <ReorgRequired>false</ReorgRequired>
+            <ReorgRequired Condition="'$(MSBuildLastTaskResult)' == 'False'">true</ReorgRequired>
+        </PropertyGroup>
         <Error Condition="$(ReorgRequired)"/>
         <CloseKnowledgeBase/>
-	</Target>
+    </Target>
 
     <Target Name="UpdateInstallationModel">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
@@ -147,17 +145,46 @@
     <Target Name="ApplyReorg">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetActiveEnvironment EnvironmentName="$(EnvironmentName)" />
-		<Reorganize ContinueOnError="ErrorAndContinue"/>
+        <Reorganize ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
-	</Target>
+    </Target>
 
-    <Target Name="AddNugetServer">
-        <AddModulesServer Type="NexusNuGet" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+    <Target Name="AddModuleServer">
+	<PropertyGroup>
+		<srvType Condition="'$(ServerType)'!='' and '$(ServerType)'!='null'">$(ServerType)</srvType>
+		<srvType Condition="'$(srvType)'==''">NexusNuGet</srvType>
+	</PropertyGroup>
+        <AddModulesServer Type="$(srvType)" Name="$(ServerId)" Source="$(ServerSource)" User="$(ServerUsername)" Password="$(ServerPassword)" />
+        <CallTarget Targets="CreateSettingsXml" Condition="'$(srvType)'=='Nexus'"/>
+    </Target>
+
+    <Target Name="CreateSettingsXml">
+        <PropertyGroup>
+            <settingsXmlPath>$([MSBuild]::EnsureTrailingSlash('$(USERPROFILE)')).m2\settings.xml</settingsXmlPath>
+            <settingsXmlContent>&lt;settings&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;${repo.id}&lt;/id&gt;
+      &lt;username&gt;${repo.login}&lt;/username&gt;
+      &lt;password&gt;${repo.pwd}&lt;/password&gt; 
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;</settingsXmlContent>
+	</PropertyGroup>
+        <Message Text="[info] Creating '$(settingsXmlPath)', required for module publishing to a Maven repository" Importance="high" Condition="!Exists('$(settingsXmlPath)')"/>
+        <Message Text="[info] '$(settingsXmlPath)' already exists, use it for module publishing to a Maven repository" Condition="Exists('$(settingsXmlPath)')"/>
+        <WriteLinesToFile Lines="$(settingsXmlContent)" File="$(settingsXmlPath)" Condition="!Exists('$(settingsXmlPath)')"/>
     </Target>
 
     <Target Name="PackageGXModule">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+	<OpenKnowledgeBase Directory="$(localKbPath)"/>
         <Message Text="Packaging Module:$(PackageModuleName)"/>
+	<PropertyGroup>
+		<packageNameProp Condition="'$(packageNameProp)'==''">packageName</packageNameProp>
+	</PropertyGroup>
+        <GetObjectProperty Object="Module:$(PackageModuleName)" Name="Package Name">
+            <Output TaskParameter="PropertyValue" PropertyName="ModulePackageName" />
+        </GetObjectProperty>
         <GetObjectProperty Object="Module:$(PackageModuleName)" Name="ModuleVersion">
             <Output TaskParameter="PropertyValue" PropertyName="ModuleVersionValue" />
         </GetObjectProperty>
@@ -169,21 +196,21 @@
         <!-- Task to create .json file with property name n value-->
         <Delete Condition="Exists($(propFileAbsolutePath))" Files='$(propFileAbsolutePath)' />     
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
-        <!-- <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(ModuleVersionValue)+$(PipelineBuildNumber)"' /> -->
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(packageNameProp)":"$(ModulePackageName)",' />
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(ModuleVersionValue)"' />
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
         <!-- Task to create .json file with property name n value-->
-		<ItemGroup>
-			<EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
-			<EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
-			<EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
-		</ItemGroup>
-		<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
+	<ItemGroup>
+            <EnvToPackage Include="$(CSharpEnvName)" Condition="$(CSharpEnvName) != '' "/>
+            <EnvToPackage Include="$(JavaEnvName)" Condition="$(JavaEnvName) != '' "/>
+            <EnvToPackage Include="$(NetCoreEnvName)" Condition="$(NetCoreEnvName) != '' "/>
+	</ItemGroup>
+	<PackageModule ModuleName="$(PackageModuleName)" Environments="@(EnvToPackage)" OutputDirectory="$(DestinationPath)" ContinueOnError="ErrorAndContinue"/>
         <CloseKnowledgeBase/>
     </Target>
 
     <Target Name="PublishGXModule">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
         <!--
             Para hacer la publicación a un nexus Maven hay que:
             1. Crear settings.xml en .\Users\Adm\.m2\ con exacto esto:
@@ -202,20 +229,19 @@
         <Message Text="opc path:: $(opcPath)" />
         <Message Text="server:: $(serverId)" />
         <PublishModule OpcFile="$(opcPath)" Server="$(serverId)" User="$(serverUsername)" Password="$(serverPassword)" />
-		<CloseKnowledgeBase/>
+        <CloseKnowledgeBase/>
     </Target>
     
     <Target Name="ImportXPZ">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-		<Import File="$(xpzFilePath)" AutomaticBackup="false"/>
-
-		<CloseKnowledgeBase/>
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <Import File="$(xpzFilePath)" AutomaticBackup="false"/>
+        <CloseKnowledgeBase/>
     </Target>
 
     <Target Name="DeleteLocalObject">
         <OpenKnowledgeBase Directory="$(localKbPath)"/>
         <DeleteObject Objects="$(ObjsToDelete)" IncludeChildren="true"/>
-		<CloseKnowledgeBase/>
+        <CloseKnowledgeBase/>
     </Target>
 
     <Target Name="DeleteLocalObjectsByCategory">
@@ -227,13 +253,12 @@
             <ItemsToDelete Include="$(ObjListToDelete.Split(';'))" />
         </ItemGroup>
         <DeleteObject Objects="$(ObjListToDelete)" IncludeChildren="true" Condition="'@(ItemsToDelete->Count())' != '0'"/>
-		<CloseKnowledgeBase/>
+        <CloseKnowledgeBase/>
     </Target>
 
-
     <Target Name="CloseKB">
-		<OpenKnowledgeBase Directory="$(localKbPath)"/>
-		<CloseKnowledgeBase/>
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <CloseKnowledgeBase/>
     </Target>
    
 </Project>

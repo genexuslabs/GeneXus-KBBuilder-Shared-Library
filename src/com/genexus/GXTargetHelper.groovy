@@ -23,9 +23,10 @@ void configureNexusServer(Map args = [:]) {
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:ServerId="${args.moduleServerId}" \
                 /p:ServerSource="${args.moduleServerSource}" \
+                /p:ServerType="${args.moduleServerType}" \
                 /p:ServerUsername="${moduleServerUser}" \
                 /p:ServerPassword="${moduleServerPass}" \
-                /t:AddNugetServer
+                /t:AddModuleServer
             """
         }
     } catch (error) {

@@ -40,9 +40,10 @@ def call(Map args = [:]) {
         /p:netCoreEnvName="${args.netCoreEnvName}" \
         /p:destinationPath="${moduleTargetPath}" \
         /p:propFileAbsolutePath="${propsFile}" \
+        /p:packageNameProp="packageId" \
         /p:helperName="aux" \
         /t:PackageGXModule
     """
     def packageModuleName = readJSON file: propsFile
-    return "${moduleTargetPath}\\${args.packageModuleName}_${packageModuleName.aux}.opc"
+    return "${moduleTargetPath}\\${packageModuleName.packageId}_${packageModuleName.aux}.opc"
 }
