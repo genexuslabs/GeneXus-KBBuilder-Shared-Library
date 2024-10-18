@@ -27,15 +27,20 @@
  */
 def call(Map args = [:]) {
     boolean isMySQL = false;
-    if (args.dataSource == "MySQL") {
-        isMySQL = true; 
-    }
+    boolean isSQLServer = false;
 
-    echo "[DEBUG] Data source is MySQL: ${isMySQL}"
-    echo "[DEBUG] Export reorganization to ${args.reorgExportPath}"
+    switch (args.dataSource) {
+        case "MySQL":
+            isMySQL = true;
+            break;
+        case "SQLServer":
+            isSQLServer = true;
+            break;
+        default:
+            throw new IllegalArgumentException("Unsupported DataStore type: ${args.dataSource}");
+    }
     
     try {
-        echo "[DEBUG] Running MSBuild to export reorganization script"
         bat label: "Export reorganization::${args.environmentName}", 
         script: """
             "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
@@ -48,12 +53,13 @@ def call(Map args = [:]) {
             /p:Generator="${args.generator}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
-            /p:SQLServer="${!isMySQL}" \
+            /p:SQLServer="${isSQLServer}" \
             /t:ExportReorganization 
         """
         
-        echo "[DEBUG] Copying reorganization script"
         powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
+        echo "[DEBUG] pwsh: Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
+        echo "[INFO] Export reorganization to ${args.reorgExportPath}"
     } catch (error) {
         echo "[ERROR] An error occurred during the reorganization export process: ${error}"
         throw error
