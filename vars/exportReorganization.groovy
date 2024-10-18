@@ -33,7 +33,7 @@ def call(Map args = [:]) {
         case "MySQL":
             isMySQL = true;
             break;
-        case "SQLServer":
+        case "SQL Server":
             isSQLServer = true;
             break;
         default:
