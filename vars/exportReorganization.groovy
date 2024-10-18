@@ -58,7 +58,6 @@ def call(Map args = [:]) {
         """
         
         powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
-        echo "[DEBUG] pwsh: Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
         echo "[INFO] Export reorganization to ${args.reorgExportPath}"
     } catch (error) {
         echo "[ERROR] An error occurred during the reorganization export process: ${error}"
