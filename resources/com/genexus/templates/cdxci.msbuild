@@ -240,8 +240,14 @@
 
     <Target Name="ExportXPZ">
         <OpenKnowledgeBase Directory="$(localKbPath)"/>
-        <Export File="$(xpzFilePath)" Objects="$(ObjectList)" DependencyType="ReferencesTo" 
-ReferenceType="Minimal" IncludeGXMessages="false" IncludeUntranslatedMessages="false" OnlyStructuresForTransactions="false" />
+        <Export File="$(xpzFilePath)" Objects="$(ObjectList)" DependencyType="ReferencesTo" ReferenceType="Minimal" IncludeGXMessages="false" IncludeUntranslatedMessages="false" OnlyStructuresForTransactions="false" />
+        <CloseKnowledgeBase/>
+    </Target>
+  
+    <Target Name="ApplyPattern">
+        <OpenKnowledgeBase Directory="$(localKbPath)"/>
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
+        <ApplyPattern ForceApply="$(forceApply)" Pattern="$(patternName)"/>
         <CloseKnowledgeBase/>
     </Target>
 
