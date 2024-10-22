@@ -31,8 +31,12 @@ if ($flag) {
     [string] $guid = [System.Guid]::NewGuid()
     $blZip = Join-Path -Path $tempDir -ChildPath $guid".zip"
     Write-Output((Get-Date -Format G) + " INFO downloading: $genexusURI to: $blZip")
-    $clnt = new-object System.Net.WebClient
-    $clnt.DownloadFile("$genexusURI", $blZip)
+    if($genexusURI.Contains("s3://")) {
+        & aws s3 cp $genexusURI $blZip
+    } else {
+        $clnt = new-object System.Net.WebClient
+        $clnt.DownloadFile("$genexusURI", $blZip)
+    }
 
     Write-Output((Get-Date -Format G) + " INFO unziping gx-bl")
     Expand-Archive -LiteralPath $blZip -DestinationPath "$gxBasePath" -Force
