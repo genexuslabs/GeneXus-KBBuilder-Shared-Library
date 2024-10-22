@@ -1,15 +1,11 @@
 param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
-    [string] $gxBasePath,
-    [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
     [string] $genexusURI,
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
+    [string] $gxBasePath,
     [string] $localAndroidSDKPath,
-    [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
     [boolean] $runGXInstall
 )
 $ErrorActionPreference="Stop"
