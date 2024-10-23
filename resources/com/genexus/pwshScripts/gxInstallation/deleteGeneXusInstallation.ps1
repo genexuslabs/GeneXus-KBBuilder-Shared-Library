@@ -2,8 +2,6 @@ param (
     [Parameter(Mandatory=$True)]
 	[ValidateNotNullOrEmpty()]
     [string] $gxBasePath,
-    [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
     [string] $localAndroidSDKPath
 )
 $ErrorActionPreference="Stop"
