@@ -32,8 +32,10 @@ if(Test-Path -Path $gxBasePath) {
     Write-Output((Get-Date -Format G) + " INFO remove gxBasePath: $gxBasePath") 
     Remove-Item -Path "$gxBasePath" -Recurse -ErrorAction Stop
 }
-if(Test-Path -Path $localAndroidSDKPath) {
-    Write-Output((Get-Date -Format G) + " INFO remove localAndroidSDKPath: $localAndroidSDKPath") 
-    Remove-Item -Path "$localAndroidSDKPath" -Recurse -ErrorAction Stop
+if(![string]::IsNullOrEmpty($localAndroidSDKPath)) {
+    if(Test-Path -Path $localAndroidSDKPath) {
+        Write-Output((Get-Date -Format G) + " INFO remove localAndroidSDKPath: $localAndroidSDKPath") 
+        Remove-Item -Path "$localAndroidSDKPath" -Recurse -ErrorAction Stop
+    }
 }
 #
