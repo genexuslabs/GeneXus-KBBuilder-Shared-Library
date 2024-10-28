@@ -26,6 +26,7 @@
         <Message Text="GetVersionProperty"/>
         <Message Text="SetVersionProperty"/>
         <Message Text="ResetVersionProperty"/>
+        <Message Text="SetGAMProperties"/>
         <Message Text="CloseKB" />
         <Error Text="Error: You are seeing the default target." />
     </Target>
