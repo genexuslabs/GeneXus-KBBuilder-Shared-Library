@@ -179,7 +179,7 @@
 
     <Target Name="SetGAMProperties">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
-        <SetGAMOptions IncludeFrontendObjects="$(includeFrontEnd)" IncludeSDSamples="$(includeSDSamples)" UpdateMode="$(ppdateMode)" />
+        <SetGAMOptions IncludeFrontendObjects="$(includeFrontEnd)" IncludeSDSamples="$(includeSDSamples)" UpdateMode="$(updateMode)" />
 	    <CloseKnowledgeBase/>
     </Target>
 
