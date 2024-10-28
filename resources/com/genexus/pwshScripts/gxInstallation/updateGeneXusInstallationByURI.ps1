@@ -100,6 +100,9 @@ if ($flag) {
     Set-Content -Path $lastURIFilePath -Value "$genexusURI"
     if(![string]::IsNullOrEmpty($localAndroidSDKPath)) {
         $androidRequirementsExe = "$gxBasePath\Android\Setup\AndroidRequirements.exe"
+        if(!Test-Path -Path $androidRequirementsExe) {
+            $androidRequirementsExe = "$gxBasePath\Android\Setup\art.exe" #TODO https://files.genexus.com/runtimesxev2u1/AndroidSDK18.exe
+        }
         Write-Output((Get-Date -Format G) + " INFO downloading androidSDK") 
         #AndroidRequirements.exe /s GXPATH=<path GX> ANDROIDSDKPATH=<path Android SDK> LOG=<path log>
         Start-Process -FilePath $androidRequirementsExe -ArgumentList "/s GXPATH=`"$gxBasePath`" ANDROIDSDKPATH=`"$localAndroidSDKPath`" LOG=`"$localAndroidSDKPath\androidsdk.log`"" -NoNewWindow -Wait

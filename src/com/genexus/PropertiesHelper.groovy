@@ -424,4 +424,39 @@ void resetVersionProperty(Map args = [:], String verPropName) {
     }
 }
 
+/**
+ * Sets GAM properties using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
+ *             and localKBPath, to customize the MSBuild execution.
+ * @param includeFrontEnd A flag indicating whether to include frontend objects.
+ * @param includeSDSamples A flag indicating whether to include SDSamples.
+ * @param updateMode The update mode to be used in the GAM properties.
+ *
+ * This method generates a properties file using a provided MSBuild template. It then
+ * executes MSBuild to set the GAM properties as specified. The properties file is
+ * used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+void setGAMProperties(Map args = [:], boolean includeFrontEnd, boolean includeSDSamples, String updateMode) {
+    try {
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        bat script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:includeFrontEnd="${includeFrontEnd}" \
+                /p:includeSDSamples="${includeSDSamples}" \
+                /p:updateMode="${updateMode}" \
+                /t:SetGAMProperties
+            """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this
