@@ -77,11 +77,7 @@ function Get-ZipFile {
 	}
 
 	Write-Host("Downloading: ${SourceUri} to ${zipFilePath}")
-	if($genexusURI.Contains("s3://")) {
-        & aws s3 cp $genexusURI $blZip
-    } else {
-		Invoke-WebRequest -Uri $SourceUri -OutFile $zipFilePath
-	}
+	Invoke-WebRequest -Uri $SourceUri -OutFile $zipFilePath
 	return $zipFilePath
 }
 

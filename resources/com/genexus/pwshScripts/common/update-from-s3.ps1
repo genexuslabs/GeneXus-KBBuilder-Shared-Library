@@ -52,7 +52,7 @@ function Get-ZipFile {
 
     # Use AWS CLI to copy the ZIP file from S3
     Write-Host("Copying from: ${SourceUri} to ${zipFilePath}")
-    aws s3 cp $SourceUri $zipFilePath
+    aws s3 cp $SourceUri $zipFilePath --quiet
     return $zipFilePath
 }
 
