@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
-    <Import Project="$(GX_PROGRAM_DIR)\Genexus.Tasks.targets" />
     <Import Project="$(GX_PROGRAM_DIR)\Genexus.GAM.Tasks.targets" />
 
     <Target Name="ShowTargets">
