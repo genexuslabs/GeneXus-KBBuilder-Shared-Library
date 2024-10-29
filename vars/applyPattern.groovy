@@ -31,7 +31,7 @@ void call(Map args = [:]) {
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:localKbPath="${args.localKBPath}" \
                 /p:environmentName="${args.environmentName}" \
-                /p:pattern="${args.patternName}" \
+                /p:patternName="${args.patternName}" \
                 /p:forceApply=True \
                 /t:ApplyPattern
             """
