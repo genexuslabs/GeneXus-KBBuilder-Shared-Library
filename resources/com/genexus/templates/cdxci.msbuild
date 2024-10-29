@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <Import Project="$(GX_PROGRAM_DIR)\Imports.targets" />
+    <Import Project="$(GX_PROGRAM_DIR)\Genexus.Tasks.Patterns.targets" Condition="Exists('$(GX_PROGRAM_DIR)\Genexus.Tasks.Patterns.targets')"/>
+    <Import Project="$(GX_PROGRAM_DIR)\Genexus.GAM.Tasks.targets" Condition="Exists('$(GX_PROGRAM_DIR)\Genexus.GAM.Tasks.targets')"/>
 
     <Target Name="ShowTargets">
         <Message Text="BuildConfigurationEnv" />
@@ -21,6 +23,8 @@
         <Message Text="PackageGXModule" />
         <Message Text="PublishGXModule" />
         <Message Text="ImportXPZ" />
+        <Message Text="ExportXPZ" />
+        <Message Text="ApplyPattern" />
         <Message Text="CloseKB" />
         <Error Text="Error: You are seeing the default target." />
     </Target>

@@ -25,17 +25,16 @@ void call(Map args = [:]) {
         def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
         writeFile file: 'cdxci.msbuild', text: fileContents
 
-        echo "[ERROR] UNABLE TO APPLY PATTERN, NOT IMPLEMENTED YET"
-        // bat label: "ApplyPattern", 
-        //     script: """ 
-        //         "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-        //         /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-        //         /p:localKbPath="${args.localKBPath}" \
-        //         /p:environmentName="${args.environmentName}" \
-        //         /p:pattern="${args.patternName}" \
-        //         /p:forceApply=True \
-        //         /t:ApplyPattern
-        //     """
+        bat label: "ApplyPattern", 
+            script: """ 
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:environmentName="${args.environmentName}" \
+                /p:pattern="${args.patternName}" \
+                /p:forceApply=True \
+                /t:ApplyPattern
+            """
     } catch (error) {
         currentBuild.result = 'FAILURE'
         echo " ERROR ${error.getMessage()}"
