@@ -25,12 +25,12 @@ def call(Map args = [:]) {
     writeFile file: 'cdxci.msbuild', text: fileContents
 
     bat label: "Update module::${args.moduleName}", 
-    script: """
-        "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-        /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-        /p:localKbPath="${args.localKBPath}" \
-        /p:moduleName="${args.moduleName}" \
-        /p:version="${args.moduleVersion}" \
-        /t:UpdateInstalledModule
-    """
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:moduleName="${args.moduleName}" \
+            /p:version="${args.moduleVersion}" \
+            /t:UpdateInstalledModule
+        """
 }

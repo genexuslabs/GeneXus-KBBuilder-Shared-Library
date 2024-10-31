@@ -68,13 +68,8 @@
     </Target>
     
     <Target Name="UpdateInstalledModule">
-        <ItemGroup>
-            <ModuleToGXVersion Include="$(ModuleName.Split(','))" />
-        </ItemGroup>
         <OpenKnowledgeBase Directory="$(localKbPath)"/>
-        <UpdateModule ModuleName="$(ModuleName)" ContinueOnError="ErrorAndContinue"/>
-        <Message Text="[DEBUG] Updating module(s): @(ModuleToGXVersion, ',')" Importance="high"/>
-        <UpdateModule ModuleName="%(ModuleToGXVersion.Identity)" ContinueOnError="ErrorAndContinue"/>
+        <UpdateModule ModuleName="$(ModuleName)" Version="$(version)"/>
         <CloseKnowledgeBase/>
     </Target>
     
