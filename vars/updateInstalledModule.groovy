@@ -24,13 +24,18 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
+    def selectedModuleversion = "" //Handle double quotes var
+    if(args.moduleVersion) {
+        selectedModuleversion = "${args.moduleVersion}"
+    }
+
     bat label: "Update module::${args.moduleName}", 
         script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:moduleName="${args.moduleName}" \
-            /p:version="${args.moduleVersion}" \
+            /p:version=${selectedModuleversion} \
             /t:UpdateInstalledModule
         """
 }
