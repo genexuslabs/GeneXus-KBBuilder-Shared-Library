@@ -25,7 +25,7 @@ def call(Map args = [:]) {
     writeFile file: 'cdxci.msbuild', text: fileContents
 
     def selectedModuleversion = "" //Handle double quotes var
-    if(args.moduleVersion) {
+    if (args.moduleVersion?.trim()) {
         selectedModuleversion = "${args.moduleVersion}"
     }
 
