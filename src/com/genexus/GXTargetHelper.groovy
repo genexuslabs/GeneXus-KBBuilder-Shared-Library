@@ -11,21 +11,32 @@ package com.genexus
  *   - moduleServerCredentialsId: Jenkins credentials ID for module server authentication.
  *
  */
-void configureNexusServer(Map args = [:]) {
+void configureModuleServer(Map args = [:]) {
     try{
         def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
         writeFile file: 'cdxci.msbuild', text: fileContents
-        withCredentials([
-            usernamePassword(credentialsId: "${args.moduleServerCredentialsId}", passwordVariable: 'moduleServerPass', usernameVariable: 'moduleServerUser')
-        ]) {        
+        if(args.moduleServerCredentialsId) {
+            withCredentials([
+                usernamePassword(credentialsId: "${args.moduleServerCredentialsId}", passwordVariable: 'moduleServerPass', usernameVariable: 'moduleServerUser')
+            ]) {        
+                bat script: """
+                    "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                    /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                    /p:ServerId="${args.moduleServerId}" \
+                    /p:ServerSource="${args.moduleServerSource}" \
+                    /p:ServerType="${args.moduleServerType}" \
+                    /p:ServerUsername="${moduleServerUser}" \
+                    /p:ServerPassword="${moduleServerPass}" \
+                    /t:AddModuleServer
+                """
+            }
+        } else {
             bat script: """
                 "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
                 /p:ServerId="${args.moduleServerId}" \
                 /p:ServerSource="${args.moduleServerSource}" \
                 /p:ServerType="${args.moduleServerType}" \
-                /p:ServerUsername="${moduleServerUser}" \
-                /p:ServerPassword="${moduleServerPass}" \
                 /t:AddModuleServer
             """
         }
