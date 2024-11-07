@@ -11,9 +11,10 @@ def downloadNuGet() {
             New-Item -ItemType Directory -Force -Path "\$env:USERPROFILE\\GeneXusBuilderTools"
             Write-Output((Get-Date -Format G) + " [INFO] Downloading nuget.exe from \$nuGetExeUrl to \$nuGetExePath")
             Invoke-WebRequest -Uri \$nuGetExeUrl -OutFile \$nuGetExePath
-            Write-Output((Get-Date -Format G) + " [INFO]nuget.exe downloaded to \$nuGetExePath")
+            Write-Output((Get-Date -Format G) + " [INFO] nuget.exe downloaded to \$nuGetExePath")
 
-            & \$nuGetExePath help
+            & \$nuGetExePath eula
+
         } else {
             Write-Output((Get-Date -Format G) + " [INFO] nuget.exe already exists at \$nuGetExePath.")
         }
@@ -72,59 +73,84 @@ def createDockerContext(Map args = [:]) {
     }
 }
 
-def createNuGetPackageFromZip(Map args = [:]) {
-    //----- Parse Package Location
-    workingDir = powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true
-    echo "[DEBUG] workingDir::${workingDir.trim()}"
-    packageZipName = powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true
-    echo "[DEBUG] packageZipName::${packageZipName.trim()}"
-    packageName = powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName.trim()}\")", returnStdout: true
-    echo "[DEBUG] packageName::${packageName.trim()}"
+String createNuGetPackageFromZip(Map args = [:]) {
+    try{
+        //----- Parse Package Location
+        workingDir = powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true
+        echo "[DEBUG] workingDir::${workingDir.trim()}"
+        packageZipName = powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true
+        echo "[DEBUG] packageZipName::${packageZipName.trim()}"
+        packageName = powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName.trim()}\")", returnStdout: true
+        echo "[DEBUG] packageName::${packageName.trim()}"
 
-    //---- Set Package Name
-    def packageId = ""
-    if(args.prefix) { packageId += "${args.prefix}." }
-    packageId += "${args.componentId}.${packageName.trim()}.${args.packageVersion}"
-    if(args.sufix) { packageId += ".${args.sufix}" }
-    echo "[INFO] packageId::${packageId}"
+        //---- Set Package Name
+        def packageId = ""
+        if(args.prefix) { packageId += "${args.prefix}." }
+        packageId += "${args.componentId}.${packageName.trim()}"
+        if(args.sufix) { packageId += ".${args.sufix}" }
+        echo "[INFO] packageId::${packageId}"
 
-    //----Set .nuspec properties
-    String nuspecFileName = "${packageId}.nuspec"
-    echo "[DEBUG] nuspecFileName::${nuspecFileName}"
-    String nuspecPath = "${workingDir.trim()}\\${nuspecFileName}"
-    echo "[DEBUG] nuspecPath::${nuspecPath}"
-    def nuspecContent = """<?xml version="1.0" encoding="utf-8"?>
+        //----Set .nuspec properties
+        String nuspecFileName = "${packageId}.${args.packageVersion}.nuspec"
+        echo "[DEBUG] nuspecFileName::${nuspecFileName}"
+        String nuspecPath = "${workingDir.trim()}\\${nuspecFileName}"
+        echo "[DEBUG] nuspecPath::${nuspecPath}"
+        def nuspecContent = """<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
-  <metadata>
+<metadata>
     <id>${packageId}</id>
     <version>${args.packageVersion}</version>
     <authors>GeneXus</authors>
     <description>Generated ${args.ComponentId} package for integration with GeneXus</description>
-  </metadata>
-  <files>
+</metadata>
+<files>
     <file src="${args.packageLocation}" />
-  </files>
+</files>
 </package>
 """
-    //---- Write nuspec content
-    writeFile file: "${nuspecPath}", text: "${nuspecContent}"
+        //---- Write nuspec content
+        writeFile file: "${nuspecPath}", text: "${nuspecContent}"
 
-    downloadNuGet()
+        downloadNuGet()
 
-    // Execute NuGet package
-    powershell script: """
-        \$ErrorActionPreference = "Stop"
-        \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
-        & \$nuGetExePath pack "${nuspecPath}"
-        if(-not(Test-Path -Path "${nuspecPath}")) {
-            Write-Output((Get-Date -Format G) + " [ERROR] ${nuspecPath} not found")
-            throw "[ERROR] ${nuspecPath} not found"
+        // Execute NuGet package
+        def nupkgPath = nuspecPath.replace("nuspec", "nupkg")
+        powershell script: """
+            \$ErrorActionPreference = "Stop"
+            \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
+            & \$nuGetExePath pack "${nuspecPath}"
+            if(-not(Test-Path -Path "${nupkgPath}")) {
+                Write-Output((Get-Date -Format G) + " [ERROR] ${nupkgPath} not found")
+                throw "[ERROR] ${nupkgPath} not found"
+            }
+        """
+
+        return nupkgPath
+
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+def publishNuGetPackages(Map args = [:]) {
+    try {
+        downloadNuGet()
+
+        withCredentials([usernamePassword(
+            credentialsId: "${args.moduleServerApiKeyId}", usernameVariable: 'publisherUser', passwordVariable: 'apiKeyValue')]
+        ) {
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
+                & \$nuGetExePath "${args.nupkgPath}" -Source "${args.moduleServerSource}" -ApiKey ${apiKeyValue} -SkipDuplicate
+            """
         }
-    """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        echo "[ERROR] ${error.getMessage()}"
+        throw error
+    }
 }
 
-// Función para obtener el nombre del archivo sin la extensión
-String getFileNameWithoutExtension(String filePath) {
-    return new File(filePath).name - ~/\.[^.]+$/
-}
 return this
