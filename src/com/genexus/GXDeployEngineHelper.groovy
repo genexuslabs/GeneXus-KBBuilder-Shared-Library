@@ -1,16 +1,14 @@
 package com.genexus
 
-localToolsDir = "$env:USERPROFILE\\GXBuilderTools"
-
 def downloadNuGet() {
     powershell script: """
         \$ErrorActionPreference = "Stop"
 
-        \$nuGetExePath = Join-Path ${localToolsDir} "nuget.exe"
+        \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
         \$nuGetExeUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
         if (-Not (Test-Path -Path "\$nuGetExePath")) {
-            New-Item -ItemType Directory -Force -Path ${localToolsDir}
+            New-Item -ItemType Directory -Force -Path "\$env:USERPROFILE\\GeneXusBuilderTools"
             Write-Output((Get-Date -Format G) + " [INFO] Downloading nuget.exe from \$nuGetExeUrl to \$nuGetExePath")
             Invoke-WebRequest -Uri \$nuGetExeUrl -OutFile \$nuGetExePath
             Write-Output((Get-Date -Format G) + " [INFO]nuget.exe downloaded to \$nuGetExePath")
@@ -114,7 +112,7 @@ def createNuGetPackageFromZip(Map args = [:]) {
     // Execute NuGet package
     powershell script: """
         \$ErrorActionPreference = "Stop"
-        \$nuGetExePath = Join-Path ${localToolsDir} "nuget.exe"
+        \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
         & \$nuGetExePath pack "${nuspecPath}"
         if(-not(Test-Path -Path "${nuspecPath}")) {
             Write-Output((Get-Date -Format G) + " [ERROR] ${nuspecPath} not found")
