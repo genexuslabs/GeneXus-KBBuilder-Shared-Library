@@ -133,7 +133,7 @@ String createNuGetPackageFromZip(Map args = [:]) {
     }
 }
 
-def publishNuGetPackages(Map args = [:]) {
+def publishNuGetPackage(Map args = [:]) {
     try {
         downloadNuGet()
 
