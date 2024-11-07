@@ -76,24 +76,24 @@ def createDockerContext(Map args = [:]) {
 
 def createNuGetPackageFromZip(Map args = [:]) {
     //----- Parse Package Location
-    workingDir = (powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true).trim()
-    echo "[DEBUG] workingDir::${workingDir}"
-    packageZipName = (powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true).trim()
-    echo "[DEBUG] packageZipName::${packageZipName}"
-    packageName = (powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName}\")", returnStdout: true).trim()
-    echo "[DEBUG] packageName::${packageName}"
+    workingDir = powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true
+    echo "[DEBUG] workingDir::${workingDir.trim()}"
+    packageZipName = powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true
+    echo "[DEBUG] packageZipName::${packageZipName.trim()}"
+    packageName = powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName.trim()}\")", returnStdout: true
+    echo "[DEBUG] packageName::${packageName.trim()}"
 
     //---- Set Package Name
     def packageId = ""
     if(args.prefix) { packageId += "${args.prefix}." }
-    packageId += "${args.componentId}.${packageName}.${args.packageVersion}"
+    packageId += "${args.componentId}.${packageName.trim()}.${args.packageVersion}"
     if(args.sufix) { packageId += ".${args.sufix}" }
     echo "[INFO] packageId::${packageId}"
 
     //----Set .nuspec properties
     String nuspecFileName = "${packageId}.nuspec"
     echo "[DEBUG] nuspecFileName::${nuspecFileName}"
-    String nuspecPath = "${workingDir}\\${nuspecFileName}"
+    String nuspecPath = "${workingDir.trim()}\\${nuspecFileName}"
     echo "[DEBUG] nuspecPath::${nuspecPath}"
     def nuspecContent = """<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
