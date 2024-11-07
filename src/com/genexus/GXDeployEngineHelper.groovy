@@ -144,7 +144,7 @@ def publishNuGetPackage(Map args = [:]) {
             powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
-                & \$nuGetExePath "${args.nupkgPath}" -Source "${args.moduleServerSource}" -ApiKey ${apiKeyValue} -SkipDuplicate
+                & \$nuGetExePath push "${args.nupkgPath}" -Source "${args.moduleServerSource}" -ApiKey ${apiKeyValue} -SkipDuplicate
             """
         }
     } catch (error) {
