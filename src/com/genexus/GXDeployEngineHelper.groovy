@@ -76,13 +76,13 @@ def createDockerContext(Map args = [:]) {
 
 def createNuGetPackageFromZip(Map args = [:]) {
     //----- Parse Package Location
-    workingDir = powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true
+    workingDir = (powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true).trim()
     echo "[DEBUG] workingDir::${workingDir}"
-    packageZipName = powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true
+    packageZipName = (powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true).trim()
     echo "[DEBUG] packageZipName::${packageZipName}"
-    packageName = powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName}\")"
+    packageName = (powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName}\")", returnStdout: true).trim()
     echo "[DEBUG] packageName::${packageName}"
-    
+
     //---- Set Package Name
     def packageId = ""
     if(args.prefix) { packageId += "${args.prefix}." }
