@@ -78,15 +78,11 @@ String createNuGetPackageFromZip(Map args = [:]) {
         //----- Parse Package Location
         workingDir = powershell script: "Split-Path \"${args.packageLocation}\" -Parent", returnStdout: true
         echo "[DEBUG] workingDir::${workingDir.trim()}"
-        packageZipName = powershell script: "Split-Path \"${args.packageLocation}\" -Leaf", returnStdout: true
-        echo "[DEBUG] packageZipName::${packageZipName.trim()}"
-        packageName = powershell script: "[System.IO.Path]::GetFileNameWithoutExtension(\"${packageZipName.trim()}\")", returnStdout: true
-        echo "[DEBUG] packageName::${packageName.trim()}"
 
         //---- Set Package Name
         def packageId = ""
         if(args.prefix) { packageId += "${args.prefix}." }
-        packageId += "${args.componentId}.${packageName.trim()}"
+        packageId += "${args.componentId}.${args.packageName}"
         if(args.sufix) { packageId += ".${args.sufix}" }
         echo "[INFO] packageId::${packageId}"
 
