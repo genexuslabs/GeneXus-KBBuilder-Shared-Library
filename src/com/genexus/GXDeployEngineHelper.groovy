@@ -114,11 +114,12 @@ String createNuGetPackageFromZip(Map args = [:]) {
         downloadNuGet()
 
         // Execute NuGet package
-        def nupkgPath = nuspecPath.replace("nuspec", "nupkg")
+        def nupkgPath = "${workingDir.trim()}\\${nuspecPath.replace("nuspec", "nupkg")}"
+        echo "[DEBUG] nupkgPath::${nupkgPath}"
         powershell script: """
             \$ErrorActionPreference = "Stop"
             \$nuGetExePath = Join-Path "\$env:USERPROFILE\\GeneXusBuilderTools" "nuget.exe"
-            & \$nuGetExePath pack "${nuspecPath}"
+            & \$nuGetExePath pack "${nuspecPath}" -OutputDirectory ${workingDir.trim()}
             if(-not(Test-Path -Path "${nupkgPath}")) {
                 Write-Output((Get-Date -Format G) + " [ERROR] ${nupkgPath} not found")
                 throw "[ERROR] ${nupkgPath} not found"
