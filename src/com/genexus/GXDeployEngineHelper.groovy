@@ -109,6 +109,8 @@ def createNuGetPackageFromZip(Map args = [:]) {
     //---- Write nuspec content
     writeFile file: "${nuspecPath}", text: "${nuspecContent}"
 
+    downloadNuGet()
+
     // Execute NuGet package
     powershell script: """
         \$ErrorActionPreference = "Stop"
