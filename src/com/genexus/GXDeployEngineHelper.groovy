@@ -114,7 +114,7 @@ String createNuGetPackageFromZip(Map args = [:]) {
         downloadNuGet()
 
         // Execute NuGet package
-        def nupkgPath = "${workingDir.trim()}\\${nuspecPath.replace("nuspec", "nupkg")}"
+        def nupkgPath = nuspecPath.replace("nuspec", "nupkg")
         echo "[DEBUG] nupkgPath::${nupkgPath}"
         powershell script: """
             \$ErrorActionPreference = "Stop"
