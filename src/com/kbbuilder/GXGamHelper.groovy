@@ -8,9 +8,7 @@ void buildPlatform(Map args = [:]) {
         // ----------------------------- Print Debug vars
         echo "INFO GeneratedLanguage:: ${args.generatedLanguage}"
         echo "INFO DataSource:: ${args.dataSource}"
-        args.targetPath = "${args.generatedLanguage}${args.dataSource}"
         echo "INFO TargetPath:: ${args.targetPath}"
-        kbLibHelper.setEnvironmentProperty(args, "TargetPath", args.targetPath)
         // ----------------------------- Clean target path
         powershell script: """
             \$ErrorActionPreference = 'Stop'
