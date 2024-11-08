@@ -1,7 +1,10 @@
-package com.genexus
+package com.kbbuilder
+import com.genexus.PropertiesHelper
+
 
 void buildPlatform(Map args = [:]) {
     try{
+        def kbLibHelper = new PropertiesHelper()
         // ----------------------------- Print Debug vars
         echo "INFO GeneratedLanguage:: ${args.generatedLanguage}"
         echo "INFO DataSource:: ${args.dataSource}"
@@ -21,7 +24,6 @@ void buildPlatform(Map args = [:]) {
         applyPattern(args)
         //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
         buildConfigurationEnvironment(args)
-        
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
