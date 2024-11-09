@@ -29,7 +29,7 @@ void buildPlatform(Map args = [:]) {
     }
 }
 
-String packagePlatform(Map args = [:]) {
+String updatePlatform(Map args = [:]) {
     try{
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
@@ -72,6 +72,18 @@ String packagePlatform(Map args = [:]) {
         args.packageName = args.packageName.replace(".zip", "").trim()
         args.packageVersion = args.componentVersion
         args.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(args)
+
+        // ----------------------------- Publish NuGet package
+        args.moduleServerSource = "${projectDefinition.moduleServerSourceBase}${projectDefinition.artifactsServerId}"
+        gxLibDeployEngine.publishNuGetPackage(args)
+
+        // ----------------------------- Update Platform package in GeneXus Installation
+        powershell script: """
+            \$platformDir = "${args.gxBasePath}\\Library\\GAM\\Platforms\\${args.platformDirectory}"
+            Get-ChildItem -Path \$platformDir -File | Where-Object { \$_.Name -ne 'ReorganizationScript.txt' -and \$_.Name -ne 'reorganization.jar' } | Remove-Item -Force
+            Get-ChildItem -Path \$platformDir -Directory | Where-Object { \$_.Name -ne 'Reorgs' } | Remove-Item -Recurse -Force
+            Expand-Archive -Path "${args.deployTarget}\\${args.packageName.trim()}.zip" -DestinationPath "${args.gxBasePath}" -Force 
+        """
 
         return "${args.componentId}.${args.packageName}"
 
