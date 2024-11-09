@@ -106,8 +106,8 @@ String updateInitResources(Map args = [:]) {
         // ----------------------------- Clean daployTarget
         powershell script: """
             \$ErrorActionPreference = 'Stop'
-            if (Test-Path -Path "${envJavaSQLDefinition.deployTarget}") { Remove-Item -Path "${envJavaSQLDefinition.deployTarget}" -Recurse -Force }
-            \$null = New-Item -Path "${envJavaSQLDefinition.deployTarget}" -ItemType Directory
+            if (Test-Path -Path "${args.deployTarget}") { Remove-Item -Path "${args.deployTarget}" -Recurse -Force }
+            \$null = New-Item -Path "${args.deployTarget}" -ItemType Directory
         """
         // ----------------------------- Create GAM Init Resources package
         bat script: """
