@@ -74,7 +74,7 @@ String updatePlatform(Map args = [:]) {
         args.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(args)
 
         // ----------------------------- Publish NuGet package
-        args.moduleServerSource = "${projectDefinition.moduleServerSourceBase}${projectDefinition.artifactsServerId}"
+        args.moduleServerSource = "${args.moduleServerSourceBase}${args.artifactsServerId}"
         gxLibDeployEngine.publishNuGetPackage(args)
 
         // ----------------------------- Update Platform package in GeneXus Installation
