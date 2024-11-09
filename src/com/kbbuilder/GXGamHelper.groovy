@@ -50,7 +50,7 @@ String updatePlatform(Map args = [:]) {
                 /p:DBMS="${args.dataSource}" \
                 /p:GenerateLibraryPath="${args.deployTarget}" \
                 /p:PackagerResources="${args.packagerResourcesDirPath}" \
-                /p:SolutionPath="${WORKSPACE}\\${gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${extObjGeneratorName}" \
+                /p:SolutionPath="${WORKSPACE}\\${args.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${extObjGeneratorName}" \
                 /t:${args.packageTarget}
         """
         // ----------------------------- Rename package for nuget
