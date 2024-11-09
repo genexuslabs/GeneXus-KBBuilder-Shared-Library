@@ -147,6 +147,9 @@ String updateInitResources(Map args = [:]) {
         // ----------------------------- Publish NuGet package
         args.moduleServerSource = "${args.moduleServerSourceBase}${args.artifactsServerId}"
         gxLibDeployEngine.publishNuGetPackage(args)
+        
+        return "${args.componentId}.${args.packageName}"
+        
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
