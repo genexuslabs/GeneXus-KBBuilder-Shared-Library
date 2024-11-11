@@ -119,6 +119,27 @@ def getKnowledgeBaseChanges2() {
     return changes 
 }
 
+@NonCPS
+def getAllKnowledgeBaseMessages() {
+    def changes = getKnowledgeBaseChanges2()
+    def commitMessages = changes.collect { it.message }
+    return commitMessages
+}
+
+def searchKeywordsInMessages(commitMessages, keywords) {
+    def foundKeywords = []
+
+    commitMessages.each { message ->
+        keywords.each { keyword ->
+            if (message.contains(keyword)) {
+                foundKeywords << keyword
+            }
+        }
+    }
+
+    return foundKeywords.unique()
+}
+
 void printCommit() {
     try{
         getChangeLogSet()
