@@ -119,10 +119,11 @@ def getKnowledgeBaseChanges2() {
     return changes 
 }
 
-@NonCPS
 def getAllKnowledgeBaseMessages() {
     def changes = getKnowledgeBaseChanges2()
+    echo "[DEBUG] changes::${changes}"
     def commitMessages = changes.collect { it.message }
+    echo "[DEBUG] commitMessages::${commitMessages}"
     return commitMessages
 }
 
