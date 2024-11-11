@@ -52,10 +52,10 @@ def getRepositoryChanges() {
 def getKnowledgeBaseChanges() {
     try {
         def changeLogSets = currentBuild.changeSets
-        if(changeLogSets.size() != 0) {
-            if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
-                echo "changeLogSets::${changeLogSets}"
-                for (def entry in changeLogSets) {
+        if(changeLogSets.size() != 0) { 
+            echo "changeLogSets::${changeLogSets}"
+            for (def entry in changeLogSets) {
+                if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
                     echo "entry::${entry}"
                     for (def revision in entry.items) {
                         echo "revision::${revision}"
@@ -72,9 +72,9 @@ def getKnowledgeBaseChanges() {
                             echo " [DEBUG] read file path::${file.path}"
                         }
                     }
+                } else {
+                    echo " [DEBUG] no commits"
                 }
-            } else {
-                echo " [DEBUG] no commits"
             }
         } else {
             echo " [DEBUG] no commits"
@@ -84,6 +84,41 @@ def getKnowledgeBaseChanges() {
         throw error
     }
 }
+
+@NonCPS
+def getKnowledgeBaseChanges2() {
+    def changes = []
+
+    try {
+        def changeLogSets = currentBuild.changeSets
+        if (changeLogSets.size() != 0) { 
+            for (def entry in changeLogSets) {
+                if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
+                    for (def revision in entry.items) {
+                        def date = new Date(revision.timestamp).toString()
+                        def filesCount = revision.affectedFiles.size()
+
+                        changes << [
+                            commitId: revision.commitId.toString(),
+                            date: date,
+                            author: revision.author.toString(),
+                            message: revision.msg.toString(),
+                            filesCount: filesCount
+                        ]
+                    }
+                }
+            }
+        } else {
+            echo " [DEBUG] no commits"
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+
+    return changes 
+}
+
 void printCommit() {
     try{
         getChangeLogSet()
