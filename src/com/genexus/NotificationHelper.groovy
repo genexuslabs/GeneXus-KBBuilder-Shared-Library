@@ -133,7 +133,6 @@ def searchKeywordInMessages(commitMessages, keyword) {
     commitMessages.each { message ->
         if (message.contains(keyword)) {
             keywordFound = true
-            break
         }
     }
 
