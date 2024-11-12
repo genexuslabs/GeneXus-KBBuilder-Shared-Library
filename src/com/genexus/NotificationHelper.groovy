@@ -127,18 +127,17 @@ def getAllKnowledgeBaseMessages() {
     return commitMessages
 }
 
-def searchKeywordsInMessages(commitMessages, keywords) {
-    def foundKeywords = []
+def searchKeywordInMessages(commitMessages, keyword) {
+    def keywordFound = false 
 
     commitMessages.each { message ->
-        keywords.each { keyword ->
-            if (message.contains(keyword)) {
-                foundKeywords << keyword
-            }
+        if (message.contains(keyword)) {
+            keywordFound = true
+            break
         }
     }
 
-    return foundKeywords.unique()
+    return keywordFound
 }
 
 void printCommit() {
