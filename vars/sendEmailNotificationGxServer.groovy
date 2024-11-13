@@ -14,8 +14,18 @@ String createTemplate(String templateName, def params) {
 
 String generateTableChangelogHTML(def changes) {
     String revisions = ""
-    boolean isEven = false
 
+    revisions += "<tr>"
+    revisions += "<th class=\"revision-header\">Commit ID</th>"
+    revisions += "<th class=\"revision-header\">Date</th>"
+    revisions += "<th class=\"revision-header\">Author</th>"
+    revisions += "<th class=\"revision-header\">Message</th>"
+    revisions += "<th class=\"revision-header\">Files Changed</th>"
+    revisions += "<th class=\"revision-header\">Objects Modified</th>"
+    revisions += "<th class=\"revision-header\">DUs Deployed</th>"
+    revisions += "</tr>"
+
+    boolean isEven = false
     for (def change in changes) {
         if (isEven) {
             revisions += "<tr class=\"revisions-even\">"
@@ -24,11 +34,11 @@ String generateTableChangelogHTML(def changes) {
         }
         isEven = !isEven
 
-        revisions += "<th class=\"revision-item\">${change.commitId}</th>"
-        revisions += "<th class=\"revision-item\" style=\"width:240px;\">${change.date}</th>"
-        revisions += "<th class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.author}</th>"
-        revisions += "<th class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</th>"
-        revisions += "<th class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</th>"
+        revisions += "<td class=\"revision-item\">${change.commitId}</td>"
+        revisions += "<td class=\"revision-item\" style=\"width:240px;\">${change.date}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.author}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</td>"
         revisions += "</tr>"
     }
 

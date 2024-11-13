@@ -87,7 +87,7 @@ def getKnowledgeBaseChanges() {
 
 @NonCPS
 def getKnowledgeBaseChanges2() {
-    def changes = []
+    List<Map<String, Object>> changes = []
 
     try {
         def changeLogSets = currentBuild.changeSets
@@ -95,15 +95,22 @@ def getKnowledgeBaseChanges2() {
             for (def entry in changeLogSets) {
                 if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
                     for (def revision in entry.items) {
+                        echo "[DEBUG] revision::${revision}"
                         def date = new Date(revision.timestamp).toString()
                         def filesCount = revision.affectedFiles.size()
 
+                        List<String> modifiedFiles = []
+                        for (file2 in revision.affectedFiles) {
+                            modifiedFiles << file2.path
+                        }
+
                         changes << [
-                            commitId: revision.commitId.toString(),
-                            date: date,
-                            author: revision.author.toString(),
-                            message: revision.msg.toString(),
-                            filesCount: filesCount
+                            commitId     : revision.commitId.toString(),
+                            date         : date,
+                            author       : revision.author.toString(),
+                            message      : revision.msg.toString(),
+                            filesCount   : filesCount,
+                            modifiedFiles: modifiedFiles
                         ]
                     }
                 }
