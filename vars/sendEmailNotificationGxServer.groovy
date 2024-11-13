@@ -12,7 +12,7 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
+String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorganized, def DUsDeployed) {
     String revisions = ""
 
     if (!changes.isEmpty()) {
@@ -24,10 +24,10 @@ String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean w
         revisions += "<th class=\"revision-header\">Objects Changed</th>"
         revisions += "<th class=\"revision-header\">Objects Modified</th>"
 
-        if (args.wasGxInstalled) {
+        if (wasGxInstalled) {
             revisions += "<th class=\"revision-header\">GX Updated</th>"
         }
-        if (args.wasReorganized) {
+        if (wasReorganized) {
             revisions += "<th class=\"revision-header\">Database Impact</th>"
         }
         if (!DUsDeployed.isEmpty()) {
@@ -54,11 +54,11 @@ String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean w
         def modifiedFilesList = change.modifiedFiles.join(", ")
         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${modifiedFilesList}</td>"
 
-        if (args.wasGxInstalled) {
+        if (wasGxInstalled) {
             revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
         }
 
-        if (args.wasReorganized) {
+        if (wasReorganized) {
             revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
         }
 
