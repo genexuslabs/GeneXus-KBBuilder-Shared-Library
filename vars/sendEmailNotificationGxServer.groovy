@@ -164,7 +164,7 @@ def call(Map args = [:], boolean wasGxInstalled, boolean wasReorganized, List<St
             "buildColor"        :   buildColor,
             "buildResult"       :   buildResult,
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
-            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet),
+            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet, wasGxInstalled, wasReorganized, DUsDeployed),
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
             "gxversion"         :   gxVersion
         ]);
