@@ -51,7 +51,7 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</td>"
         revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</td>"
 
-        def modifiedFilesList = change.modifiedFiles.join(", ")
+        def modifiedFilesList = change.modifiedFiles.values().join(", ")
         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${modifiedFilesList}</td>"
 
         if (wasGxInstalled) {
@@ -63,7 +63,7 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
         }
 
         if (!DUsDeployed.isEmpty()) {
-            def dusList = DUsDeployed.join(", ")
+            def dusList = DUsDeployed.values().join(", ")
             revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${dusList}</td>"
         }
 
