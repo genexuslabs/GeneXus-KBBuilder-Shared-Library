@@ -16,22 +16,22 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
     String revisions = ""
 
     if (!changes.isEmpty()) {
-        revisions += "<tr>"
-        revisions += "<th class=\"revision-header\">Commit ID</th>"
-        revisions += "<th class=\"revision-header\">Date</th>"
-        revisions += "<th class=\"revision-header\">Author</th>"
-        revisions += "<th class=\"revision-header\">Message</th>"
-        revisions += "<th class=\"revision-header\">Objects Changed</th>"
-        revisions += "<th class=\"revision-header\">Objects Modified</th>"
+        revisions += "<tr class=\"revisions-even\">"
+        revisions += "<th class=\"revision-item\">Commit ID</th>"
+        revisions += "<th class=\"revision-item\">Date</th>"
+        revisions += "<th class=\"revision-item\">Author</th>"
+        revisions += "<th class=\"revision-item\">Message</th>"
+        revisions += "<th class=\"revision-item\">Objects Changed</th>"
+        revisions += "<th class=\"revision-item\">Objects Modified</th>"
 
         if (wasGxInstalled) {
-            revisions += "<th class=\"revision-header\">GX Updated</th>"
+            revisions += "<th class=\"revision-item\">GX Updated</th>"
         }
         if (wasReorganized) {
-            revisions += "<th class=\"revision-header\">Database Impact</th>"
+            revisions += "<th class=\"revision-item\">Database Impact</th>"
         }
         if (!dusDeployed.isEmpty()) {
-            revisions += "<th class=\"revision-header\">DUs Deployed</th>"
+            revisions += "<th class=\"revision-item\">DUs Deployed</th>"
         }
         revisions += "</tr>"
     }
