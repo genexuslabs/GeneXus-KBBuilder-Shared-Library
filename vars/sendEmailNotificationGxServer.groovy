@@ -127,7 +127,7 @@ def call(Map args = [:]) {
             break
         }
 
-        templateName = "com/genexus/notificationTemplates/emailBuildResult.html.groovy"
+        templateName = "com/genexus/notificationTemplates/emailBuildResult2.html.groovy"
         template = createTemplate(templateName, [
             "jenkinsJobName"    :   jobName,
             "jenkinsUrl"        :   env.BUILD_URL,
