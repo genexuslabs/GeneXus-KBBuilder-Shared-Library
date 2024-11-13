@@ -12,69 +12,69 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean wasReorganized, List<String> DUsDeployed) {
+String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
     String revisions = ""
 
-    // if (!changes.isEmpty()) {
-    //     revisions += "<tr>"
-    //     revisions += "<th class=\"revision-header\">Commit ID</th>"
-    //     revisions += "<th class=\"revision-header\">Date</th>"
-    //     revisions += "<th class=\"revision-header\">Author</th>"
-    //     revisions += "<th class=\"revision-header\">Message</th>"
-    //     revisions += "<th class=\"revision-header\">Objects Changed</th>"
-    //     revisions += "<th class=\"revision-header\">Objects Modified</th>"
+    if (!changes.isEmpty()) {
+        revisions += "<tr>"
+        revisions += "<th class=\"revision-header\">Commit ID</th>"
+        revisions += "<th class=\"revision-header\">Date</th>"
+        revisions += "<th class=\"revision-header\">Author</th>"
+        revisions += "<th class=\"revision-header\">Message</th>"
+        revisions += "<th class=\"revision-header\">Objects Changed</th>"
+        revisions += "<th class=\"revision-header\">Objects Modified</th>"
 
-    //     if (wasGxInstalled) {
-    //         revisions += "<th class=\"revision-header\">GX Updated</th>"
-    //     }
-    //     if (wasReorganized) {
-    //         revisions += "<th class=\"revision-header\">Database Impact</th>"
-    //     }
-    //     if (!DUsDeployed.isEmpty()) {
-    //         revisions += "<th class=\"revision-header\">DUs Deployed</th>"
-    //     }
-    //     revisions += "</tr>"
-    // }
+        if (wasGxInstalled) {
+            revisions += "<th class=\"revision-header\">GX Updated</th>"
+        }
+        if (wasReorganized) {
+            revisions += "<th class=\"revision-header\">Database Impact</th>"
+        }
+        if (!DUsDeployed.isEmpty()) {
+            revisions += "<th class=\"revision-header\">DUs Deployed</th>"
+        }
+        revisions += "</tr>"
+    }
 
-    // boolean isEven = false
-    // for (def change in changes) {
-    //     if (isEven) {
-    //         revisions += "<tr class=\"revisions-even\">"
-    //     } else {
-    //         revisions += "<tr class=\"revisions-odd\">"
-    //     }
-    //     isEven = !isEven
+    boolean isEven = false
+    for (def change in changes) {
+        if (isEven) {
+            revisions += "<tr class=\"revisions-even\">"
+        } else {
+            revisions += "<tr class=\"revisions-odd\">"
+        }
+        isEven = !isEven
 
-    //     revisions += "<td class=\"revision-item\">${change.commitId}</td>"
-    //     revisions += "<td class=\"revision-item\" style=\"width:240px;\">${change.date}</td>"
-    //     revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.author}</td>"
-    //     revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</td>"
-    //     revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</td>"
+        revisions += "<td class=\"revision-item\">${change.commitId}</td>"
+        revisions += "<td class=\"revision-item\" style=\"width:240px;\">${change.date}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.author}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</td>"
+        revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</td>"
 
-    //     def modifiedFilesList = change.modifiedFiles.join(", ")
-    //     revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${modifiedFilesList}</td>"
+        def modifiedFilesList = change.modifiedFiles.join(", ")
+        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${modifiedFilesList}</td>"
 
-    //     if (wasGxInstalled) {
-    //         revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
-    //     }
+        if (wasGxInstalled) {
+            revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
+        }
 
-    //     if (wasReorganized) {
-    //         revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
-    //     }
+        if (wasReorganized) {
+            revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
+        }
 
-    //     if (!DUsDeployed.isEmpty()) {
-    //         def dusList = DUsDeployed.join(", ")
-    //         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${dusList}</td>"
-    //     }
+        if (!DUsDeployed.isEmpty()) {
+            def dusList = DUsDeployed.join(", ")
+            revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${dusList}</td>"
+        }
 
-    //     revisions += "</tr>"
-    // }
+        revisions += "</tr>"
+    }
 
-    // if (changes.isEmpty()) {
-    //     revisions += "<tr class=\"revisions-even\">"
-    //     revisions += "<td class=\"revision-item\" colspan=\"8\" style=\"text-align:center;\">No changes</td>"
-    //     revisions += "</tr>"
-    // }
+    if (changes.isEmpty()) {
+        revisions += "<tr class=\"revisions-even\">"
+        revisions += "<td class=\"revision-item\" colspan=\"8\" style=\"text-align:center;\">No changes</td>"
+        revisions += "</tr>"
+    }
 
     return revisions
 }
@@ -100,7 +100,7 @@ String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean w
  * 5. Handle any exceptions by setting the build result to 'FAILURE' and rethrowing the error.
  *
  */
-def call(Map args = [:], boolean wasGxInstalled, boolean wasReorganized, List<String> DUsDeployed) {
+def call(Map args = [:], boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
     try {
         def engine2 = new NotificationHelper()
         def file = new GeneXusHelper()
