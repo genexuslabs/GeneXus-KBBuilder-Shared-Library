@@ -12,7 +12,7 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-// String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
+// String generateTableChangelogHTML(def changes, boolean args.wasGxInstalled, boolean args.wasReorganized, def DUsDeployed) {
 //     String revisions = ""
 
 //     if (!changes.isEmpty()) {
@@ -24,10 +24,10 @@ String createTemplate(String templateName, def params) {
 //         revisions += "<th class=\"revision-header\">Objects Changed</th>"
 //         revisions += "<th class=\"revision-header\">Objects Modified</th>"
 
-//         if (wasGxInstalled) {
+//         if (args.wasGxInstalled) {
 //             revisions += "<th class=\"revision-header\">GX Updated</th>"
 //         }
-//         if (wasReorganized) {
+//         if (args.wasReorganized) {
 //             revisions += "<th class=\"revision-header\">Database Impact</th>"
 //         }
 //         if (!DUsDeployed.isEmpty()) {
@@ -54,11 +54,11 @@ String createTemplate(String templateName, def params) {
 //         def modifiedFilesList = change.modifiedFiles.join(", ")
 //         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${modifiedFilesList}</td>"
 
-//         if (wasGxInstalled) {
+//         if (args.wasGxInstalled) {
 //             revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
 //         }
 
-//         if (wasReorganized) {
+//         if (args.wasReorganized) {
 //             revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
 //         }
 
@@ -100,7 +100,7 @@ String createTemplate(String templateName, def params) {
  * 5. Handle any exceptions by setting the build result to 'FAILURE' and rethrowing the error.
  *
  */
-def call(Map args = [:], def wasGxInstalled, def wasReorganized, def DUsDeployed) {
+def call(Map args = [:], def DUsDeployed) {
     try {
         def engine2 = new NotificationHelper()
         def file = new GeneXusHelper()
@@ -164,7 +164,7 @@ def call(Map args = [:], def wasGxInstalled, def wasReorganized, def DUsDeployed
             "buildColor"        :   buildColor,
             "buildResult"       :   buildResult,
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
-            "changeLogSet"      :   "",//generateTableChangelogHTML(changeLogSet, wasGxInstalled, wasReorganized, DUsDeployed),
+            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet, args.wasGxInstalled, args.wasReorganized, DUsDeployed),
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
             "gxversion"         :   gxVersion
         ]);
