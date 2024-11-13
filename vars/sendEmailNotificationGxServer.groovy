@@ -12,7 +12,7 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-String generateTableChangelogHTML(def changes, boolean args.wasGxInstalled, boolean args.wasReorganized, def DUsDeployed) {
+String generateTableChangelogHTML(def changes, boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
     String revisions = ""
 
     if (!changes.isEmpty()) {
