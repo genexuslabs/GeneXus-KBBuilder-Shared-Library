@@ -12,7 +12,7 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorganized, def DUsDeployed) {
+String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorganized, def dusDeployed) {
     String revisions = ""
 
     if (!changes.isEmpty()) {
@@ -30,7 +30,7 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
         if (wasReorganized) {
             revisions += "<th class=\"revision-header\">Database Impact</th>"
         }
-        if (!DUsDeployed.isEmpty()) {
+        if (!dusDeployed.isEmpty()) {
             revisions += "<th class=\"revision-header\">DUs Deployed</th>"
         }
         revisions += "</tr>"
@@ -62,9 +62,9 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
             revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
         }
 
-        if (!DUsDeployed.isEmpty()) {
-            //def dusList = DUsDeployed.join(", ")
-            revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${DUsDeployed}</td>"
+        if (!dusDeployed.isEmpty()) {
+            //def dusList = dusDeployed.join(", ")
+            revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${dusDeployed}</td>"
         }
 
         revisions += "</tr>"
@@ -100,7 +100,7 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
  * 5. Handle any exceptions by setting the build result to 'FAILURE' and rethrowing the error.
  *
  */
-def call(Map args = [:], def DUsDeployed) {
+def call(Map args = [:], List<String> dusDeployed) {
     try {
         def engine2 = new NotificationHelper()
         def file = new GeneXusHelper()
@@ -164,7 +164,7 @@ def call(Map args = [:], def DUsDeployed) {
             "buildColor"        :   buildColor,
             "buildResult"       :   buildResult,
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
-            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet, args.wasGxInstalled, args.wasReorganized, DUsDeployed),
+            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet, args.wasGxInstalled, args.wasReorganized, dusDeployed),
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
             "gxversion"         :   gxVersion
         ]);
