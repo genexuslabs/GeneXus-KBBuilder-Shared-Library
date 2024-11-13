@@ -100,7 +100,7 @@ String createTemplate(String templateName, def params) {
  * 5. Handle any exceptions by setting the build result to 'FAILURE' and rethrowing the error.
  *
  */
-def call(Map args = [:], boolean wasGxInstalled, boolean wasReorganized, def DUsDeployed) {
+def call(Map args = [:], def DUsDeployed) {
     try {
         def engine2 = new NotificationHelper()
         def file = new GeneXusHelper()
