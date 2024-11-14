@@ -101,6 +101,9 @@
 			font-size: 10pt;
 			font-weight: normal;
 		}
+        .jenkins-header-outputlink a:hover {
+            background-color: #0056b3;
+        }
         </style>
 </head>
 <body>
@@ -114,14 +117,22 @@
                     <img id="jenkins-logo" src="https://raw.githubusercontent.com/Enz1n/Images/main/images/jenkinstitle.png">
                 </div>
                 <div class="jenkins-header-tittleline">
-                    <a href="${jenkinsUrl}">
-                        <p style="color: ${buildColor};" id="build-result" >Build #${buildNumber} <strong>${buildResult}</p>
-                    </a>
+                    <p style="color: ${buildColor};" id="build-result" >Build #${buildNumber} <strong>${buildResult}</p>
                 </div>
             </div>
             <div class="jenkins-header-outputlink">
-                <a href="${jenkinsUrl}" style="font-weight: bold; color: #007bff; text-decoration: none;">
-                    See Pipeline Results
+                <a href="${jenkinsUrl}" style="
+                    display: inline-block;
+                    font-weight: bold;
+                    color: #fff;
+                    background-color: #007bff;
+                    padding: 10px 20px;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    transition: background-color 0.3s ease;
+                    width: 250px;
+                ">
+                    See Pipeline Output
                 </a>
             </div>
         </div>

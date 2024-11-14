@@ -22,7 +22,6 @@ String generateTableChangelogHTML(def changes) {
         revisions += "<th class=\"revision-item\">Author</th>"
         revisions += "<th class=\"revision-item\">Message</th>"
         revisions += "<th class=\"revision-item\">Objects Changed</th>"
-        revisions += "<th class=\"revision-item\">Objects Modified</th>"
 
         revisions += "</tr>"
     }
