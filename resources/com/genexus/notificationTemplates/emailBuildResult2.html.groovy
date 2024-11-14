@@ -132,10 +132,10 @@
                     <li><strong>Duration:</strong> ${jenkinsDuration}</li>
                     <li>${cause}</li>
                     <li><strong>GeneXus Version:</strong> ${gxversion}</li>
+                    ${extraGralInfo}
                 </ul>
             </div>
-        </div>
-        <div class="jenkins-properties-main">
+            <div class="jenkins-properties-main">
 				<table class="jenkins-revisions">
 				  <tr class="revisions-even">
 					<th class="revision-item">
@@ -147,6 +147,7 @@
                     ${changeLogSet}
                 </table>
             </div>
+        </div>
     </div>
 </body>
 </html>

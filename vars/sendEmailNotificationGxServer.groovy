@@ -12,7 +12,7 @@ String createTemplate(String templateName, def params) {
     return engine.createTemplate(fileContents).make(params).toString()
 }
 
-String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorganized, def dusDeployed) {
+String generateTableChangelogHTML(def changes) {
     String revisions = ""
 
     if (!changes.isEmpty()) {
@@ -24,15 +24,6 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
         revisions += "<th class=\"revision-item\">Objects Changed</th>"
         revisions += "<th class=\"revision-item\">Objects Modified</th>"
 
-        if (wasGxInstalled) {
-            revisions += "<th class=\"revision-item\">GX Updated</th>"
-        }
-        if (wasReorganized) {
-            revisions += "<th class=\"revision-item\">Database Impact</th>"
-        }
-        if (!dusDeployed.isEmpty()) {
-            revisions += "<th class=\"revision-item\">DUs Deployed</th>"
-        }
         revisions += "</tr>"
     }
 
@@ -51,22 +42,6 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
         revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.message}</td>"
         revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;width:60px;\">${change.filesCount} Files</td>"
 
-        //def modifiedFilesList = change.modifiedFiles.join(", ")
-        revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${change.modifiedFiles}</td>"
-
-        if (wasGxInstalled) {
-            revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
-        }
-
-        if (wasReorganized) {
-            revisions += "<td class=\"revision-item\" style=\"text-align:center;padding-left:5px;\">Yes</td>"
-        }
-
-        if (!dusDeployed.isEmpty()) {
-            //def dusList = dusDeployed.join(", ")
-            revisions += "<td class=\"revision-item\" style=\"text-align:left;padding-left:5px;\">${dusDeployed}</td>"
-        }
-
         revisions += "</tr>"
     }
 
@@ -79,6 +54,23 @@ String generateTableChangelogHTML(def changes, def wasGxInstalled, def wasReorga
     return revisions
 }
 
+String generateExtraGralInfoHTML(def wasReorganized, def dusDeployed) {
+    String extraInfoGral = ""
+    if (wasReorganized) {
+        extraInfoGral += "<li><strong>A Reorg Was Executed</strong></li>"
+    }
+    if (dusDeployed.size() > 0) {
+        String dus = ""
+        for (def du in dusDeployed) {
+            if (dus != "") {
+                dus += ", "
+            }
+            dus += du
+        }
+        extraInfoGral += "<li><strong>Deployment Units Deployed:</strong> ${dus} </li>"
+    }
+    return extraInfoGral
+}
 
 /*
  * Job: sendEmailNotification
@@ -164,7 +156,8 @@ def call(Map args = [:], List<String> dusDeployed) {
             "buildColor"        :   buildColor,
             "buildResult"       :   buildResult,
             "jenkinsDuration"   :   currentBuild.durationString.replaceAll(' and counting', ''),
-            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet, args.wasGxInstalled, args.wasReorganized, dusDeployed),
+            "extraGralInfo"     :   generateExtraGralInfoHTML(args.wasReorganized, dusDeployed),
+            "changeLogSet"      :   generateTableChangelogHTML(changeLogSet),
             "cause"             :   currentBuild.buildCauses[0].shortDescription.replaceAll('\\[',' '),
             "gxversion"         :   gxVersion
         ]);

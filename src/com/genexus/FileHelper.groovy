@@ -59,6 +59,20 @@ String getAbsolutePathFromWS(String relativePath) {
     }
 }
 
+
+def searchKeywordInMessages(message, keyword) {
+    def keywordFound = false 
+
+    message.each { message ->
+        if (message.contains(keyword)) {
+            keywordFound = true
+        }
+    }
+
+    return keywordFound
+}
+
+
 /**
  * Compresses a directory using 7-Zip if available, otherwise uses PowerShell's Compress-Archive.
  *

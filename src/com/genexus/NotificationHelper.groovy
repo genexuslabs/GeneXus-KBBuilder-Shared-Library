@@ -48,32 +48,34 @@ def getRepositoryChanges() {
         throw error
     }
 }
+
 @NonCPS
 def getKnowledgeBaseChanges() {
+    List<Map<String, Object>> changes = []
+
     try {
         def changeLogSets = currentBuild.changeSets
-        if(changeLogSets.size() != 0) { 
-            echo "changeLogSets::${changeLogSets}"
+        if (changeLogSets.size() != 0) { 
             for (def entry in changeLogSets) {
-                if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
-                    echo "entry::${entry}"
+                if (entry instanceof hudson.plugins.git.GitChangeSetList) {
                     for (def revision in entry.items) {
-                        echo "revision::${revision}"
-                        def date = new Date(revision.timestamp)
-                        echo " [DEBUG] read revision date::${date.toString()}"
-                        echo " [DEBUG] read revision commitId::${revision.commitId.toString()}"
-                        echo " [DEBUG] read revision author::${revision.author.toString()}"
-                        echo " [DEBUG] read revision msg::${revision.msg.toString()}"
-                        def files = new ArrayList(revision.affectedFiles)
-                        echo "files::${files}"
-                        for (def file in files) {
-                            echo "file::${file}"
-                            echo " [DEBUG] read editType::${file.editType.name}"
-                            echo " [DEBUG] read file path::${file.path}"
+                        def date = new Date(revision.timestamp).toString()
+                        def filesCount = revision.affectedFiles.size()
+
+                        List<String> modifiedFiles = []
+                        for (file2 in revision.affectedFiles) {
+                            modifiedFiles << file2.path
                         }
+
+                        changes << [
+                            commitId     : revision.commitId.toString(),
+                            date         : date,
+                            author       : revision.author.toString(),
+                            message      : revision.msg.toString(),
+                            filesCount   : filesCount,
+                            modifiedFiles: modifiedFiles
+                        ]
                     }
-                } else {
-                    echo " [DEBUG] no commits"
                 }
             }
         } else {
@@ -83,10 +85,12 @@ def getKnowledgeBaseChanges() {
         currentBuild.result = 'FAILURE'
         throw error
     }
+
+    return changes 
 }
 
 @NonCPS
-def getKnowledgeBaseChanges2() {
+def getKnowledgeBaseChanges() {
     List<Map<String, Object>> changes = []
 
     try {
@@ -95,7 +99,6 @@ def getKnowledgeBaseChanges2() {
             for (def entry in changeLogSets) {
                 if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
                     for (def revision in entry.items) {
-                        echo "[DEBUG] revision::${revision}"
                         def date = new Date(revision.timestamp).toString()
                         def filesCount = revision.affectedFiles.size()
 
@@ -127,23 +130,20 @@ def getKnowledgeBaseChanges2() {
 }
 
 def getAllKnowledgeBaseMessages() {
-    def changes = getKnowledgeBaseChanges2()
-    echo "[DEBUG] changes::${changes}"
-    def commitMessages = changes.collect { it.message }
-    echo "[DEBUG] commitMessages::${commitMessages}"
-    return commitMessages
-}
-
-def searchKeywordInMessages(commitMessages, keyword) {
-    def keywordFound = false 
-
-    commitMessages.each { message ->
-        if (message.contains(keyword)) {
-            keywordFound = true
+    def commitMessages = []
+    def changeLogSets = currentBuild.changeSets
+    if (changeLogSets.size() != 0) { 
+        for (def entry in changeLogSets) {
+            if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
+                for (def revision in entry.items) {
+                    commitMessages << revision.msg.toString()
+                }
+            }
         }
+    } else {
+        echo " [DEBUG] no commits"
     }
-
-    return keywordFound
+    return commitMessages
 }
 
 void printCommit() {
