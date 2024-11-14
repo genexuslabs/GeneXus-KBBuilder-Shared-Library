@@ -96,7 +96,7 @@ def call(Map args = [:], List<String> dusDeployed) {
     try {
         def engine2 = new NotificationHelper()
         def file = new GeneXusHelper()
-        def changeLogSet = engine2.getKnowledgeBaseChanges2()
+        def changeLogSet = engine2.getKnowledgeBaseChanges()
         def gxVersion = file.getGeneXusInstallationVersion(args.gxBasePath)
         def icon
         String template
