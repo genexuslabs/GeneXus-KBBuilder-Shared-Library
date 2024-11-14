@@ -28,7 +28,7 @@
             display: block;
         }
         .jenkins-header-outputlink {
-            width:  200px;
+            width:  300px;
             display: block;
             /* background-color: blue; */
         }
@@ -130,7 +130,6 @@
                     text-decoration: none;
                     border-radius: 5px;
                     transition: background-color 0.3s ease;
-                    width: 250px;
                 ">
                     See Pipeline Output
                 </a>
