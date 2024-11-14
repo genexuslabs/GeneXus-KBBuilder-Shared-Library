@@ -60,10 +60,10 @@ String getAbsolutePathFromWS(String relativePath) {
 }
 
 
-def searchKeywordInMessages(message, keyword) {
+def searchKeywordInMessages(messages, keyword) {
     def keywordFound = false 
 
-    message.each { message ->
+    messages.each { message ->
         if (message.contains(keyword)) {
             keywordFound = true
         }
