@@ -30,7 +30,7 @@ def call(Map args = [:]) {
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
-            /p:customBuildName="${args.genexus.customBuildName}" \
+            /p:customBuildName="${args.customBuildName}" \
             /t:BuildCustomEnv
         """
 }
