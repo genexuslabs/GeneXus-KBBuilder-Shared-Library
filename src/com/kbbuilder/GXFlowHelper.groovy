@@ -168,14 +168,14 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             echo "INFO Package Name:: ${clientDuArgs.packageName}"
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
-                Copy-Item -Path "${clientDuArgs.packageLocation}" "${clientDuArgs.deployTarget}\\Packages\\GXPM\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
+                Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
                 Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
-            }
+            // // // dir("${deployDirPath.trim()}") {
+            // // //     archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+            // // // }
             // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
             echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
@@ -183,14 +183,14 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             echo "INFO Package Name:: ${engineDuArgs.packageName}"
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
-                Copy-Item -Path "${engineDuArgs.packageLocation}" "${engineDuArgs.deployTarget}\\Packages\\GXPM\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
+                Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
                 Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
-            }
+            // // // dir("${deployDirPath.trim()}") {
+            // // //     archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+            // // // }
             // ----------------------------- Zip package
             envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
             powershell script: """
