@@ -24,19 +24,20 @@
  */
 
 def call(Map args = [:]) {
-    // Sync cdxci.msbuild
-    def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
-    writeFile file: 'cdxci.msbuild', text: fileContents
+    try {
+        // Sync cdxci.msbuild
+        def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
+        writeFile file: 'cdxci.msbuild', text: fileContents
 
-    bat label: "Create Environment", 
-        script: """
-            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-            /p:localKbPath="${args.localKBPath}" \
-            /p:environmentName="${args.environmentName}" \
-            /p:localKBTemplate="${args.localKBTemplate}" \
-            /t:CreateLocalEnvironment
-        """
+        bat label: "Create Environment", 
+            script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:environmentName="${args.environmentName}" \
+                /p:localKBTemplate="${args.localKBTemplate}" \
+                /t:CreateLocalEnvironment
+            """
     } catch (error) {
         echo "[ERROR] Failed to create environment '${args.environmentName}'"
     }
