@@ -133,7 +133,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
         // }
         // stage("Make DB Schema Dynamic") {
         //     bat script: """
-        //         "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\GxpmDeploy.msbuild" \
+        //         "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
         //         /p:GXInstall="${envArgs.gxBasePath}" \
         //         /p:KBFolder="${envArgs.localKBPath}" \
         //         /p:KBEnvironment="${envArgs.environmentName}" \
@@ -150,7 +150,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
                 if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration" -Recurse -Force }
             """
             bat script: """
-                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\GxpmDeploy.msbuild" \
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
                 /p:GXInstall="${envArgs.gxBasePath}" \
                 /p:KBFolder="${envArgs.localKBPath}" \
                 /p:KBEnvironment="${envArgs.environmentName}" \
@@ -172,9 +172,9 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            // // // dir("${deployDirPath.trim()}") {
-            // // //     archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
-            // // // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+            }
             // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
             echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
@@ -187,15 +187,16 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            // // // dir("${deployDirPath.trim()}") {
-            // // //     archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
-            // // // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+            }
             // ----------------------------- Zip package
             envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
             powershell script: """
                 & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
             """
             // ----------------------------- Create NuGet package
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
             envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
             envArgs.packageVersion = envArgs.componentVersion
             envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
