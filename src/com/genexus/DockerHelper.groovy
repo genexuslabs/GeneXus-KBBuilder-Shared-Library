@@ -168,6 +168,24 @@ void performDockerComposeStart(Map args = [:]) {
         throw e
     }
 }
+/**
+ * Create and start containers using docker-compose.yaml project file in attached mode.
+ *
+ * @param args A map containing the following parameters:
+ *   - composeFileRootPath: The root path where the docker-compose.yaml file is located
+ *   - projectName: The name of the Docker Compose project
+ */
+void performDockerComposeRun(Map args = [:]) {
+    try {
+        dir(args.composeFileRootPath) {
+            sh label: "Start project ${args.projectName} in attached mode", 
+                script: "docker compose -p ${args.projectName} up"
+        }
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+}
 
 /**
  * Create a Java environment variables file.
