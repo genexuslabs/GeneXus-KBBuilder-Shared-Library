@@ -131,19 +131,18 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
         //     bat label: 'Create connection.gam',
         //         script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
         // }
-        // // // stage("Make DB Schema Dynamic") {
-        // // //     bat script: """
-        // // //         "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\GxpmDeploy.msbuild" \
-        // // //         /p:GXInstall="${envArgs.gxBasePath}" \
-        // // //         /p:KBFolder="${envArgs.localKBPath}" \
-        // // //         /p:KBEnvironment="${envArgs.environmentName}" \
-        // // //         /p:TargetLanguage="${envArgs.generatedLanguage}" \
-        // // //         /p:TargetDbms="${envArgs.dataSource}" \
-        // // //         /p:KBEnvironmentPath="${envArgs.targetPath}" \
-        // // //         /p:OutputPath="${envArgs.deployTarget}" \
-        // // //         /t:PackageWorkflow
-        // // //     """
-        // // // }
+        // stage("Make DB Schema Dynamic") {
+        //     bat script: """
+        //         "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\GxpmDeploy.msbuild" \
+        //         /p:GXInstall="${envArgs.gxBasePath}" \
+        //         /p:KBFolder="${envArgs.localKBPath}" \
+        //         /p:KBEnvironment="${envArgs.environmentName}" \
+        //         /p:TargetLanguage="${envArgs.generatedLanguage}" \
+        //         /p:TargetDbms="${envArgs.dataSource}" \
+        //         /p:KBEnvironmentPath="${envArgs.targetPath}" \
+        //         /t:MakeDBSchemaDynamic
+        //     """
+        // }
         stage("Package ENV:${envArgs.targetPath} Platform") {
             // ----------------------------- Package Platform resources
             envArgs.deployTarget = "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration"
@@ -168,7 +167,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             echo "INFO Package Name:: ${clientDuArgs.packageName}"
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
-                Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
+                Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
                 Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
@@ -183,7 +182,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             echo "INFO Package Name:: ${engineDuArgs.packageName}"
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
-                Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
+                Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
                 Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
