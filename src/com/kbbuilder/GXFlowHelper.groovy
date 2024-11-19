@@ -130,6 +130,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
                 script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
         }
         stage("Package ENV:${envArgs.targetPath} Platform") {
+            // ----------------------------- Create Package for DU:Client
             clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
             echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
             deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
@@ -140,6 +141,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             //     TODO: Rename file to Java_client/Engine_BUILDNUM.zip
             //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
             // }
+            // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
             echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
             deployDirPath = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Parent""", returnStdout: true
@@ -150,6 +152,19 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             //     TODO: Rename file to Java_client/Engine_BUILDNUM.zip
             //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
             // }
+            // ----------------------------- Package Platform resources
+            envArgs.deployTarget = "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration"
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\GxpmDeploy.msbuild" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:KBEnvironment="${envArgs.environmentName}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}" \
+                /t:PackageWorkflow
+            """
         }
 
     } catch (error) {
