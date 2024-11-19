@@ -10,7 +10,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
         // ----------------------------- Print Debug vars
         echo "INFO generatedLanguage:: ${envArgs.generatedLanguage}"
         echo "INFO dataSource:: ${envArgs.dataSource}"
-        envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+        echo "INFO targetPath:: ${envArgs.targetPath}"
 
         stage("Prepare ENV:${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -50,7 +50,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             bat label: 'Create connection.gam',
                 script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
         }
-        stage("Package ENV:${envArgs.targetPath} Platform"){
+        stage("Package ENV:${envArgs.targetPath} Platform") {
             clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
             echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
             deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
@@ -87,7 +87,70 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
         // ----------------------------- Print Debug vars
         echo "INFO generatedLanguage:: ${envArgs.generatedLanguage}"
         echo "INFO dataSource:: ${envArgs.dataSource}"
-        envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+        echo "INFO targetPath:: ${envArgs.targetPath}"
+        
+        stage("Prepare ENV:${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath) 
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib" -ItemType Directory
+
+                # --------------------- TODO: Update reference to circle dependency
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${WORKSPACE}\\Libs\\Java\\*")
+                Copy-Item -Path "${WORKSPACE}\\Libs\\Java\\*" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib\\" -Force -Recurse
+                
+                # --------------------- Sync files from GeneXus Installation
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${envArgs.gxBasePath}\\Packages\\Gxpm\\RuleEvaluator\\Java\\com.gxflow.rules.jar")
+                Copy-Item -Path "${envArgs.gxBasePath}\\Packages\\Gxpm\\RuleEvaluator\\Java\\com.gxflow.rules.jar" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib\\" -Force -Recurse
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${envArgs.gxBasePath}\\Packages\\Gxpm\\WFCache\\Java\\wfcache.jar")
+                Copy-Item -Path "${envArgs.gxBasePath}\\Packages\\Gxpm\\WFCache\\Java\\wfcache.jar" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib\\" -Force -Recurse
+                Write-Output((Get-Date -Format G) + " [INFO] Extract JavaProt.zip")
+                Expand-Archive -Path "${envArgs.gxBasePath}\\Packages\\GXPM\\Protection\\JavaProt.zip" -DestinationPath "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib" -Force
+                
+                # --------------------- Create VirtualDirCreationDisabled file
+                Write-Output((Get-Date -Format G) + " [INFO] Create VirtualDirCreationDisabled file in modelDir")
+                if(-not (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\VirtualDirCreationDisabled")) {\$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\VirtualDirCreationDisabled"}
+            """
+        }
+        stage("Build ENV:${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "translation_type", "Run-time")
+            kbLibHelper.setEnvironmentProperty(envArgs, "html_document_type", "HTML5")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "java package name", "com.gxflow")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "generate prompt programs", "No")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "compiler_options", "-J-Xms1024m -J-Xmx2048m -O -source 1.8 -target 1.8")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "java package name", "com.gxflow")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "Java platform support", "Both Platforms")
+            
+            buildConfigurationEnvironment(envArgs)
+
+            // //------------------ W.A for connection.gam
+            bat label: 'Create connection.gam',
+                script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
+        }
+        stage("Package ENV:${envArgs.targetPath} Platform") {
+            clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
+            echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
+            deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
+            echo "INFO Deploy Dir Path:: ${deployDirPath}"
+            packageName = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Leaf""", returnStdout: true
+            echo "INFO Package Name:: ${packageName}"
+            // dir("${deployDirPath.trim()}") {
+            //     TODO: Rename file to Java_client/Engine_BUILDNUM.zip
+            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
+            // }
+            engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
+            echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
+            deployDirPath = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Parent""", returnStdout: true
+            echo "INFO Deploy Dir Path:: ${deployDirPath}"
+            packageName = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Leaf""", returnStdout: true
+            echo "INFO Package Name:: ${packageName}"
+            // dir("${deployDirPath.trim()}") {
+            //     TODO: Rename file to Java_client/Engine_BUILDNUM.zip
+            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
+            // }
+        }
 
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -104,7 +167,68 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
         // ----------------------------- Print Debug vars
         echo "INFO generatedLanguage:: ${envArgs.generatedLanguage}"
         echo "INFO dataSource:: ${envArgs.dataSource}"
-        envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+        echo "INFO targetPath:: ${envArgs.targetPath}"
+        
+        stage("Prepare ENV:${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
+            
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin" -ItemType Directory
+
+                # --------------------- TODO: Update reference to circle dependency
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${WORKSPACE}\\Libs\\NetCore\\*")
+                Copy-Item -Path "${WORKSPACE}\\Libs\\NetCore\\*.dll" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin\\" -Force -Recurse
+                
+                # --------------------- Sync files from GeneXus Installation
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${envArgs.gxBasePath}\\Packages\\Gxpm\\RuleEvaluator\\dotNetCore\\GXflow.Programs.Rules.dll")
+                Copy-Item -Path "${envArgs.gxBasePath}\\Packages\\Gxpm\\RuleEvaluator\\dotNetCore\\GXflow.Programs.Rules.dll" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin\\GXflow.Programs.Rules.dll" -Force -Recurse
+                Write-Output((Get-Date -Format G) + " [INFO] Sync ${envArgs.gxBasePath}\\Packages\\Gxpm\\WFCache\\dotNetCore\\wfcache.dll")
+                Copy-Item -Path "${envArgs.gxBasePath}\\Packages\\Gxpm\\WFCache\\dotNetCore\\wfcache.dll" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin\\wfcache.dll" -Force -Recurse
+                Write-Output((Get-Date -Format G) + " [INFO] Extract NetProtCore.zip")
+                Expand-Archive -Path "${envJavaDefinition.gxBasePath}\\Packages\\GXPM\\Protection\\NetProtCore.zip" -DestinationPath "${envJavaDefinition.localKBPath}\\${envJavaDefinition.targetPath}\\web\\bin" -Force                        
+                
+                # --------------------- Create VirtualDirCreationDisabled file
+                Write-Output((Get-Date -Format G) + " [INFO] Create VirtualDirCreationDisabled file in modelDir")
+                if(-not (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\VirtualDirCreationDisabled")) {\$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\VirtualDirCreationDisabled"}
+            """
+        }
+        stage("Build ENV:${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "translation_type", "Run-time")
+            kbLibHelper.setEnvironmentProperty(envArgs, "html_document_type", "Do not specify")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", ".net_application_namespace", "GXflow.Programs")                    
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
+            
+            buildConfigurationEnvironment(envArgs)
+
+            // //------------------ W.A for connection.gam
+            bat label: 'Create connection.gam',
+                script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
+        }
+        stage("Package ENV:${envArgs.targetPath} Platform") {
+            clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
+            echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
+            deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
+            echo "INFO Deploy Dir Path:: ${deployDirPath}"
+            packageName = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Leaf""", returnStdout: true
+            echo "INFO Package Name:: ${packageName}"
+            // dir("${deployDirPath.trim()}") {
+            //     TODO: Rename file to Net_client/Engine_BUILDNUM.zip
+            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
+            // }
+            engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
+            echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
+            deployDirPath = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Parent""", returnStdout: true
+            echo "INFO Deploy Dir Path:: ${deployDirPath}"
+            packageName = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Leaf""", returnStdout: true
+            echo "INFO Package Name:: ${packageName}"
+            // dir("${deployDirPath.trim()}") {
+            //     TODO: Rename file to Net_client/Engine_BUILDNUM.zip
+            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
+            // }
+        }
 
     } catch (error) {
         currentBuild.result = 'FAILURE'
