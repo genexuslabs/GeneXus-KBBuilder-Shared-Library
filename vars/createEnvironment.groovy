@@ -41,5 +41,4 @@ def call(Map args = [:]) {
     } catch (error) {
         echo "[ERROR] Failed to create environment '${args.environmentName}'"
     }
-    return environmentCreated
 }
