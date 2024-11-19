@@ -11,7 +11,7 @@
  *   - localKBPath: The local path of the Knowledge Base.
  *   - environmentName: The name of the environment to create.
  *   - msbuildExePath: The path to the MSBuild executable.
- *   - kbTemplate: The template to use for creating the environment.
+ *   - kbTemplate: The template to use for creating the environment. ["netcore", "java", "csharp"]
  *
  * Return Type:
  * - Boolean: Returns true if the environment creation is successful, false otherwise.
@@ -28,19 +28,15 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
-    Boolean environmentCreated = false
-    try {
-        bat label: "Create Environment", 
-            script: """
-                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:localKbPath="${args.localKBPath}" \
-                /p:environmentName="${args.environmentName}" \
-                /p:localKBTemplate="${args.localKBTemplate}" \
-                /t:CreateEnvironment
-            """
-        echo "[INFO] Environment '${args.environmentName}' created successfully"
-        environmentCreated = true
+    bat label: "Create Environment", 
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
+            /p:localKBTemplate="${args.localKBTemplate}" \
+            /t:CreateLocalEnvironment
+        """
     } catch (error) {
         echo "[ERROR] Failed to create environment '${args.environmentName}'"
     }
