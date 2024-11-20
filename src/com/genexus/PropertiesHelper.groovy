@@ -352,7 +352,7 @@ String getVersionProperty(Map args = [:], String verPropName) {
             /t:GetVersionProperty
         """
         def commiteableGenPropValue = readJSON file: propsFile
-        echo "[READ] Version property `${objPropName}` = ${commiteableGenPropValue.aux}"
+        echo "[READ] Version property `${verPropName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -455,7 +455,7 @@ String getDataStoreProperty(Map args = [:], String dataStoreName, String propert
             /t:GetDataStoreProperty
         """
         def commiteableGenPropValue = readJSON file: propsFile
-        echo "[READ] DataStore property `${objPropName}` = ${commiteableGenPropValue.aux}"
+        echo "[READ] DataStore property `${propertyName}` = ${commiteableGenPropValue.aux}"
         return commiteableGenPropValue.aux
     } catch (error) {
         currentBuild.result = 'FAILURE'
