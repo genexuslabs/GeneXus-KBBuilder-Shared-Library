@@ -144,7 +144,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
 }
 
 /**
- *
+ *  
  */
 void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
@@ -428,6 +428,5 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
         throw error
     }
 }
-
 
 return this

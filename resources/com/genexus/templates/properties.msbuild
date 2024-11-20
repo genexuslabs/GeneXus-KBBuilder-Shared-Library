@@ -176,6 +176,26 @@
 	<CloseKnowledgeBase/>
     </Target>
 
+    <Target Name="GetDataStoreProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <Delete Condition="Exists($(propFileAbsolutePath))" Files="$(propFileAbsolutePath)" />
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
+        <GetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)">
+            <Output TaskParameter="PropertyValue" PropertyName="PropertyValue"/>
+        </GetDataStoreProperty>
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines='"$(helperName)":"$(PropertyValue)"' />
+        <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="}" />
+        <CloseKnowledgeBase/>
+    </Target>
+
+    <Target Name="SetDataStoreProperty">
+        <SetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)" Value="$(PropertyValue)" />
+    </Target>
+
+    <Target Name="ResetDataStoreProperty">
+        <ResetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)"/>
+    </Target>
+
     <Target Name="SetGAMProperties">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
         <SetGAMOptions IncludeFrontendObjects="$(includeFrontEnd)" IncludeSDSamples="$(includeSDSamples)" UpdateMode="$(updateMode)" />

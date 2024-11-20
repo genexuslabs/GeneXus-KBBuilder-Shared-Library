@@ -423,6 +423,113 @@ void resetVersionProperty(Map args = [:], String verPropName) {
         throw error
     }
 }
+/**
+ * Retrieves a datastore property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
+ *             and localKBPath, to customize the MSBuild execution.
+ * @param propertyName The name of the datastore property to retrieve.
+ * @param dataStoreName The name of the datastore.
+ * @return The value of the specified datastore property.
+ *
+ * This method generates a properties file using a provided MSBuild template and then
+ * executes MSBuild to obtain the requested datastore property value. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+String getDataStoreProperty(Map args = [:], String propertyName, String dataStoreName) {
+    try {
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        def propsFile = "${WORKSPACE}\\DStoreProperty.json"
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:DataStoreName="${dataStoreName}" \
+            /p:PropertyName="${propertyName}" \
+            /p:propFileAbsolutePath="${propsFile}" \
+            /p:helperName="aux" \
+            /t:GetDataStoreProperty
+        """
+        def commiteableGenPropValue = readJSON file: propsFile
+        echo "[READ] DataStore property `${objPropName}` = ${commiteableGenPropValue.aux}"
+        return commiteableGenPropValue.aux
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Sets a datastore property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
+ *             and localKBPath, to customize the MSBuild execution.
+ * @param propertyName The name of the datastore property to set.
+ * @param propertyValue The value to assign to the specified datastore property.
+ * @param dataStoreName The name of the datastore.
+ *
+ * This method generates a properties file using a provided MSBuild template. It then
+ * executes MSBuild to set the value of the specified datastore property. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+void setDataStoreProperty(Map args = [:], String propertyName, String propertyValue, String dataStoreName) {
+    try {
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:DataStoreName="${dataStoreName}" \
+            /p:PropertyName="${propertyName}" \
+            /p:PropertyValue="${propertyValue}" \
+            /t:SetDataStoreProperty
+        """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Resets a datastore property using the MSBuild command.
+ *
+ * @param args A map containing optional parameters, such as msbuildExePath, gxBasePath,
+ *             and localKBPath, to customize the MSBuild execution.
+ * @param propertyName The name of the datastore property to reset.
+ * @param dataStoreName The name of the datastore.
+ *
+ * This method generates a properties file using a provided MSBuild template. It then
+ * executes MSBuild to reset the value of the specified datastore property. The properties file
+ * is used to store temporary values during the execution of the MSBuild command.
+ *
+ */
+void resetDataStoreProperty(Map args = [:], String propertyName, String dataStoreName) {
+    try {
+        if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
+            def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
+            writeFile file: 'properties.msbuild', text: fileContents
+        }
+        bat script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:DataStoreName="${dataStoreName}" \
+            /p:PropertyName="${propertyName}" \
+            /t:ResetDataStoreProperty
+        """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
 
 /**
  * Sets GAM properties using the MSBuild command.
