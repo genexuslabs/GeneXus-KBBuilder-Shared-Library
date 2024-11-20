@@ -45,6 +45,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".Net Application Namespace", "GXflow.Programs")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             
             buildConfigurationEnvironment(envArgs)
 
@@ -187,6 +188,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "compiler_options", "-J-Xms1024m -J-Xmx2048m -O -source 1.8 -target 1.8")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "Java platform support", "Both Platforms")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             
             buildConfigurationEnvironment(envArgs)
 
@@ -329,6 +331,7 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".net_application_namespace", "GXflow.Programs")                    
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             
             buildConfigurationEnvironment(envArgs)
 
