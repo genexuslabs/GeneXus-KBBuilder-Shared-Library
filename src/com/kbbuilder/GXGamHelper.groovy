@@ -14,23 +14,29 @@ void completePlatformIntegration(Map envArgs = [:]) {
         echo "INFO targetPath:: ${envArgs.targetPath}"
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
-            // ----------------------------- Clean target path
-            powershell script: """
-                \$ErrorActionPreference = 'Stop'
-                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
-                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin" -ItemType Directory
-                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib" -ItemType Directory
-            """
-            //----------------------------- Mark DB Reorganized
-            markDBReorganized(envArgs)
-            //----------------------------- Apply ExternalObjectGenerator Pattern
-            envArgs.patternName = "ExternalObjectGenerator"
-            applyPattern(envArgs)
-            //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
-            buildConfigurationEnvironment(envArgs)
+            // // // // ----------------------------- Clean target path
+            // // // powershell script: """
+            // // //     \$ErrorActionPreference = 'Stop'
+            // // //     if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
+            // // //     \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin" -ItemType Directory
+            // // //     \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\lib" -ItemType Directory
+            // // // """
+            // // // //----------------------------- Mark DB Reorganized
+            // // // markDBReorganized(envArgs)
+            // // // //----------------------------- Apply ExternalObjectGenerator Pattern
+            // // // envArgs.patternName = "ExternalObjectGenerator"
+            // // // applyPattern(envArgs)
+            // // // //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
+            // // // buildConfigurationEnvironment(envArgs)
         }
         stage("Package Platform ${envArgs.targetPath}") {
             envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
+            // ----------------------------- Clean deployTarget
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
+            """
             // ----------------------------- Package Patform
             bat script: """
                     "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
@@ -190,7 +196,7 @@ String updateInitResources(Map args = [:]) {
         echo "INFO PackageTarget:: ${args.packageTarget}"
         echo "INFO GamAPIResourcesRepository:: ${args.gamAPIResourcesRepository}"
         echo "INFO ExtObjGeneratorName:: ${args.extObjGeneratorName}"
-        // ----------------------------- Clean daployTarget
+        // ----------------------------- Clean deployTarget
         powershell script: """
             \$ErrorActionPreference = 'Stop'
             if (Test-Path -Path "${args.deployTarget}") { Remove-Item -Path "${args.deployTarget}" -Recurse -Force }
