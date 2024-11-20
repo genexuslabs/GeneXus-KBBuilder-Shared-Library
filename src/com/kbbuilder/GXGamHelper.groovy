@@ -79,7 +79,7 @@ void completePlatformIntegration(Map envArgs = [:]) {
         }
 
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
-        if(envArgs.generatedLanguage = 'Net') {
+        if(envArgs.generatedLanguage == 'Net') {
             ret = ret.replace("Net", "CSharp")
         }
         return ret.replace("GAM","Gam")
