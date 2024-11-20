@@ -77,7 +77,12 @@ void completePlatformIntegration(Map envArgs = [:]) {
                 Expand-Archive -Path "${envArgs.deployTarget}\\${envArgs.packageName.trim()}.zip" -DestinationPath "${envArgs.gxBasePath}" -Force 
             """
         }
-        return "${envArgs.componentId}.${envArgs.packageName}"
+
+        def ret = "${envArgs.componentId}.${envArgs.packageName}"
+        if(envArgs.generatedLanguage = 'Net') {
+            ret = ret.replace("Net", "CSharp")
+        }
+        return ret.replace("GAM","Gam")
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
