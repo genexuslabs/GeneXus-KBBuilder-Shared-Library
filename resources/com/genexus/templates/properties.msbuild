@@ -178,6 +178,7 @@
 
     <Target Name="GetDataStoreProperty">
         <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <Delete Condition="Exists($(propFileAbsolutePath))" Files="$(propFileAbsolutePath)" />
         <WriteLinesToFile File="$(propFileAbsolutePath)" Lines="{" />
         <GetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)">
@@ -189,11 +190,17 @@
     </Target>
 
     <Target Name="SetDataStoreProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <SetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)" Value="$(PropertyValue)" />
+        <CloseKnowledgeBase/>
     </Target>
 
     <Target Name="ResetDataStoreProperty">
+        <OpenKnowledgeBase Directory="$(localKbPath)" />
+        <SetActiveEnvironment EnvironmentName="$(environmentName)" />
         <ResetDataStoreProperty Datastore="$(DataStoreName)" Name="$(PropertyName)"/>
+        <CloseKnowledgeBase/>
     </Target>
 
     <Target Name="SetGAMProperties">
