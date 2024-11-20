@@ -51,27 +51,80 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             bat label: 'Create connection.gam',
                 script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
         }
+        stage("Make DB Schema Dynamic") {
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:KBEnvironment="${envArgs.environmentName}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /t:MakeDBSchemaDynamic
+            """
+        }
         stage("Package ENV:${envArgs.targetPath} Platform") {
+            // ----------------------------- Package Platform resources
+            envArgs.deployTarget = "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration"
+            powershell script: """
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration" -Recurse -Force }
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\IntegrationPipeline") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\IntegrationPipeline" -Recurse -Force }
+            """
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:KBEnvironment="${envArgs.environmentName}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
+                /t:PackageWorkflow
+            """
+            // ----------------------------- Create Package for DU:Client
             clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
             echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
-            deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
+            clientDuArgs.packageName = "WF${clientDuArgs.duName}.zip"
+            echo "INFO Package Name:: ${clientDuArgs.packageName}"
+            deployDirPath = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
+                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
+                Split-Path "${clientDuArgs.packageLocation}" -Parent
+            """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            packageName = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Leaf""", returnStdout: true
-            echo "INFO Package Name:: ${packageName}"
-            // dir("${deployDirPath.trim()}") {
-            //     TODO: Rename file to NetFW_client/Engine_BUILDNUM.zip
-            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
-            // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+            }
+            // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
             echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
-            deployDirPath = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Parent""", returnStdout: true
+            engineDuArgs.packageName = "WF${engineDuArgs.duName}.zip"
+            echo "INFO Package Name:: ${engineDuArgs.packageName}"
+            deployDirPath = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
+                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
+                Split-Path "${engineDuArgs.packageLocation}" -Parent
+            """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            packageName = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Leaf""", returnStdout: true
-            echo "INFO Package Name:: ${packageName}"
-            // dir("${deployDirPath.trim()}") {
-            //     TODO: Rename file to NetFW_client/Engine_BUILDNUM.zip
-            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
-            // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+            }
+            // ----------------------------- Zip package
+            envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
+            powershell script: """
+                & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
+            """
+            // ----------------------------- Create NuGet package
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
+            envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            envArgs.packageVersion = envArgs.componentVersion
+            envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -262,27 +315,80 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             bat label: 'Create connection.gam',
                 script: "echo > \"${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\connection.gam\""
         }
+        stage("Make DB Schema Dynamic") {
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:KBEnvironment="${envArgs.environmentName}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /t:MakeDBSchemaDynamic
+            """
+        }
         stage("Package ENV:${envArgs.targetPath} Platform") {
+            // ----------------------------- Package Platform resources
+            envArgs.deployTarget = "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration"
+            powershell script: """
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration" -Recurse -Force }
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\IntegrationPipeline") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\IntegrationPipeline" -Recurse -Force }
+            """
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:KBEnvironment="${envArgs.environmentName}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
+                /t:PackageWorkflow
+            """
+            // ----------------------------- Create Package for DU:Client
             clientDuArgs.packageLocation = packageLocalDU(clientDuArgs)
             echo "INFO DU Package Location:: ${clientDuArgs.packageLocation}"
-            deployDirPath = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Parent""", returnStdout: true
+            clientDuArgs.packageName = "WF${clientDuArgs.duName}.zip"
+            echo "INFO Package Name:: ${clientDuArgs.packageName}"
+            deployDirPath = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
+                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
+                Split-Path "${clientDuArgs.packageLocation}" -Parent
+            """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            packageName = powershell script: """Split-Path "${clientDuArgs.packageLocation}" -Leaf""", returnStdout: true
-            echo "INFO Package Name:: ${packageName}"
-            // dir("${deployDirPath.trim()}") {
-            //     TODO: Rename file to Net_client/Engine_BUILDNUM.zip
-            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
-            // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+            }
+            // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
             echo "INFO DU Package Location:: ${engineDuArgs.packageLocation}"
-            deployDirPath = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Parent""", returnStdout: true
+            engineDuArgs.packageName = "WF${engineDuArgs.duName}.zip"
+            echo "INFO Package Name:: ${engineDuArgs.packageName}"
+            deployDirPath = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
+                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
+                Split-Path "${engineDuArgs.packageLocation}" -Parent
+            """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
-            packageName = powershell script: """Split-Path "${engineDuArgs.packageLocation}" -Leaf""", returnStdout: true
-            echo "INFO Package Name:: ${packageName}"
-            // dir("${deployDirPath.trim()}") {
-            //     TODO: Rename file to Net_client/Engine_BUILDNUM.zip
-            //     archiveArtifacts artifacts: "${packageName.trim()}", followSymlinks: false
-            // }
+            dir("${deployDirPath.trim()}") {
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+            }
+            // ----------------------------- Zip package
+            envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
+            powershell script: """
+                & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
+            """
+            // ----------------------------- Create NuGet package
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
+            envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            envArgs.packageVersion = envArgs.componentVersion
+            envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
 
     } catch (error) {
