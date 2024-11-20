@@ -44,7 +44,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             kbLibHelper.setEnvironmentProperty(envArgs, "html_document_type", "HTML5")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema")
-            kbLibHelper.setGeneratorProperty(envArgs, "Default", ".Net Application Namespace", "QueryViewer.Services")                    
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", ".Net Application Namespace", "GXflow.Programs")
             
             buildConfigurationEnvironment(envArgs)
 
@@ -185,7 +185,6 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "java package name", "com.gxflow")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "generate prompt programs", "No")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "compiler_options", "-J-Xms1024m -J-Xmx2048m -O -source 1.8 -target 1.8")
-            kbLibHelper.setGeneratorProperty(envArgs, "Default", "java package name", "com.gxflow")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "Java platform support", "Both Platforms")
             
