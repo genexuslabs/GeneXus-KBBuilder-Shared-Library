@@ -448,6 +448,7 @@ String getDataStoreProperty(Map args = [:], String dataStoreName, String propert
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
             /p:DataStoreName="${dataStoreName}" \
             /p:PropertyName="${propertyName}" \
             /p:propFileAbsolutePath="${propsFile}" \
@@ -487,6 +488,7 @@ void setDataStoreProperty(Map args = [:], String dataStoreName, String propertyN
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
             /p:DataStoreName="${dataStoreName}" \
             /p:PropertyName="${propertyName}" \
             /p:PropertyValue="${propertyValue}" \
@@ -521,6 +523,7 @@ void resetDataStoreProperty(Map args = [:], String dataStoreName, String propert
             "${args.msbuildExePath}" "${WORKSPACE}\\properties.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
+            /p:environmentName="${args.environmentName}" \
             /p:DataStoreName="${dataStoreName}" \
             /p:PropertyName="${propertyName}" \
             /t:ResetDataStoreProperty
