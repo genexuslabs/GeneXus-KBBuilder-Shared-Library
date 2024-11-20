@@ -8,6 +8,7 @@ import com.genexus.GXDeployEngineHelper
 String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
         def kbLibHelper = new PropertiesHelper()
+        def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
         echo "INFO generatedLanguage:: ${envArgs.generatedLanguage}"
         echo "INFO dataSource:: ${envArgs.dataSource}"
@@ -111,6 +112,16 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             dir("${deployDirPath.trim()}") {
                 archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
             }
+            // ----------------------------- Generate files extra from WFClient n WFEngine local package
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
+                /t:GenerateGXDeployDescriptor
+            """
             // ----------------------------- Zip package
             envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
             powershell script: """
@@ -244,6 +255,16 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             dir("${deployDirPath.trim()}") {
                 archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
             }
+            // ----------------------------- Generate files extra from WFClient n WFEngine local package
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
+                /t:GenerateGXDeployDescriptor
+            """
             // ----------------------------- Zip package
             envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
             powershell script: """
@@ -272,6 +293,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
 void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
         def kbLibHelper = new PropertiesHelper()
+        def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
         echo "INFO generatedLanguage:: ${envArgs.generatedLanguage}"
         echo "INFO dataSource:: ${envArgs.dataSource}"
@@ -375,6 +397,16 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             dir("${deployDirPath.trim()}") {
                 archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
             }
+            // ----------------------------- Generate files extra from WFClient n WFEngine local package
+            bat script: """
+                "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.msbuildDeployFile}" \
+                /p:GXInstall="${envArgs.gxBasePath}" \
+                /p:KBFolder="${envArgs.localKBPath}" \
+                /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:KBEnvironmentPath="${envArgs.targetPath}" \
+                /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
+                /t:GenerateGXDeployDescriptor
+            """
             // ----------------------------- Zip package
             envArgs.packageName = "Platform.${envArgs.generatedLanguage}${envArgs.dataSource}.zip"
             powershell script: """
