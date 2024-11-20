@@ -437,7 +437,7 @@ void resetVersionProperty(Map args = [:], String verPropName) {
  * is used to store temporary values during the execution of the MSBuild command.
  *
  */
-String getDataStoreProperty(Map args = [:], String propertyName, String dataStoreName) {
+String getDataStoreProperty(Map args = [:], String dataStoreName, String propertyName) {
     try {
         if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
@@ -477,7 +477,7 @@ String getDataStoreProperty(Map args = [:], String propertyName, String dataStor
  * is used to store temporary values during the execution of the MSBuild command.
  *
  */
-void setDataStoreProperty(Map args = [:], String propertyName, String propertyValue, String dataStoreName) {
+void setDataStoreProperty(Map args = [:], String dataStoreName, String propertyName, String propertyValue) {
     try {
         if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
@@ -511,7 +511,7 @@ void setDataStoreProperty(Map args = [:], String propertyName, String propertyVa
  * is used to store temporary values during the execution of the MSBuild command.
  *
  */
-void resetDataStoreProperty(Map args = [:], String propertyName, String dataStoreName) {
+void resetDataStoreProperty(Map args = [:], String dataStoreName, String propertyName) {
     try {
         if (!fileExists("${WORKSPACE}\\properties.msbuild")) {
             def fileContents = libraryResource 'com/genexus/templates/properties.msbuild'
