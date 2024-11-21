@@ -91,12 +91,12 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
-                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
+                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
@@ -106,12 +106,12 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
-                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
+                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Generate files extra from WFClient n WFEngine local package
             bat script: """
@@ -234,12 +234,12 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
-                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
+                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
@@ -249,12 +249,12 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
-                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
+                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Generate files extra from WFClient n WFEngine local package
             bat script: """
@@ -377,12 +377,12 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${clientDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${clientDuArgs.targetPath}\\${clientDuArgs.packageName}"
-                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}" -Force
+                Rename-Item -Path "${clientDuArgs.packageLocation}" -NewName "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${clientDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${clientDuArgs.targetPath}_${clientDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Create Package for DU:Engine
             engineDuArgs.packageLocation = packageLocalDU(engineDuArgs)
@@ -392,12 +392,12 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             deployDirPath = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Copy-Item -Path "${engineDuArgs.packageLocation}" "${envArgs.deployTarget}\\Packages\\GXPM\\Platforms\\${engineDuArgs.targetPath}\\${engineDuArgs.packageName}"
-                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}" -Force
+                Rename-Item -Path "${engineDuArgs.packageLocation}" -NewName "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}" -Force
                 Split-Path "${engineDuArgs.packageLocation}" -Parent
             """, returnStdout: true
             echo "INFO Deploy Dir Path:: ${deployDirPath}"
             dir("${deployDirPath.trim()}") {
-                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}", followSymlinks: false
+                archiveArtifacts artifacts: "${engineDuArgs.targetPath}_${engineDuArgs.packageName}_${env.BUILD_NUMBER}", followSymlinks: false
             }
             // ----------------------------- Generate files extra from WFClient n WFEngine local package
             bat script: """
