@@ -52,7 +52,6 @@ def getRepositoryChanges() {
     return changes 
 }
 
-@NonCPS
 def getChanges(int source) {
     // 0: All
     // 1: Only GxServer Knowledge Base
