@@ -52,33 +52,19 @@ def getRepositoryChanges() {
     return changes 
 }
 
-@NonCPS
-def getKnowledgeBaseChanges() {
+def getChanges(int source) {
+    // 0: All
+    // 1: Only GxServer Knowledge Base
+    // 2: Only Git
     List<Map<String, Object>> changes = []
 
     try {
         def changeLogSets = currentBuild.changeSets
-        if (changeLogSets.size() != 0) { 
+        if (changeLogSets.size() != 0) {
             for (def entry in changeLogSets) {
-                if (entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet) {
-                    for (def revision in entry.items) {
-                        def date = new Date(revision.timestamp).toString()
-                        def filesCount = revision.affectedFiles.size()
-
-                        List<String> modifiedFiles = []
-                        for (file2 in revision.affectedFiles) {
-                            modifiedFiles << file2.path
-                        }
-
-                        changes << [
-                            commitId     : revision.commitId.toString(),
-                            date         : date,
-                            author       : revision.author.toString(),
-                            message      : revision.msg.toString(),
-                            filesCount   : filesCount,
-                            modifiedFiles: modifiedFiles
-                        ]
-                    }
+                if ((entry instanceof org.jenkinsci.plugins.genexus.server.GXSChangeLogSet && (source == 1 || source == 0)) || 
+                    (entry instanceof hudson.plugins.git.GitChangeSetList && (source == 2 || source == 0))) {
+                    processRevisions(entry.items, changes)
                 }
             }
         } else {
@@ -89,7 +75,28 @@ def getKnowledgeBaseChanges() {
         throw error
     }
 
-    return changes 
+    return changes
+}
+
+def processRevisions(items, changes) {
+    for (def revision in items) {
+        def date = new Date(revision.timestamp).toString()
+        def filesCount = revision.affectedFiles.size()
+
+        List<String> modifiedFiles = []
+        for (file2 in revision.affectedFiles) {
+            modifiedFiles << file2.path
+        }
+
+        changes << [
+            commitId     : revision.commitId.toString(),
+            date         : date,
+            author       : revision.author.toString(),
+            message      : revision.msg.toString(),
+            filesCount   : filesCount,
+            modifiedFiles: modifiedFiles
+        ]
+    }
 }
 
 def getAllKnowledgeBaseMessages() {
