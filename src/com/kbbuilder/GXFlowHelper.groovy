@@ -138,6 +138,9 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
             envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
+        
+        def ret = "${envArgs.componentId}.${envArgs.packageName}"
+        return ret
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -147,7 +150,7 @@ String updatePlatformNetFW(Map envArgs = [:], Map clientDuArgs = [:], Map engine
 /**
  *  
  */
-void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
+String updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
@@ -281,6 +284,8 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
             envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
+        def ret = "${envArgs.componentId}.${envArgs.packageName}"
+        return ret
 
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -291,7 +296,7 @@ void updatePlatformJava(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuA
 /**
  *
  */
-void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
+String updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
@@ -424,6 +429,8 @@ void updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuAr
             envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
+        def ret = "${envArgs.componentId}.${envArgs.packageName}"
+        return ret
 
     } catch (error) {
         currentBuild.result = 'FAILURE'
