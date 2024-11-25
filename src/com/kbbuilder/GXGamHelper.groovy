@@ -120,65 +120,66 @@ void completeJavaPlatformIntegration(Map envArgs = [:]) {
             powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 Write-Output((Get-Date -Format G) + " [INFO] Sync ExternalObjectGenerator .java objs")
+                Copy-Item -Path "${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}\\genexus\\security\\GAMSecurityProvider.java" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\GAMSecurityProvider.java" -Force -Recurse
                 Copy-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\*java" -Destination "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\src\\main\\java\\genexus\\security\\" -Force -Recurse
             """
             //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
-            // buildConfigurationEnvironment(envArgs)
+            buildConfigurationEnvironment(envArgs)
         }
-        // stage("Package Platform ${envArgs.targetPath}") {
-        //     envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
-        //     ----------------------------- Clean deployTarget
-        //     powershell script: """
-        //         \$ErrorActionPreference = 'Stop'
-        //         if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
-        //         \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
-        //     """
-        //     ----------------------------- Package Patform
-        //     bat script: """
-        //             "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
-        //             /p:GX_PROGRAM_DIR="${envArgs.gxBasePath}" \
-        //             /p:KBGAMDirectory="${envArgs.localKBPath}" \
-        //             /p:KBEnvironment="${envArgs.environmentName}" \
-        //             /p:Generator="${envArgs.generatedLanguage}" \
-        //             /p:DBMS="${envArgs.dataSource}" \
-        //             /p:GenerateLibraryPath="${envArgs.deployTarget}" \
-        //             /p:PackagerResources="${envArgs.packagerResourcesDirPath}" \
-        //             /p:SolutionPath="${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}" \
-        //             /t:${envArgs.packageTarget}
-        //     """
-        //     ----------------------------- Rename package for nuget
-        //     envArgs.packageName = powershell script: """
-        //         \$ErrorActionPreference = 'Stop'
-        //         \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
-        //         \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
-        //         Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
-        //         (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
-        //     """, returnStdout: true
-        //     echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
-        //     envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
-        //     echo "[INFO] Package Location:: ${envArgs.packageLocation}"
-        //     ----------------------------- Archive artifacts
-        //     dir("${envArgs.deployTarget}") {
-        //         archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
-        //     }
-        //     ----------------------------- Create NuGet package
-        //     envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
-        //     envArgs.packageVersion = envArgs.componentVersion
-        //     envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+        stage("Package Platform ${envArgs.targetPath}") {
+            envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
+            ----------------------------- Clean deployTarget
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
+            """
+            ----------------------------- Package Patform
+            bat script: """
+                    "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
+                    /p:GX_PROGRAM_DIR="${envArgs.gxBasePath}" \
+                    /p:KBGAMDirectory="${envArgs.localKBPath}" \
+                    /p:KBEnvironment="${envArgs.environmentName}" \
+                    /p:Generator="${envArgs.generatedLanguage}" \
+                    /p:DBMS="${envArgs.dataSource}" \
+                    /p:GenerateLibraryPath="${envArgs.deployTarget}" \
+                    /p:PackagerResources="${envArgs.packagerResourcesDirPath}" \
+                    /p:SolutionPath="${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}" \
+                    /t:${envArgs.packageTarget}
+            """
+            ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+            ----------------------------- Create NuGet package
+            envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            envArgs.packageVersion = envArgs.componentVersion
+            envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
 
-        //     ----------------------------- Publish NuGet package
-        //     envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
-        //     gxLibDeployEngine.publishNuGetPackage(envArgs)
-        // }
-        // stage("Update Platform ${envArgs.targetPath}") {
-        //     ----------------------------- Update Platform package in GeneXus Installation
-        //     powershell script: """
-        //         \$platformDir = "${envArgs.gxBasePath}\\Library\\GAM\\Platforms\\${envArgs.platformDirectory}"
-        //         Get-ChildItem -Path \$platformDir -File | Where-Object { \$_.Name -ne 'ReorganizationScript.txt' -and \$_.Name -ne 'reorganization.jar' } | Remove-Item -Force
-        //         Get-ChildItem -Path \$platformDir -Directory | Where-Object { \$_.Name -ne 'Reorgs' } | Remove-Item -Recurse -Force
-        //         Expand-Archive -Path "${envArgs.deployTarget}\\${envArgs.packageName.trim()}.zip" -DestinationPath "${envArgs.gxBasePath}" -Force 
-        //     """
-        // }
+            ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
+        }
+        stage("Update Platform ${envArgs.targetPath}") {
+            ----------------------------- Update Platform package in GeneXus Installation
+            powershell script: """
+                \$platformDir = "${envArgs.gxBasePath}\\Library\\GAM\\Platforms\\${envArgs.platformDirectory}"
+                Get-ChildItem -Path \$platformDir -File | Where-Object { \$_.Name -ne 'ReorganizationScript.txt' -and \$_.Name -ne 'reorganization.jar' } | Remove-Item -Force
+                Get-ChildItem -Path \$platformDir -Directory | Where-Object { \$_.Name -ne 'Reorgs' } | Remove-Item -Recurse -Force
+                Expand-Archive -Path "${envArgs.deployTarget}\\${envArgs.packageName.trim()}.zip" -DestinationPath "${envArgs.gxBasePath}" -Force 
+            """
+        }
 
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         if(envArgs.generatedLanguage == 'Net') {
