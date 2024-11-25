@@ -128,13 +128,13 @@ void completeJavaPlatformIntegration(Map envArgs = [:]) {
         }
         stage("Package Platform ${envArgs.targetPath}") {
             envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
-            ----------------------------- Clean deployTarget
+            // ----------------------------- Clean deployTarget
             powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
                 \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
             """
-            ----------------------------- Package Patform
+            // ----------------------------- Package Patform
             bat script: """
                     "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
                     /p:GX_PROGRAM_DIR="${envArgs.gxBasePath}" \
@@ -147,7 +147,7 @@ void completeJavaPlatformIntegration(Map envArgs = [:]) {
                     /p:SolutionPath="${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}" \
                     /t:${envArgs.packageTarget}
             """
-            ----------------------------- Rename package for nuget
+            // ----------------------------- Rename package for nuget
             envArgs.packageName = powershell script: """
                 \$ErrorActionPreference = 'Stop'
                 \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
@@ -158,21 +158,21 @@ void completeJavaPlatformIntegration(Map envArgs = [:]) {
             echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
             envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
             echo "[INFO] Package Location:: ${envArgs.packageLocation}"
-            ----------------------------- Archive artifacts
+            // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
                 archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
             }
-            ----------------------------- Create NuGet package
+            // ----------------------------- Create NuGet package
             envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
             envArgs.packageVersion = envArgs.componentVersion
             envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
 
-            ----------------------------- Publish NuGet package
+            // ----------------------------- Publish NuGet package
             envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
         stage("Update Platform ${envArgs.targetPath}") {
-            ----------------------------- Update Platform package in GeneXus Installation
+            // ----------------------------- Update Platform package in GeneXus Installation
             powershell script: """
                 \$platformDir = "${envArgs.gxBasePath}\\Library\\GAM\\Platforms\\${envArgs.platformDirectory}"
                 Get-ChildItem -Path \$platformDir -File | Where-Object { \$_.Name -ne 'ReorganizationScript.txt' -and \$_.Name -ne 'reorganization.jar' } | Remove-Item -Force
