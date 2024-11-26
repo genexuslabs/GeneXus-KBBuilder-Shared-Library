@@ -264,16 +264,17 @@ String standarizeVersion(String version, String label, int position){
  * const version3 = standarizeVersionForSemVer("1.3.5", "88", "", 100); // Returns "101.3.88"
  */
 String standarizeVersionForSemVer(String version, String buildNumber, String label, int majorOffset = 0) {
+    def sanitizedLabel = label == null ? "" : label // Ensure label is an empty string if null
     def standarizedVersion = powershell label: "Define a SemVer expression with the BuildNumber",
             script: """
                 \$versionParts = "${version}".Split('.')
                 \$majorVersion = [int]\$versionParts[0]
-                if ([string]::IsNullOrEmpty("${label}")) {
+                if ([string]::IsNullOrEmpty("${sanitizedLabel}")) {
                     \$majorVersion += ${majorOffset}
                 }
                 \$minorVersion = [int]\$versionParts[1]
-                if (-not [string]::IsNullOrEmpty("${label}")) {
-                    \$buildVer = "0-${label}.${buildNumber}"
+                if (-not [string]::IsNullOrEmpty("${sanitizedLabel}")) {
+                    \$buildVer = "0-${sanitizedLabel}.${buildNumber}"
                 }
                 else {
                     \$buildVer = "${buildNumber}"
