@@ -416,6 +416,7 @@ String updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDu
                 /p:GXInstall="${envArgs.gxBasePath}" \
                 /p:KBFolder="${envArgs.localKBPath}" \
                 /p:TargetLanguage="${envArgs.generatedLanguage}" \
+                /p:TargetDbms="${envArgs.dataSource}" \
                 /p:KBEnvironmentPath="${envArgs.targetPath}" \
                 /p:OutputPath="${envArgs.deployTarget}\\Packages\\GXPM" \
                 /t:GenerateGXDeployDescriptor
