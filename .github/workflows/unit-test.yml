@@ -1,4 +1,4 @@
-name: Unit Test
+name: Run All Tests
 
 on: [push, pull_request]
 
@@ -7,24 +7,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         distribution: temurin
         java-version: '17'
 
-    - name: Cache Gradle packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: ${{ runner.os }}-gradle
+    - name: Run All Tests
+      run: |
+        # Ensure the test directory is set up correctly
+        echo "Running all Groovy tests..."
+        
+        # Run all Groovy test files in the tests directory
+        for testFile in ./test/*.groovy; do
+            echo "Running $testFile..."
+            groovy "$testFile"
+        done
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
-    - name: Run unit tests
-      run: ./gradlew test
+        echo "All tests executed!"
