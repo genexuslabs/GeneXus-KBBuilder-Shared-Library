@@ -27,8 +27,8 @@ jobs:
         # Ensure the test directory is set up correctly
         echo "Running all Groovy tests..."
         
-        # Run all Groovy test files in the tests directory
-        for testFile in ./test/*.groovy; do
+        # Run all Groovy test files in the 'test' directory
+        find ./test -name '*.groovy' | while read testFile; do
             echo "Running $testFile..."
             groovy "$testFile"
         done
