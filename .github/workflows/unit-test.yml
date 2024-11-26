@@ -28,6 +28,7 @@ jobs:
     - name: Compile Groovy Classes
       run: |
         # Compile the Groovy classes
+        source "$HOME/.sdkman/bin/sdkman-init.sh"  
         groovyc -d ./bin ./src/com/genexus/*.groovy
         
     - name: Run All Tests
