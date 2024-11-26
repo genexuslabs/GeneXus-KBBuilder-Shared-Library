@@ -21,16 +21,16 @@ jobs:
         curl -s "https://get.sdkman.io" | bash
         source "$HOME/.sdkman/bin/sdkman-init.sh"
         sdk install groovy
+        source "$HOME/.sdkman/bin/sdkman-init.sh" && groovy -version  # Verify installation
 
     - name: Run All Tests
       run: |
         # Ensure the test directory is set up correctly
         echo "Running all Groovy tests..."
-        
+        source "$HOME/.sdkman/bin/sdkman-init.sh"  # Ensure SDKMAN! is sourced
         # Run all Groovy test files in the 'test' directory
         find ./test -name '*.groovy' | while read testFile; do
             echo "Running $testFile..."
             groovy "$testFile"
         done
-
         echo "All tests executed!"
