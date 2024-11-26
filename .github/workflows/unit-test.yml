@@ -23,6 +23,11 @@ jobs:
         sdk install groovy
         source "$HOME/.sdkman/bin/sdkman-init.sh" && groovy -version  # Verify installation
 
+    - name: Compile Groovy Classes
+      run: |
+        # Compile the Groovy classes
+        groovyc -d ./bin ./src/com/genexus/*.groovy
+        
     - name: Run All Tests
       run: |
         # Ensure the test directory is set up correctly
@@ -31,6 +36,6 @@ jobs:
         # Run all Groovy test files in the 'test' directory
         find ./test -name '*.groovy' | while read testFile; do
             echo "Running $testFile..."
-            groovy "$testFile"
+            groovy -cp ./bin "$testFile"
         done
         echo "All tests executed!"
