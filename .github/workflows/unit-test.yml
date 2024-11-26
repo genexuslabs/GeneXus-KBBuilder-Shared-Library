@@ -16,6 +16,12 @@ jobs:
         distribution: temurin
         java-version: '17'
 
+   - name: Install Groovy
+      run: |
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install groovy
+
     - name: Run All Tests
       run: |
         # Ensure the test directory is set up correctly
