@@ -29,7 +29,7 @@ jobs:
       run: |
         # Compile the Groovy classes
         source "$HOME/.sdkman/bin/sdkman-init.sh"  
-        groovyc -d ./bin ./src/com/genexus/*.groovy
+        groovyc -d ./bin ./src/com/genexus/FileHelper.groovy
         
     - name: Run All Tests
       run: |
