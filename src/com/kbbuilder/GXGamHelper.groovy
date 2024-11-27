@@ -392,6 +392,7 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -506,6 +507,7 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -620,9 +622,9 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
         }
         stage("Build Platform ${envArgs.targetPath}") {
-            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
             // ----------------------------- Clean target path
             powershell script: """
