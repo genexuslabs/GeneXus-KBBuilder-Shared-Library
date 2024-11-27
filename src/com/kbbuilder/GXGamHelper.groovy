@@ -369,7 +369,7 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         
-        stage("Prepare ENV:${envArgs.targetPath}") {
+        stage("Prepare ENV") {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
