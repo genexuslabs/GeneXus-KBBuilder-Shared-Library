@@ -349,31 +349,27 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Oracle
+        // -------------------------- Net Framework - Oracle
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - Postgre
+        // -------------------------- Net Framework - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - DB2 Common
+        // -------------------------- Net Framework - DB2 Common
         envArgs.dataSource = 'db2common'
         envArgs.dbmsModelConst = 'DB2Common'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - DB2 ISeries
+        // -------------------------- Net Framework - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
         envArgs.dbmsModelConst = 'AS400'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - Informix
+        // -------------------------- Net Framework - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Java - SAP Hana
+        // -------------------------- Net Framework - SAP Hana
         envArgs.dataSource = 'SAPHana'
         envArgs.dbmsModelConst = 'HANA'
         buildNoStandardNetFWPlatform(envArgs)
@@ -464,31 +460,27 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Oracle
+        // -------------------------- Net - Oracle
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - Postgre
+        // -------------------------- Net - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - DB2 Common
+        // -------------------------- Net - DB2 Common
         envArgs.dataSource = 'db2common'
         envArgs.dbmsModelConst = 'DB2Common'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - DB2 ISeries
+        // -------------------------- Net - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
         envArgs.dbmsModelConst = 'AS400'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - Informix
+        // -------------------------- Net - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Java - SAP Hana
+        // -------------------------- Net - SAP Hana
         envArgs.dataSource = 'SAPHana'
         envArgs.dbmsModelConst = 'HANA'
         buildNoStandardNetPlatform(envArgs)
