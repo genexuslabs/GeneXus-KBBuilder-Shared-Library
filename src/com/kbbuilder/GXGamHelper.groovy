@@ -347,22 +347,269 @@ String updateInitResources(Map args = [:]) {
 }
 
 
-void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
+void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
         // -------------------------- Java - Oracle
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Postgres
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardJavaPlatform(envArgs)
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - Dameng
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'db2common'
+        envArgs.dbmsModelConst = 'DB2Common'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'db2IServies'
+        envArgs.dbmsModelConst = 'AS400'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Java - SAP Hana
+        envArgs.dataSource = 'SAPHana'
+        envArgs.dbmsModelConst = 'HANA'
+        buildNoStandardNetFWPlatform(envArgs)
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
+    try{
+        def sysLibHelper = new FileHelper()
+        def kbLibHelper = new PropertiesHelper()
+        def gxLibDeployEngine = new GXDeployEngineHelper()
+
+        stage("Prepare ENV") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+        }
+        stage("Build Platform ${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
+            // ----------------------------- Clean target path
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin" -ItemType Directory
+            """
+            //----------------------------- Mark DB Reorganized
+            markDBReorganized(envArgs)
+            //----------------------------- Apply ExternalObjectGenerator Pattern
+            envArgs.patternName = "ExternalObjectGenerator"
+            applyPattern(envArgs)
+            //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
+            buildConfigurationEnvironment(envArgs)
+        }
+        stage("Package Platform ${envArgs.targetPath}") {
+            envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
+            // ----------------------------- Clean deployTarget
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
+            """
+            // ----------------------------- Package Patform
+            bat script: """
+                    "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
+                    /p:GX_PROGRAM_DIR="${envArgs.gxBasePath}" \
+                    /p:KBGAMDirectory="${envArgs.localKBPath}" \
+                    /p:KBEnvironment="${envArgs.environmentName}" \
+                    /p:Generator="${envArgs.generatedLanguage}" \
+                    /p:DBMS="${envArgs.dataSource}" \
+                    /p:GenerateLibraryPath="${envArgs.deployTarget}" \
+                    /p:PackagerResources="${envArgs.packagerResourcesDirPath}" \
+                    /p:SolutionPath="${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}" \
+                    /t:${envArgs.packageTarget}
+            """
+            // ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+        }
+        stage("Package Platform ${envArgs.targetPath}") {
+            // ----------------------------- Create NuGet package
+            envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            envArgs.packageVersion = envArgs.componentVersion
+            envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
+        }
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
     }
 }
 
+void buildNoStandardNetPlatforms(Map envArgs = [:]) {
+    try {
+        // -------------------------- Java - Oracle
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - Dameng
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'db2common'
+        envArgs.dbmsModelConst = 'DB2Common'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'db2IServies'
+        envArgs.dbmsModelConst = 'AS400'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Java - SAP Hana
+        envArgs.dataSource = 'SAPHana'
+        envArgs.dbmsModelConst = 'HANA'
+        buildNoStandardNetPlatform(envArgs)
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+void buildNoStandardNetPlatform(Map envArgs = [:]) {
+    try{
+        def sysLibHelper = new FileHelper()
+        def kbLibHelper = new PropertiesHelper()
+        def gxLibDeployEngine = new GXDeployEngineHelper()
+
+        stage("Prepare ENV") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+        }
+        stage("Build Platform ${envArgs.targetPath}") {
+            kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
+            // ----------------------------- Clean target path
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.localKBPath}\\${envArgs.targetPath}") { Remove-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.localKBPath}\\${envArgs.targetPath}\\web\\bin" -ItemType Directory
+            """
+            //----------------------------- Mark DB Reorganized
+            markDBReorganized(envArgs)
+            //----------------------------- Apply ExternalObjectGenerator Pattern
+            envArgs.patternName = "ExternalObjectGenerator"
+            applyPattern(envArgs)
+            //----------------------------- Build Configuration Environment (Configuration meens avoid configure database properties)
+            buildConfigurationEnvironment(envArgs)
+        }
+        stage("Package Platform ${envArgs.targetPath}") {
+            envArgs.deployTarget = sysLibHelper.getFullPath("${envArgs.localKBPath}\\${envArgs.targetPath}\\Integration").trim()
+            // ----------------------------- Clean deployTarget
+            powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                if (Test-Path -Path "${envArgs.deployTarget}") { Remove-Item -Path "${envArgs.deployTarget}" -Recurse -Force }
+                \$null = New-Item -Path "${envArgs.deployTarget}" -ItemType Directory
+            """
+            // ----------------------------- Package Patform
+            bat script: """
+                    "${envArgs.msbuildExePath}" "${envArgs.localKBPath}\\${envArgs.targetPath}\\Web\\${envArgs.packageAPIFile}" \
+                    /p:GX_PROGRAM_DIR="${envArgs.gxBasePath}" \
+                    /p:KBGAMDirectory="${envArgs.localKBPath}" \
+                    /p:KBEnvironment="${envArgs.environmentName}" \
+                    /p:Generator="${envArgs.generatedLanguage}" \
+                    /p:DBMS="${envArgs.dataSource}" \
+                    /p:GenerateLibraryPath="${envArgs.deployTarget}" \
+                    /p:PackagerResources="${envArgs.packagerResourcesDirPath}" \
+                    /p:SolutionPath="${WORKSPACE}\\${envArgs.gamAPIResourcesRepository}\\Solutions\\ExternalObject\\${envArgs.extObjGeneratorName}" \
+                    /t:${envArgs.packageTarget}
+            """
+            // ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+        }
+        stage("Package Platform ${envArgs.targetPath}") {
+            // ----------------------------- Create NuGet package
+            envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            envArgs.packageVersion = envArgs.componentVersion
+            envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
+    try {
+        // -------------------------- Java - Oracle
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Dameng
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'db2common'
+        envArgs.dbmsModelConst = 'DB2Common'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'db2IServies'
+        envArgs.dbmsModelConst = 'AS400'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - SAP Hana
+        envArgs.dataSource = 'SAPHana'
+        envArgs.dbmsModelConst = 'HANA'
+        buildNoStandardJavaPlatform(envArgs)
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
 void buildNoStandardJavaPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
@@ -373,9 +620,9 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
-            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
         }
         stage("Build Platform ${envArgs.targetPath}") {
+            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
             // ----------------------------- Clean target path
             powershell script: """
