@@ -474,6 +474,8 @@ void buildNoStandardJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map 
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+            clientDuArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+            engineDuArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath) 
             powershell script: """
                 \$ErrorActionPreference = 'Stop'
