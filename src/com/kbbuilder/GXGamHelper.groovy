@@ -352,11 +352,11 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         // -------------------------- Java - Oracle
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Postgres
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        buildNoStandardJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
