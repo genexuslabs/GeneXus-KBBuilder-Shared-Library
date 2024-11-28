@@ -350,16 +350,16 @@ String updateInitResources(Map args = [:]) {
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
         // -------------------------- Net Framework - Oracle 9
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle9'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardNetFWPlatform(envArgs)
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Oracle 11
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle12'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         buildNoStandardNetFWPlatform(envArgs)
@@ -471,16 +471,16 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
         // -------------------------- Net - Oracle 9
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle9'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardNetPlatform(envArgs)
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Oracle 11
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle12'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         buildNoStandardNetPlatform(envArgs)
@@ -592,27 +592,27 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
         // -------------------------- Java - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle9'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardJavaPlatform(envArgs)
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Oracle 12
-        envArgs.dataSource = 'Oracle'
+        envArgs.dataSource = 'Oracle12'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - DB2 Common
-        envArgs.dataSource = 'db2common'
-        envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardJavaPlatform(envArgs)
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - DB2 Common
+        // envArgs.dataSource = 'db2common'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
         envArgs.dbmsModelConst = 'DB2400'
