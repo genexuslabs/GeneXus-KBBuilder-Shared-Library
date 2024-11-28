@@ -349,31 +349,31 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net Framework - Oracle 9
-        envArgs.dataSource = 'Oracle9'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Oracle 11
-        envArgs.dataSource = 'Oracle12'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
+        // -------------------------- Net Framework - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - DB2 Common
-        envArgs.dataSource = 'db2common'
+        envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - DB2 ISeries
-        envArgs.dataSource = 'db2IServies'
-        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Oracle 9
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - SAP Hana
         envArgs.dataSource = 'SAPHana'
@@ -470,31 +470,31 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net - Oracle 9
-        envArgs.dataSource = 'Oracle9'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Oracle 11
-        envArgs.dataSource = 'Oracle12'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
+        // -------------------------- Net - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - DB2 Common
-        envArgs.dataSource = 'db2common'
+        envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - DB2 ISeries
-        envArgs.dataSource = 'db2IServies'
-        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Oracle 9
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - SAP Hana
         envArgs.dataSource = 'SAPHana'
@@ -591,35 +591,35 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Oracle 12
-        envArgs.dataSource = 'Oracle12'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Dameng
-        // envArgs.dataSource = 'Dameng'
-        // envArgs.dbmsModelConst = 'Dameng'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 Common
-        // envArgs.dataSource = 'db2common'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // buildNoStandardJavaPlatform(envArgs)
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - DB2 ISeries
-        envArgs.dataSource = 'db2IServies'
+        envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 12
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 9 to 11
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - SAP Hana
         envArgs.dataSource = 'SAPHana'
