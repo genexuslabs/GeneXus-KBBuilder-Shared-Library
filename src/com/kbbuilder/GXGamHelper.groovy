@@ -349,13 +349,19 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net Framework - Oracle
+        // -------------------------- Net Framework - Oracle 9
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - DB2 Common
         envArgs.dataSource = 'db2common'
@@ -389,6 +395,10 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+            if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
+            }            
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -460,13 +470,19 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net - Oracle
+        // -------------------------- Net - Oracle 9
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - DB2 Common
         envArgs.dataSource = 'db2common'
@@ -500,6 +516,10 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+            if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
+            }
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -571,13 +591,19 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Oracle
+        // -------------------------- Java - Oracle 9 to 11
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 12
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Dameng
         envArgs.dataSource = 'Dameng'
@@ -614,6 +640,10 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
+            }
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
         }
         stage("Build Platform ${envArgs.targetPath}") {
