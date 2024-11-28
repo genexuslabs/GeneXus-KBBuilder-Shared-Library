@@ -369,7 +369,7 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
-        envArgs.dbmsModelConst = 'AS400'
+        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Informix
         envArgs.dataSource = 'Informix'
@@ -490,7 +490,7 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
-        envArgs.dbmsModelConst = 'AS400'
+        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Informix
         envArgs.dataSource = 'Informix'
@@ -615,7 +615,7 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - DB2 ISeries
         envArgs.dataSource = 'db2IServies'
-        envArgs.dbmsModelConst = 'AS400'
+        envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Informix
         envArgs.dataSource = 'Informix'
