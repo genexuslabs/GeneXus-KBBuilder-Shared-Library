@@ -352,6 +352,8 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         // -------------------------- Net Framework - DB2 ISeries
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
         // // -------------------------- Net Framework - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
@@ -448,6 +450,11 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
             envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
             echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
                 archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
@@ -473,6 +480,8 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         // -------------------------- Net - DB2 ISeries
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
         buildNoStandardNetPlatform(envArgs)
         // // -------------------------- Net - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
@@ -569,6 +578,11 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
             echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
             envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
             echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
                 archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
@@ -594,6 +608,8 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         // -------------------------- Java - Dameng
         envArgs.dataSource = 'Dameng'
         envArgs.dbmsModelConst = 'Dameng'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
+        envArgs.platformVersion = '18.11.0'
         buildNoStandardJavaPlatform(envArgs)
         // // -------------------------- Java - DB2 ISeries
         // envArgs.dataSource = 'DB2ISeries'
