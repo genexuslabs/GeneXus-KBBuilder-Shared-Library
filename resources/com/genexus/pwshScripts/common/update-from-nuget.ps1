@@ -48,4 +48,8 @@ dotnet restore $DepsProjectPath
 $localPackagesPath = Join-Path -Path $LOCAL_NUGET_CACHE -ChildPath "$($PackageId.ToLower())\$PackageVersion"
 $PackageName = (Get-ChildItem -Path "$localPackagesPath" -Filter "*.zip").Name
 Write-Output "$(Get-Date -Format G) [DEBUG] Read downloaded package zip: $PackageName"
-Invoke-Command -ScriptBlock {& "$PSScriptRoot\update-from-zip.ps1" (Join-Path -Path $localPackagesPath -ChildPath $PackageName) $DeployTarget}
+try {
+    Invoke-Command -ScriptBlock {& "$PSScriptRoot\update-from-zip.ps1" (Join-Path -Path $localPackagesPath -ChildPath $PackageName) $DeployTarget}
+} catch {
+    Write-Host "Failed to install package"
+}
