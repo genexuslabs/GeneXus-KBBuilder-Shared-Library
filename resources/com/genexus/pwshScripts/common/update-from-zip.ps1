@@ -125,3 +125,5 @@ catch {
 	Write-Output "Error Updating from '${SourceUri}':"
 	throw $_
 }
+
+Write-Output "$(Get-Date -Format G) [DEBUG] finish execution of $PSCommandPath"
