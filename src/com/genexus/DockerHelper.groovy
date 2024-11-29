@@ -1,6 +1,33 @@
 package com.genexus
 
 /**
+ * Perform login to an ECR registry.
+ *
+ * @param args A map containing the following parameters:
+ *   - credentialsId: The ID of the Jenkins credential storing the registry credentials (username/password)
+ *   - registryEndpoint: The endpoint of the Docker registry
+ */
+void performDockerLoginToECR(Map args = [:]) {
+    try {
+            sh label: "Login to registry ECR",
+                    script: """
+                        ROLE_ARN="${args.roleArn}"
+                        SESSION_NAME="${args.sessionName}"
+                        CREDS=\$(aws sts assume-role --role-arn \$ROLE_ARN --role-session-name \$SESSION_NAME --output json)
+                        AWS_ACCESS_KEY_ID=\$(echo \$CREDS | jq -r .Credentials.AccessKeyId)
+                        AWS_SECRET_ACCESS_KEY=\$(echo \$CREDS | jq -r .Credentials.SecretAccessKey)
+                        AWS_SESSION_TOKEN=\$(echo \$CREDS | jq -r .Credentials.SessionToken)
+                        export AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY
+                        export AWS_SESSION_TOKEN
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${args.publishDockerImageName}
+                    """
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+}
+/**
  * Perform login to a Docker registry.
  *
  * @param args A map containing the following parameters:
