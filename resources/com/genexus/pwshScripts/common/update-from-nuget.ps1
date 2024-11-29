@@ -8,6 +8,7 @@ param (
     [Parameter(Mandatory=$true)]
     [string]$DeployTarget
 )
+try {
 # Define constants
 $DepsTmpDir = Join-Path -Path $PSScriptRoot -ChildPath "\.tmp\"
 $DepsProjectName = "DepsProject"
@@ -52,4 +53,7 @@ try {
     Invoke-Command -ScriptBlock {& "$PSScriptRoot\update-from-zip.ps1" (Join-Path -Path $localPackagesPath -ChildPath $PackageName) $DeployTarget}
 } catch {
     Write-Host "Failed to install package"
+}
+} catch {
+    Write-Host "general Failed "
 }
