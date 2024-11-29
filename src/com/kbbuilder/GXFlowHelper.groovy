@@ -523,6 +523,10 @@ void buildNoStandardJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map 
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
+            }
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             clientDuArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             engineDuArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
