@@ -470,7 +470,7 @@ void buildNoStandardJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map 
         def gxLibDeployEngine = new GXDeployEngineHelper()
         if(envArgs.platformId) {
             stage("Download GAM Platform") {
-                gxLibHelper.installGAMPlatform(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\index.json")
+                gxLibHelper.installGAMPlatform(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             }
         }
 
