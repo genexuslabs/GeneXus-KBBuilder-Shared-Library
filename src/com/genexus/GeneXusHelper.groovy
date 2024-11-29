@@ -113,7 +113,7 @@ String getGeneXusInstallationVersion(String gxBasePath) {
     }
 }
 
-void installGAMPlatform(String gxBasePath, String platformId, String platformVersion, String nugetSourceRepository) {
+void downloadNugetPackage(String gxBasePath, String platformId, String platformVersion, String nugetSourceRepository) {
     try{
         fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
         writeFile file: 'update-from-zip.ps1', text: fileContents

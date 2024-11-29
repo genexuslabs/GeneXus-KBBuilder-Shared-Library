@@ -353,32 +353,32 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Oracle 11
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Oracle 9
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Oracle 11
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '12c or higher'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Oracle 9
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Postgre
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // buildNoStandardNetFWPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -474,32 +474,32 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Oracle 11
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Oracle 9
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Oracle 11
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '12c or higher'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Oracle 9
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Postgre
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // buildNoStandardNetPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -595,36 +595,36 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.dataSource = 'Dameng'
         envArgs.dbmsModelConst = 'Dameng'
         buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Oracle 12
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Postgre
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Oracle 12
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '12c or higher'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Oracle 9 to 11
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Postgre
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // buildNoStandardJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -702,6 +702,11 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
             envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
             echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
                 archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
