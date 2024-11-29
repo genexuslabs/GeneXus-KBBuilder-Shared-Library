@@ -375,11 +375,10 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         // envArgs.dataSource = 'PostgreSQL'
         // envArgs.dbmsModelConst = 'POSTGRESQL'
         // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - SAP Hana
-        // envArgs.dataSource = 'SapHana'
-        // envArgs.dbmsModelConst = 'HANA'
-        // buildNoStandardNetFWPlatform(envArgs)
-        echo "COMMENT PLATFORMS"
+        // -------------------------- Net Framework - SAP Hana
+        envArgs.dataSource = 'SapHana'
+        envArgs.dbmsModelConst = 'HANA'
+        buildNoStandardNetFWPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
