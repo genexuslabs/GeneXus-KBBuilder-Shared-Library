@@ -113,4 +113,17 @@ String getGeneXusInstallationVersion(String gxBasePath) {
     }
 }
 
+void installGAMPlatform(String gxBasePath, String platformId, String platformVersion, String nugetSourceRepository) {
+    try{
+        fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
+        writeFile file: 'update-from-zip.ps1', text: fileContents
+        fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-nuget.ps1'
+        writeFile file: 'update-from-nuget.ps1', text: fileContents
+        powershell script: ".\\update-from-nuget.ps1 -REMOTE_NUGET_HOST:'${nugetSourceRepository}' -PackageId:'${platformId}' -PackageVersion:'${platformVersion}' -DeployTarget:'${gxBasePath}'"
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this
