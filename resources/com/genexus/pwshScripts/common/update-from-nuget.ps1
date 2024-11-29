@@ -46,6 +46,6 @@ try {
 # Restore the project
 dotnet restore $DepsProjectPath
 $localPackagesPath = Join-Path -Path $LOCAL_NUGET_CACHE -ChildPath "$($PackageId.ToLower())\$PackageVersion"
-$Package = Get-ChildItem -Path "$localPackagesPath" -Filter "*.zip"
-Write-Output "$(Get-Date -Format G) [DEBUG] Read downloaded package zip: $Package.Name"
-Invoke-Command -ScriptBlock {& "$PSScriptRoot\update-from-zip.ps1" (Join-Path -Path $localPackagesPath -ChildPath $Package.Name) $DeployTarget}
+$PackageName = (Get-ChildItem -Path "$localPackagesPath" -Filter "*.zip").Name
+Write-Output "$(Get-Date -Format G) [DEBUG] Read downloaded package zip: $PackageName"
+Invoke-Command -ScriptBlock {& "$PSScriptRoot\update-from-zip.ps1" (Join-Path -Path $localPackagesPath -ChildPath $PackageName) $DeployTarget}
