@@ -448,34 +448,34 @@ String updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDu
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- Java - MySQL
-        envArgs.dataSource = 'mysql5'
-        envArgs.dbmsModelConst = 'MySQL'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDameng'
-        envArgs.platformVersion = '18.11.26'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
-        envArgs.platformVersion = '18.11.26'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
-        envArgs.platformVersion = '18.11.26'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaInformix'
-        envArgs.platformVersion = '18.11.26'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - MySQL
+        // envArgs.dataSource = 'mysql5'
+        // envArgs.dbmsModelConst = 'MySQL'
+        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Dameng
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDameng'
+        // envArgs.platformVersion = '18.11.26'
+        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
+        // envArgs.platformVersion = '18.11.26'
+        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
+        // envArgs.platformVersion = '18.11.26'
+        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaInformix'
+        // envArgs.platformVersion = '18.11.26'
+        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
