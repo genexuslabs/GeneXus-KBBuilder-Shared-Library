@@ -9,6 +9,11 @@ param (
     [string]$DeployTarget
 )
 try {
+    Write-Host "[DEBUG] INPUT:REMOTE_NUGET_HOST  $REMOTE_NUGET_HOST"
+    Write-Host "[DEBUG] INPUT:PackageId  $PackageId"
+    Write-Host "[DEBUG] INPUT:PackageVersion  $PackageVersion"
+    Write-Host "[DEBUG] INPUT:DeployTarget  $DeployTarget"
+
 # Define constants
 $DepsTmpDir = Join-Path -Path $PSScriptRoot -ChildPath "\.tmp\"
 $DepsProjectName = "DepsProject"
