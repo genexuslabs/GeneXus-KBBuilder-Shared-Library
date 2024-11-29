@@ -1,4 +1,5 @@
 package com.kbbuilder
+import com.genexus.GeneXusHelper
 import com.genexus.PropertiesHelper
 import com.genexus.GXDeployEngineHelper
 
@@ -447,17 +448,14 @@ String updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDu
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- Java - MySQL
-        envArgs.dataSource = 'mysql5'
-        envArgs.dbmsModelConst = 'MySQL'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Oracle
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Postgres
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.platformId = 'GXDeps.GAM.Platform.JavaPostgreSQL'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - MySQL
+        envArgs.dataSource = 'mysql5'
+        envArgs.dbmsModelConst = 'MySQL'
         buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
@@ -467,8 +465,15 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map
 
 void buildNoStandardJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try{
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
+        if(envArgs.platformId) {
+            stage("Download GAM Platform") {
+                gxLibHelper.installGAMPlatform(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, envArgs.nugetSourceIndex)
+            }
+        }
+
         stage("Prepare ENV") {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
