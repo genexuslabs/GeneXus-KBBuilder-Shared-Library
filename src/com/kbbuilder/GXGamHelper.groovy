@@ -7,6 +7,7 @@ import com.genexus.GXDeployEngineHelper
 void completePlatformIntegration(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
@@ -97,6 +98,7 @@ void completePlatformIntegration(Map envArgs = [:]) {
 void completeJavaPlatformIntegration(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
@@ -390,6 +392,7 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
 void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
 
@@ -518,6 +521,7 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
 void buildNoStandardNetPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
 
@@ -650,6 +654,7 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
 void buildNoStandardJavaPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         
