@@ -352,18 +352,18 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net Framework - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
