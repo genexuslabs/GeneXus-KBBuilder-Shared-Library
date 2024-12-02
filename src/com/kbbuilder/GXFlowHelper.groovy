@@ -1,4 +1,5 @@
 package com.kbbuilder
+import com.genexus.FileHelper
 import com.genexus.GeneXusHelper
 import com.genexus.PropertiesHelper
 import com.genexus.GXDeployEngineHelper
