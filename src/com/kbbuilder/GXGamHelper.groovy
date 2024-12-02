@@ -457,7 +457,9 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
@@ -586,7 +588,9 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
@@ -727,7 +731,9 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
