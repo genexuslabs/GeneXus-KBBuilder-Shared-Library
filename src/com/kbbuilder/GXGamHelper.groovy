@@ -352,48 +352,48 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Net Framework - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
-        // envArgs.platformVersion = '18.11.0'
-        // buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.Informix'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Oracle 11
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.Oracle'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Oracle 9
         envArgs.dataSource = 'Oracle9to11g'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.Oracle9to11g'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle9to11g'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.PostgreSQL'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetPostgreSQL'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.SapHana'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetSapHana'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
     } catch (error) {
