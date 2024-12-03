@@ -632,36 +632,50 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Oracle 12
-        // envArgs.dataSource = 'Oracle'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '12c or higher'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Oracle 9 to 11
-        // envArgs.dataSource = 'Oracle9to11g'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '9 to 11g'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - SAP Hana
-        // envArgs.dataSource = 'SapHana'
-        // envArgs.dbmsModelConst = 'HANA'
-        // buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 12
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle'
+        envArgs.platformVersion = '18.11.0'
+        envArgs.dbmsVersion = '12c or higher'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 9 to 11
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
+        envArgs.platformVersion = '18.11.0'
+        envArgs.dbmsVersion = '9 to 11g'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - SAP Hana
+        envArgs.dataSource = 'SapHana'
+        envArgs.dbmsModelConst = 'HANA'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaSapHana'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
