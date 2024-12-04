@@ -449,59 +449,59 @@ String updatePlatformNet(Map envArgs = [:], Map clientDuArgs = [:], Map engineDu
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // // -------------------------- Java - MySQL
-        // envArgs.dataSource = 'mysql5'
-        // envArgs.dbmsModelConst = 'MySQL'
-        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // // -------------------------- Java - Dameng
-        // envArgs.dataSource = 'Dameng'
-        // envArgs.dbmsModelConst = 'Dameng'
-        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDameng'
-        // envArgs.platformVersion = '18.11.26'
-        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // // -------------------------- Java - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
-        // envArgs.platformVersion = '18.11.26'
-        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // // -------------------------- Java - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
-        // envArgs.platformVersion = '18.11.26'
-        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // // -------------------------- Java - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // envArgs.platformId = 'GXDeps.GAM.Platform.JavaInformix'
-        // envArgs.platformVersion = '18.11.26'
-        // buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - MySQL
+        envArgs.dataSource = 'mysql5'
+        envArgs.dbmsModelConst = 'MySQL'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - Dameng
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDameng'
+        envArgs.platformVersion = '18.11.43'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
+        envArgs.platformVersion = '18.11.43'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
+        envArgs.platformVersion = '18.11.43'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.platformId = 'GXDeps.GAM.Platform.JavaInformix'
+        envArgs.platformVersion = '18.11.43'
+        buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.platformId = 'GXDeps.GAM.Platform.JavaOracle'
-        envArgs.platformVersion = '18.11.28'
+        envArgs.platformVersion = '18.11.47'
         buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Oracle 9 to 11
         envArgs.dataSource = 'Oracle9to11g'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         envArgs.platformId = 'GXDeps.GAM.Platform.JavaOracle9to11g'
-        envArgs.platformVersion = '18.11.28'
+        envArgs.platformVersion = '18.11.47'
         buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Postgres
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.platformId = 'GXDeps.GAM.Platform.JavaPostgreSQL'
-        envArgs.platformVersion = '18.11.28'
+        envArgs.platformVersion = '18.11.47'
         buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
         envArgs.platformId = 'GXDeps.GAM.Platform.JavaSapHana'
-        envArgs.platformVersion = '18.11.28'
+        envArgs.platformVersion = '18.11.47'
         buildNoStandardJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'

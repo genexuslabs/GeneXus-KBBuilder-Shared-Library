@@ -495,12 +495,12 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - DB2 Common
         envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
