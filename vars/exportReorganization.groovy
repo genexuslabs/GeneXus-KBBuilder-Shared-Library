@@ -54,6 +54,7 @@ def call(Map args = [:]) {
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
             /p:SQLServer="${isSQLServer}" \
+            /p:PackageName="${args.javaPackageName}" \
             /t:ExportReorganization 
         """
         
