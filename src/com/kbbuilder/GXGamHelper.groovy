@@ -1,11 +1,13 @@
 package com.kbbuilder
 import com.genexus.FileHelper
+import com.genexus.GeneXusHelper
 import com.genexus.PropertiesHelper
 import com.genexus.GXDeployEngineHelper
 
 void completePlatformIntegration(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
@@ -96,6 +98,7 @@ void completePlatformIntegration(Map envArgs = [:]) {
 void completeJavaPlatformIntegration(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ----------------------------- Print Debug vars
@@ -355,32 +358,44 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Oracle 11
-        // envArgs.dataSource = 'Oracle'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '12c or higher'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Oracle 9
-        // envArgs.dataSource = 'Oracle9to11g'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '9 to 11g'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - SAP Hana
-        // envArgs.dataSource = 'SapHana'
-        // envArgs.dbmsModelConst = 'HANA'
-        // buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Oracle 9
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle9to11g'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetPostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - SAP Hana
+        envArgs.dataSource = 'SapHana'
+        envArgs.dbmsModelConst = 'HANA'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetSapHana'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetFWPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -389,6 +404,7 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
 void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
 
@@ -453,7 +469,9 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
@@ -477,38 +495,50 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
-        // // -------------------------- Net - DB2 Common
+        // // -------------------------- Net - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
         // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
         // buildNoStandardNetPlatform(envArgs)
         // // -------------------------- Net - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // buildNoStandardNetPlatform(envArgs)
-        // // -------------------------- Net - Oracle 11
-        // envArgs.dataSource = 'Oracle'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '12c or higher'
-        // buildNoStandardNetPlatform(envArgs)
-        // // -------------------------- Net - Oracle 9
-        // envArgs.dataSource = 'Oracle9to11g'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '9 to 11g'
-        // buildNoStandardNetPlatform(envArgs)
-        // // -------------------------- Net - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardNetPlatform(envArgs)
-        // // -------------------------- Net - SAP Hana
-        // envArgs.dataSource = 'SapHana'
-        // envArgs.dbmsModelConst = 'HANA'
-        // buildNoStandardNetPlatform(envArgs)
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Oracle 11
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '12c or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Oracle 9
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.dbmsVersion = '9 to 11g'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle9to11g'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCorePostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetPlatform(envArgs)
+        // -------------------------- Net - SAP Hana
+        envArgs.dataSource = 'SapHana'
+        envArgs.dbmsModelConst = 'HANA'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreSapHana'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardNetPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -517,6 +547,7 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
 void buildNoStandardNetPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
 
@@ -581,7 +612,9 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
@@ -605,42 +638,56 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Dameng
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
         // // -------------------------- Java - DB2 ISeries
         // envArgs.dataSource = 'DB2ISeries'
         // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
         // buildNoStandardJavaPlatform(envArgs)
         // // -------------------------- Java - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
         // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
         // buildNoStandardJavaPlatform(envArgs)
         // // -------------------------- Java - Informix
         // envArgs.dataSource = 'Informix'
         // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
+        // envArgs.platformVersion = '18.11.0'
         // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Oracle 12
-        // envArgs.dataSource = 'Oracle'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '12c or higher'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Oracle 9 to 11
-        // envArgs.dataSource = 'Oracle9to11g'
-        // envArgs.dbmsModelConst = 'Oracle'
-        // envArgs.dbmsVersion = '9 to 11g'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // buildNoStandardJavaPlatform(envArgs)
-        // // -------------------------- Java - SAP Hana
-        // envArgs.dataSource = 'SapHana'
-        // envArgs.dbmsModelConst = 'HANA'
-        // buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 12
+        envArgs.dataSource = 'Oracle'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle'
+        envArgs.platformVersion = '18.11.0'
+        envArgs.dbmsVersion = '12c or higher'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Oracle 9 to 11
+        envArgs.dataSource = 'Oracle9to11g'
+        envArgs.dbmsModelConst = 'Oracle'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
+        envArgs.platformVersion = '18.11.0'
+        envArgs.dbmsVersion = '9 to 11g'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
+        // -------------------------- Java - SAP Hana
+        envArgs.dataSource = 'SapHana'
+        envArgs.dbmsModelConst = 'HANA'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaSapHana'
+        envArgs.platformVersion = '18.11.0'
+        buildNoStandardJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -649,6 +696,7 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
 void buildNoStandardJavaPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
+        def gxLibHelper = new GeneXusHelper()
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         
@@ -721,7 +769,9 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             // ----------------------------- Add Reorganization files
             gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             powershell script: """
-                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}\\" "${envArgs.deployTarget}\\Library"
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Library::${envArgs.deployTarget}\\Library"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Library"
             """
             // ----------------------------- Archive artifacts
             dir("${envArgs.deployTarget}") {
