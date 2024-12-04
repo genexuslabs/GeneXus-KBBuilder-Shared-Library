@@ -501,7 +501,7 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
         // envArgs.platformVersion = '18.11.0'
         // buildNoStandardNetPlatform(envArgs)
-        -------------------------- Net - DB2 Common
+        // -------------------------- Net - DB2 Common
         envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
