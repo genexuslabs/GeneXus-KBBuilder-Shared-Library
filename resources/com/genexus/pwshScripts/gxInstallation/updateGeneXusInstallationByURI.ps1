@@ -114,6 +114,6 @@ if ($flag) {
         Write-Output((Get-Date -Format G) + " INFO Installing $androidRequirementsExe to $localAndroidSDKPath...")
         #AndroidRequirements.exe /s GXPATH=<path GX> ANDROIDSDKPATH=<path Android SDK> LOG=<path log>
         Start-Process -FilePath $androidRequirementsExe -ArgumentList "/s GXPATH=`"$gxBasePath`" ANDROIDSDKPATH=`"$localAndroidSDKPath`" LOG=`"$localAndroidSDKPath\androidsdk.log`"" -NoNewWindow -Wait
-        Write-Output((Get-Date -Format G) + " INFO finish downloading androidSDK") 
+        Write-Output((Get-Date -Format G) + " INFO Android SDK installation complete!") 
     }
 }
