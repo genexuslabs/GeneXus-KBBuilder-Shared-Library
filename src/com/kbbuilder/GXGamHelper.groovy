@@ -417,9 +417,11 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
@@ -564,9 +566,11 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
@@ -717,9 +721,11 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
