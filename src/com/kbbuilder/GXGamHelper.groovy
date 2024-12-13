@@ -352,50 +352,50 @@ String updateInitResources(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net Framework - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Oracle 11
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - Oracle 9
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle9to11g'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Oracle 11
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '12c or higher'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - Oracle 9
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle9to11g'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetPostgreSQL'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetFWPlatform(envArgs)
-        // -------------------------- Net Framework - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetSapHana'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetFWPlatform(envArgs)
+        // // -------------------------- Net Framework - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetSapHana'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetFWPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -416,7 +416,11 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
             if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
-            }            
+            }
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -495,50 +499,50 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Net - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Oracle 11
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - Oracle 9
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle9to11g'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Oracle 11
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '12c or higher'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - Oracle 9
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle9to11g'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
         // -------------------------- Net - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCorePostgreSQL'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardNetPlatform(envArgs)
-        // -------------------------- Net - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreSapHana'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardNetPlatform(envArgs)
+        // // -------------------------- Net - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreSapHana'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardNetPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -560,6 +564,10 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -638,56 +646,56 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Oracle 12
-        envArgs.dataSource = 'Oracle'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle'
-        envArgs.platformVersion = '18.11.0'
-        envArgs.dbmsVersion = '12c or higher'
-        buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
-        envArgs.platformVersion = '18.11.0'
-        envArgs.dbmsVersion = '9 to 11g'
-        buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Dameng
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Oracle 12
+        // envArgs.dataSource = 'Oracle'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle'
+        // envArgs.platformVersion = '18.11.0'
+        // envArgs.dbmsVersion = '12c or higher'
+        // buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - Oracle 9 to 11
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
+        // envArgs.platformVersion = '18.11.0'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // buildNoStandardJavaPlatform(envArgs)
         // -------------------------- Java - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
         envArgs.platformVersion = '18.11.0'
         buildNoStandardJavaPlatform(envArgs)
-        // -------------------------- Java - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaSapHana'
-        envArgs.platformVersion = '18.11.0'
-        buildNoStandardJavaPlatform(envArgs)
+        // // -------------------------- Java - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaSapHana'
+        // envArgs.platformVersion = '18.11.0'
+        // buildNoStandardJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -704,11 +712,15 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
             kbLibHelper.setEnvironmentProperty(envArgs, "DataSource", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "DBMS", envArgs.dbmsModelConst)
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
+            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             if(envArgs.dbmsModelConst == 'Oracle' && envArgs.dbmsVersion) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Oracle version", envArgs.dbmsVersion)
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
-            envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
