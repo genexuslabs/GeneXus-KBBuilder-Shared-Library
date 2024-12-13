@@ -121,7 +121,7 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".Net Application Namespace", "GXflow.Programs")
-            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             }
             
@@ -350,7 +350,7 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "compiler_options", "-J-Xms1024m -J-Xmx2048m -O -source 1.8 -target 1.8")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "Java platform support", "Both Platforms")
-            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             }
             
@@ -578,7 +578,7 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".net_application_namespace", "GXflow.Programs")                    
             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
-            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+            if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             }
             
@@ -729,7 +729,7 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema")
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".Net Application Namespace", "GXflow.Programs")
-//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' ||  envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
 //                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
 //             }
             
@@ -878,7 +878,7 @@ echo "[ERROR] Avoid error n build all platfor"
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "compiler_options", "-J-Xms1024m -J-Xmx2048m -O -source 1.8 -target 1.8")
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "Java platform support", "Both Platforms")
-//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
 //                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
 //             }
             
@@ -1026,7 +1026,7 @@ echo "[ERROR] Avoid error n build all platfor"
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "reorganization_options", "-nogui -noverifydatabaseschema -donotexecute")
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", ".net_application_namespace", "GXflow.Programs")                    
 //             kbLibHelper.setGeneratorProperty(envArgs, "Default", "isolation_level", "Read Uncommitted")
-//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
+//             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
 //                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
 //             }
             
