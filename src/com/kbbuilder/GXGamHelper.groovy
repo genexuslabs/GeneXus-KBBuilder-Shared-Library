@@ -418,9 +418,9 @@ void buildNoStandardNetFWPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -565,9 +565,9 @@ void buildNoStandardNetPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -718,9 +718,9 @@ void buildNoStandardJavaPlatform(Map envArgs = [:]) {
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Oracle version", envArgs.dbmsVersion)
             }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referencial integrity", "No")
+            kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
