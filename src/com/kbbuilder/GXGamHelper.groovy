@@ -365,7 +365,7 @@ void setDataSourceVersion(Map args = [:]) {
                     propertyName =  "SAP Hana version"
                     break
                 default:
-                    propertyName =  "${args.dbmsModelConst} version"
+                    propertyName =  "${args.dataSource} version"
                     break
             }
             kbLibHelper.setDataStoreProperty(args, "Default", propertyName, args.dbmsVersion)
