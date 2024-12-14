@@ -447,9 +447,8 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             if(envArgs.dbmsModelConst == 'Oracle') {
                 kbLibHelper.setGeneratorProperty(envArgs, "Initialize_not_referenced_attributes", "No")
-                
             }
-            setDataSourceVersion(envAr)
+            setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
@@ -603,7 +602,7 @@ void integrateJavaPlatform(Map envArgs = [:]) {
             if(envArgs.dbmsModelConst == 'Oracle') {
                 kbLibHelper.setGeneratorProperty(envArgs, "Initialize_not_referenced_attributes", "No")
             }
-            setDataSourceVersion(envArg)
+            setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
