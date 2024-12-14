@@ -351,7 +351,7 @@ String updateInitResources(Map args = [:]) {
 
 void setDataSourceVersion(Map args = [:]) {
     try {
-        if(value) {
+        if(args.dbmsVersion) {
             def kbLibHelper = new PropertiesHelper()
             String propertyName
             switch (args.dbmsModelConst) {
