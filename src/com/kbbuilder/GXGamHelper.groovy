@@ -368,8 +368,8 @@ void setDataSourceVersion(Map args = [:]) {
                     propertyName =  "${args.dbmsModelConst} version"
                     break
             }
-            kbLibHelper.setDataStoreProperty(envArgs, "Default", propertyName, envArgs.dbmsVersion)
-            kbLibHelper.setDataStoreProperty(envArgs, "GAM", propertyName, envArgs.dbmsVersion)
+            kbLibHelper.setDataStoreProperty(args, "Default", propertyName, args.dbmsVersion)
+            kbLibHelper.setDataStoreProperty(args, "GAM", propertyName, args.dbmsVersion)
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
