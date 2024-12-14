@@ -446,7 +446,7 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             if(envArgs.dbmsModelConst == 'Oracle') {
-                kbLibHelper.setGeneratorProperty(envArgs, "Initialize_not_referenced_attributes", "No")
+                kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
@@ -600,7 +600,7 @@ void integrateJavaPlatform(Map envArgs = [:]) {
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             if(envArgs.dbmsModelConst == 'Oracle') {
-                kbLibHelper.setGeneratorProperty(envArgs, "Initialize_not_referenced_attributes", "No")
+                kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
@@ -761,7 +761,7 @@ void integrateNetPlatform(Map envArgs = [:]) {
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "DBMS", envArgs.dbmsModelConst)
             envArgs.targetPath = "${envArgs.generatedLanguage}${envArgs.dataSource}"
             if(envArgs.dbmsModelConst == 'Oracle' || envArgs.dbmsModelConst == 'Dameng') {
-                kbLibHelper.setGeneratorProperty(envArgs, "Initialize_not_referenced_attributes", "No")
+                kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
