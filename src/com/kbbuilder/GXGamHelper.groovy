@@ -352,6 +352,7 @@ String updateInitResources(Map args = [:]) {
 void setDataSourceVersion(String dbmsModelConst, String value) {
     try {
         if(value) {
+            def kbLibHelper = new PropertiesHelper()
             String propertyName
             switch (dbmsModelConst) {
                 case 'DB2400':
