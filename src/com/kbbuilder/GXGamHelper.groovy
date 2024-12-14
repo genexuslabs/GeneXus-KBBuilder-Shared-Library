@@ -354,14 +354,14 @@ void setDataSourceVersion(Map args = [:]) {
         if(args.dbmsVersion) {
             def kbLibHelper = new PropertiesHelper()
             String propertyName
-            switch (args.dbmsModelConst) {
-                case 'DB2400':
+            switch (args.dataSource) {
+                case 'DB2ISeries':
                     propertyName =  "OS for ISeries version"
                     break
-                case 'SQLServer':
+                case 'SQL':
                     propertyName =  "SQL Server version"
                     break
-                case 'HANA':
+                case 'SapHana':
                     propertyName =  "SAP Hana version"
                     break
                 default:
