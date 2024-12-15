@@ -612,7 +612,6 @@ void integrateNetPlatform(Map envArgs = [:]) {
             }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
-            kbLibHelper.setGeneratorProperty(envArgs, "Default", "Use_annotations_for_servlet_definition", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
@@ -775,6 +774,7 @@ void integrateJavaPlatform(Map envArgs = [:]) {
             }
             kbLibHelper.setDataStoreProperty(envArgs, "Default", "Declare referential integrity", "No")
             kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Declare referential integrity", "No")
+            kbLibHelper.setGeneratorProperty(envArgs, "Default", "Use_annotations_for_servlet_definition", "No")
         }
         stage("Build Platform ${envArgs.targetPath}") {
             kbLibHelper.setEnvironmentProperty(envArgs, "TargetPath", envArgs.targetPath)
