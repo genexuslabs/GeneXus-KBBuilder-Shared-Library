@@ -361,6 +361,9 @@ void setDataSourceVersion(Map args = [:]) {
                 case 'SQL':
                     propertyName =  "SQL Server version"
                     break
+                case 'Oracle9to11g':
+                    propertyName =  "Oracle version"
+                    break
                 case 'SapHana':
                     propertyName =  "SAP Hana version"
                     break
@@ -539,55 +542,55 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         envArgs.dbmsVersion = 'V6R1 to V7R1'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - DB2 Common
         envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
         envArgs.dbmsVersion = '8.0 to 10.1'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
         envArgs.dbmsVersion = '11 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - Oracle 11
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - Oracle 9
         envArgs.dataSource = 'Oracle9to11g'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle9to11g'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.dbmsVersion = '8.3 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCorePostgreSQL'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
         envArgs.dbmsVersion = '1.0 SPS 11 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreSapHana'
         envArgs.platformVersion = '18.11.0'
-        integrateJavaPlatform(envArgs)
+        integrateNetPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
     }
 }
-void integrateJavaPlatform(Map envArgs = [:]) {
+void integrateNetPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
         def gxLibHelper = new GeneXusHelper()
@@ -693,62 +696,62 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.dbmsModelConst = 'Dameng'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - DB2 ISeries
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
         envArgs.dbmsVersion = 'V6R1 to V7R1'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - DB2 Common
         envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
         envArgs.dbmsVersion = '8.0 to 10.1'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - Informix
         envArgs.dataSource = 'Informix'
         envArgs.dbmsModelConst = 'Informix'
         envArgs.dbmsVersion = '11 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - Oracle 9 to 11
         envArgs.dataSource = 'Oracle9to11g'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '9 to 11g'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - Postgre
         envArgs.dataSource = 'PostgreSQL'
         envArgs.dbmsModelConst = 'POSTGRESQL'
         envArgs.dbmsVersion = '8.3 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
         envArgs.dbmsVersion = '1.0 SPS 11 or higher'
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaSapHana'
         envArgs.platformVersion = '18.11.0'
-        integrateNetPlatform(envArgs)
+        integrateJavaPlatform(envArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
     }
 }
-void integrateNetPlatform(Map envArgs = [:]) {
+void integrateJavaPlatform(Map envArgs = [:]) {
     try{
         def sysLibHelper = new FileHelper()
         def gxLibHelper = new GeneXusHelper()
@@ -763,7 +766,9 @@ void integrateNetPlatform(Map envArgs = [:]) {
             if(envArgs.dbmsModelConst == 'Oracle' || envArgs.dbmsModelConst == 'Dameng') {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
-            setDataSourceVersion(envArgs)
+            if(envArgs.dataSource != 'Dameng') {
+                setDataSourceVersion(envArgs)
+            }
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
