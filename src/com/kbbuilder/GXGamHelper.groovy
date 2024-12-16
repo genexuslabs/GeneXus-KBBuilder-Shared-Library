@@ -695,12 +695,12 @@ void integrateNetPlatform(Map envArgs = [:]) {
 
 void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Java - Dameng
-        // envArgs.dataSource = 'Dameng'
-        // envArgs.dbmsModelConst = 'Dameng'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
+        // -------------------------- Java - Dameng
+        envArgs.dataSource = 'Dameng'
+        envArgs.dbmsModelConst = 'Dameng'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
         // // -------------------------- Java - DB2 ISeries
         // envArgs.dataSource = 'DB2ISeries'
         // envArgs.dbmsModelConst = 'DB2400'
