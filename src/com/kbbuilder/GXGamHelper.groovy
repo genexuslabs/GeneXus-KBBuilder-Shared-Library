@@ -452,7 +452,7 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             setDataSourceVersion(envArgs)
-            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
+            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
@@ -609,7 +609,7 @@ void integrateNetPlatform(Map envArgs = [:]) {
             if(envArgs.dbmsModelConst == 'Oracle') {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
-            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
+            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
@@ -775,7 +775,7 @@ void integrateJavaPlatform(Map envArgs = [:]) {
             if(envArgs.dataSource != 'Dameng') {
                 setDataSourceVersion(envArgs)
             }
-            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
+            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
