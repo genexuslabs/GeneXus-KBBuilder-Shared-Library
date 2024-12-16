@@ -382,13 +382,13 @@ void setDataSourceVersion(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Net Framework - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetFWPlatform(envArgs)
         // // -------------------------- Net Framework - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
         // envArgs.dbmsModelConst = 'DB2Common'
@@ -452,11 +452,11 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             setDataSourceVersion(envArgs)
-            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g') {
+            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
-            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             }
@@ -540,13 +540,13 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Net - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetPlatform(envArgs)
+        // -------------------------- Net - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetPlatform(envArgs)
         // // -------------------------- Net - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
         // envArgs.dbmsModelConst = 'DB2Common'
@@ -609,11 +609,11 @@ void integrateNetPlatform(Map envArgs = [:]) {
             if(envArgs.dbmsModelConst == 'Oracle') {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
-            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g') {
+            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
-            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             }
@@ -703,13 +703,13 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
         envArgs.platformVersion = '18.11.0'
         integrateJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
         // // -------------------------- Java - DB2 Common
         // envArgs.dataSource = 'DB2UDB'
         // envArgs.dbmsModelConst = 'DB2Common'
@@ -775,11 +775,11 @@ void integrateJavaPlatform(Map envArgs = [:]) {
             if(envArgs.dataSource != 'Dameng') {
                 setDataSourceVersion(envArgs)
             }
-            if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'Dameng' ) {
+            if(envArgs.dataSource == 'DB2ISeries' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
             }
-            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
+            if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
                 kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "gam")
             }
