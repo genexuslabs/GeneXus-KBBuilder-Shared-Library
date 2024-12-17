@@ -11,6 +11,7 @@ void performDockerLoginToECR(Map args = [:]) {
     try {
         sh label: "Login to registry ECR",
                 script: """
+                    set +x 
                     ROLE_ARN="${args.roleArn}"
                     SESSION_NAME="${args.sessionName}"
                     CREDS=\$(aws sts assume-role --role-arn \$ROLE_ARN --role-session-name \$SESSION_NAME --output json 2>/dev/null)
@@ -22,6 +23,7 @@ void performDockerLoginToECR(Map args = [:]) {
                     export AWS_SECRET_ACCESS_KEY
                     export AWS_SESSION_TOKEN
 
+                    set -x
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${args.publishDockerImageName}
                 """
     } catch (e) {
