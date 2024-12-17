@@ -13,13 +13,15 @@ void performDockerLoginToECR(Map args = [:]) {
                     script: """
                         ROLE_ARN="${args.roleArn}"
                         SESSION_NAME="${args.sessionName}"
-                        CREDS=\$(aws sts assume-role --role-arn \$ROLE_ARN --role-session-name \$SESSION_NAME --output json)
-                        AWS_ACCESS_KEY_ID=\$(echo \$CREDS | jq -r .Credentials.AccessKeyId)
-                        AWS_SECRET_ACCESS_KEY=\$(echo \$CREDS | jq -r .Credentials.SecretAccessKey)
-                        AWS_SESSION_TOKEN=\$(echo \$CREDS | jq -r .Credentials.SessionToken)
+                        CREDS=$(aws sts assume-role --role-arn $ROLE_ARN --role-session-name $SESSION_NAME --output json 2>/dev/null)
+                        AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r .Credentials.AccessKeyId 2>/dev/null)
+                        AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r .Credentials.SecretAccessKey 2>/dev/null)
+                        AWS_SESSION_TOKEN=$(echo $CREDS | jq -r .Credentials.SessionToken 2>/dev/null)
+
                         export AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY
                         export AWS_SESSION_TOKEN
+
                         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${args.publishDockerImageName}
                     """
     } catch (e) {
