@@ -10,9 +10,9 @@ import com.genexus.GXDeployEngineHelper
 void buildNoStandardNetFWPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
         // -------------------------- NetFW - MySQL
-        // envArgs.dataSource = 'mysql5'
-        // envArgs.dbmsModelConst = 'MySQL'
-        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        envArgs.dataSource = 'mysql5'
+        envArgs.dbmsModelConst = 'MySQL'
+        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- NetFW - DB2 ISeries
         envArgs.dataSource = 'DB2ISeries'
         envArgs.dbmsModelConst = 'DB2400'
@@ -230,9 +230,9 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
 void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
         // -------------------------- Java - MySQL
-        // envArgs.dataSource = 'mysql5'
-        // envArgs.dbmsModelConst = 'MySQL'
-        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        envArgs.dataSource = 'mysql5'
+        envArgs.dbmsModelConst = 'MySQL'
+        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Dameng
         envArgs.dataSource = 'Dameng'
         envArgs.dbmsModelConst = 'Dameng'
@@ -457,7 +457,7 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
  */
 void buildNoStandardNetPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        -------------------------- NetCore - MySQL
+        // -------------------------- NetCore - MySQL
         envArgs.dataSource = 'mysql5'
         envArgs.dbmsModelConst = 'MySQL'
         integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
