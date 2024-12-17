@@ -58,9 +58,8 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Ma
         envArgs.platformVersion = '18.11.41'
         integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }
 }
 /**
@@ -221,9 +220,8 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         return ret
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }    
 }
 /**
@@ -286,9 +284,8 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map
         envArgs.platformVersion = '18.11.47'
         integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }
 }
 /**
@@ -451,9 +448,8 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         return ret
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }
 }
 /**
@@ -461,10 +457,10 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
  */
 void buildNoStandardNetPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- NetCore - MySQL
-        // envArgs.dataSource = 'mysql5'
-        // envArgs.dbmsModelConst = 'MySQL'
-        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        -------------------------- NetCore - MySQL
+        envArgs.dataSource = 'mysql5'
+        envArgs.dbmsModelConst = 'MySQL'
+        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- NetCore - Dameng
         envArgs.dataSource = 'Dameng'
         envArgs.dbmsModelConst = 'Dameng'
@@ -516,9 +512,8 @@ void buildNoStandardNetPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map 
         envArgs.platformVersion = '18.11.47'
         integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }
 }
 /**
@@ -680,9 +675,8 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
         return ret
 
     } catch (error) {
-        // currentBuild.result = 'FAILURE'
-        // throw error
-        echo "[ERROR] Avoid error n build all platforms"
+        currentBuild.result = 'FAILURE'
+        throw error
     }
 }
 
@@ -830,7 +824,6 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
 //     } catch (error) {
 // //         currentBuild.result = 'FAILURE'
 // //         throw error
-echo "[ERROR] Avoid error n build all platfor"
 //     }
 // }
 
@@ -979,7 +972,6 @@ echo "[ERROR] Avoid error n build all platfor"
 //     } catch (error) {
 // //         currentBuild.result = 'FAILURE'
 // //         throw error
-echo "[ERROR] Avoid error n build all platfor"
 //     }
 // }
 
@@ -1128,7 +1120,6 @@ echo "[ERROR] Avoid error n build all platfor"
 //     } catch (error) {
 // //         currentBuild.result = 'FAILURE'
 // //         throw error
-echo "[ERROR] Avoid error n build all platfor"
 //     }
 // }
 
