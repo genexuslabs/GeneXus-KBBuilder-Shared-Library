@@ -453,8 +453,8 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
             }
             setDataSourceVersion(envArgs)
             if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
-                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
-                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
+                kbLibHelper.resetDataStoreProperty(envArgs, "Default", "Database schema")
+                kbLibHelper.resetDataStoreProperty(envArgs, "GAM", "Database schema")
             }
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
@@ -610,8 +610,8 @@ void integrateNetPlatform(Map envArgs = [:]) {
                 kbLibHelper.setGeneratorProperty(envArgs, "Default", "Initialize_not_referenced_attributes", "No")
             }
             if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
-                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
-                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
+                kbLibHelper.resetDataStoreProperty(envArgs, "Default", "Database schema")
+                kbLibHelper.resetDataStoreProperty(envArgs, "GAM", "Database schema")
             }
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
@@ -776,8 +776,8 @@ void integrateJavaPlatform(Map envArgs = [:]) {
                 setDataSourceVersion(envArgs)
             }
             if(envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'SapHana' || envArgs.dataSource == 'Dameng' ) {
-                kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "*DEFAULT*")
-                kbLibHelper.setDataStoreProperty(envArgs, "GAM", "Database schema", "*DEFAULT*")
+                kbLibHelper.resetDataStoreProperty(envArgs, "Default", "Database schema")
+                kbLibHelper.resetDataStoreProperty(envArgs, "GAM", "Database schema")
             }
             if(envArgs.dataSource == 'DB2UDB' || envArgs.dataSource == 'Informix' ||   envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "Database schema", "gam")
