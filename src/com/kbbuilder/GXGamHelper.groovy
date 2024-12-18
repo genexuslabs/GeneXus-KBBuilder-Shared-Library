@@ -382,27 +382,27 @@ void setDataSourceVersion(Map args = [:]) {
 
 void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Net Framework - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // envArgs.dbmsVersion = '8.0 to 10.1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // envArgs.dbmsVersion = '11 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.dbmsVersion = '8.0 to 10.1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.dbmsVersion = '11 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetInformix'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetFWPlatform(envArgs)
         // -------------------------- Net Framework - Oracle 11
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
@@ -417,13 +417,13 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetOracle9to11g'
         envArgs.platformVersion = '18.11.0'
         integrateNetFWPlatform(envArgs)
-        // // -------------------------- Net Framework - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // envArgs.dbmsVersion = '8.3 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetPostgreSQL'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetFWPlatform(envArgs)
+        // -------------------------- Net Framework - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.dbmsVersion = '8.3 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetPostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetFWPlatform(envArgs)
         // -------------------------- Net Framework - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
@@ -540,27 +540,27 @@ void integrateNetFWPlatform(Map envArgs = [:]) {
 
 void buildNoStandardNetPlatforms(Map envArgs = [:]) {
     try {
-        // // -------------------------- Net - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetPlatform(envArgs)
-        // // -------------------------- Net - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // envArgs.dbmsVersion = '8.0 to 10.1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetPlatform(envArgs)
-        // // -------------------------- Net - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // envArgs.dbmsVersion = '11 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetPlatform(envArgs)
+        // -------------------------- Net - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetPlatform(envArgs)
+        // -------------------------- Net - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.dbmsVersion = '8.0 to 10.1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetPlatform(envArgs)
+        // -------------------------- Net - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.dbmsVersion = '11 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreInformix'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - Oracle 11
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
@@ -575,13 +575,13 @@ void buildNoStandardNetPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCoreOracle9to11g'
         envArgs.platformVersion = '18.11.0'
         integrateNetPlatform(envArgs)
-        // // -------------------------- Net - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // envArgs.dbmsVersion = '8.3 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCorePostgreSQL'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateNetPlatform(envArgs)
+        // -------------------------- Net - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.dbmsVersion = '8.3 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.NetCorePostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        integrateNetPlatform(envArgs)
         // -------------------------- Net - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
@@ -703,27 +703,27 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDameng'
         envArgs.platformVersion = '18.11.0'
         integrateJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 ISeries
-        // envArgs.dataSource = 'DB2ISeries'
-        // envArgs.dbmsModelConst = 'DB2400'
-        // envArgs.dbmsVersion = 'V6R1 to V7R1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
-        // // -------------------------- Java - DB2 Common
-        // envArgs.dataSource = 'DB2UDB'
-        // envArgs.dbmsModelConst = 'DB2Common'
-        // envArgs.dbmsVersion = '8.0 to 10.1'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
-        // // -------------------------- Java - Informix
-        // envArgs.dataSource = 'Informix'
-        // envArgs.dbmsModelConst = 'Informix'
-        // envArgs.dbmsVersion = '11 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 ISeries
+        envArgs.dataSource = 'DB2ISeries'
+        envArgs.dbmsModelConst = 'DB2400'
+        envArgs.dbmsVersion = 'V6R1 to V7R1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2ISeries'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
+        // -------------------------- Java - DB2 Common
+        envArgs.dataSource = 'DB2UDB'
+        envArgs.dbmsModelConst = 'DB2Common'
+        envArgs.dbmsVersion = '8.0 to 10.1'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaDB2UDB'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
+        // -------------------------- Java - Informix
+        envArgs.dataSource = 'Informix'
+        envArgs.dbmsModelConst = 'Informix'
+        envArgs.dbmsVersion = '11 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaInformix'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
@@ -738,13 +738,13 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:]) {
         envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaOracle9to11g'
         envArgs.platformVersion = '18.11.0'
         integrateJavaPlatform(envArgs)
-        // // -------------------------- Java - Postgre
-        // envArgs.dataSource = 'PostgreSQL'
-        // envArgs.dbmsModelConst = 'POSTGRESQL'
-        // envArgs.dbmsVersion = '8.3 or higher'
-        // envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
-        // envArgs.platformVersion = '18.11.0'
-        // integrateJavaPlatform(envArgs)
+        // -------------------------- Java - Postgre
+        envArgs.dataSource = 'PostgreSQL'
+        envArgs.dbmsModelConst = 'POSTGRESQL'
+        envArgs.dbmsVersion = '8.3 or higher'
+        envArgs.platformId = 'GXDeps.GAM.Reorgs.JavaPostgreSQL'
+        envArgs.platformVersion = '18.11.0'
+        integrateJavaPlatform(envArgs)
         // -------------------------- Java - SAP Hana
         envArgs.dataSource = 'SapHana'
         envArgs.dbmsModelConst = 'HANA'
