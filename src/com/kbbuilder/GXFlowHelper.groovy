@@ -42,7 +42,7 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Ma
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetOracle'
-        envArgs.gamPlatformVersion = '18.11.41'
+        envArgs.gamPlatformVersion = '18.11.100'
         envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetOracle'
         envArgs.reorgPlatformVersion = '18.11.0'
         integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
@@ -316,7 +316,7 @@ void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaOracle'
-        envArgs.gamPlatformVersion = '18.11.47'
+        envArgs.gamPlatformVersion = '18.11.100'
         envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaOracle'
         envArgs.reorgPlatformVersion = '18.11.0'
         integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
@@ -593,7 +593,7 @@ void buildNoStandardNetPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map 
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
         envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreOracle'
-        envArgs.gamPlatformVersion = '18.11.47'
+        envArgs.gamPlatformVersion = '18.11.100'
         envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreOracle'
         envArgs.reorgPlatformVersion = '18.11.0'
         integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
