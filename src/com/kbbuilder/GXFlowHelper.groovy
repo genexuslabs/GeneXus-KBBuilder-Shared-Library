@@ -44,15 +44,15 @@ void buildNoStandardNetFWPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Ma
         envArgs.dataSource = 'mysql5'
         envArgs.dbmsModelConst = 'MySQL'
         integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.dbmsVersion = 'V6R1 to V7R1'
-        envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetDB2ISeries'
-        envArgs.gamPlatformVersion = '18.11.41'
-        envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetDB2ISeries'
-        envArgs.reorgPlatformVersion = '18.11.0'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.dbmsVersion = 'V6R1 to V7R1'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetDB2ISeries'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetDB2ISeries'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- NetFW - DB2 Common
         envArgs.dataSource = 'DB2UDB'
         envArgs.dbmsModelConst = 'DB2Common'
