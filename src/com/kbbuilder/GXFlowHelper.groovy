@@ -9,54 +9,68 @@ import com.genexus.GXDeployEngineHelper
  */
 void buildNoStandardNetFWPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- NetFW - MySQL
-        envArgs.dataSource = 'mysql5'
-        envArgs.dbmsModelConst = 'MySQL'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetDB2ISeries'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetDB2UDB'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetInformix'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - MySQL
+        // envArgs.dataSource = 'mysql5'
+        // envArgs.dbmsModelConst = 'MySQL'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetDB2ISeries'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetDB2ISeries'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetDB2UDB'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetDB2UDB'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetInformix'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetInformix'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- NetFW - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetOracle'
-        envArgs.platformVersion = '18.11.41'
+        envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetOracle'
+        envArgs.gamPlatformVersion = '18.11.41'
+        envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetOracle'
+        envArgs.reorgPlatformVersion = '18.11.0'
         integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetOracle9to11g'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - Postgres
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetPostgreSQL'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetFW - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetSapHana'
-        envArgs.platformVersion = '18.11.41'
-        integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - Oracle 9 to 11
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetOracle9to11g'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetOracle9to11g'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - Postgres
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetPostgreSQL'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetPostgreSQL'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetFW - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetSapHana'
+        // envArgs.gamPlatformVersion = '18.11.41'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetSapHana'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetFWPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -73,9 +87,9 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ------------------------ DOWNLOAD PLATFORM ------------------------ 
-        if(envArgs.platformId) {
+        if(envArgs.gamPlatformId) {
             stage("Download GAM Platform") {
-                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.gamPlatformId, envArgs.gamPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             }
         }
         // ------------------------ PREPARE ENVIRONMENT ------------------------ 
@@ -123,7 +137,6 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
             if(envArgs.dataSource == 'db2common' || envArgs.dataSource == 'Informix' || envArgs.dataSource == 'Oracle' || envArgs.dataSource == 'Oracle9to11g' || envArgs.dataSource == 'PostgreSQL' || envArgs.dataSource == 'Sql2012' ) {
                 kbLibHelper.setDataStoreProperty(envArgs, "Default", "database schema", "GXFLOW_SCHEMA")
             }
-            
             buildConfigurationEnvironment(envArgs)
 
             // //------------------ W.A for connection.gam
@@ -207,16 +220,49 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
             powershell script: """
                 & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
             """
+            // ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.reorgPlatformId, envArgs.reorgPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Packages::${envArgs.deployTarget}\\Packages"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Packages"
+            """
+            // ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+        }
+        stage("Publish Platform ${envArgs.targetPath}") {
             // ----------------------------- Create NuGet package
-            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
             envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
             envArgs.packageVersion = envArgs.componentVersion
             envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
 
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
+        }
+            // // ----------------------------- Create NuGet package
+            // envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
+            // envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            // envArgs.packageVersion = envArgs.componentVersion
+            // envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+
             // // ----------------------------- Publish NuGet package
             // envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             // gxLibDeployEngine.publishNuGetPackage(envArgs)
-        }
+        // }
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         return ret
     } catch (error) {
@@ -229,60 +275,76 @@ String integrateNetFWPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map eng
  */
 void buildNoStandardJavaPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- Java - MySQL
-        envArgs.dataSource = 'mysql5'
-        envArgs.dbmsModelConst = 'MySQL'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDameng'
-        envArgs.platformVersion = '18.11.43'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
-        envArgs.platformVersion = '18.11.43'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
-        envArgs.platformVersion = '18.11.43'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaInformix'
-        envArgs.platformVersion = '18.11.43'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - MySQL
+        // envArgs.dataSource = 'mysql5'
+        // envArgs.dbmsModelConst = 'MySQL'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Dameng
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaDameng'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaDameng'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaDB2ISeries'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaDB2ISeries'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaDB2UDB'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaDB2UDB'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaInformix'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaInformix'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- Java - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaOracle'
-        envArgs.platformVersion = '18.11.47'
+        envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaOracle'
+        envArgs.gamPlatformVersion = '18.11.47'
+        envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaOracle'
+        envArgs.reorgPlatformVersion = '18.11.0'
         integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaOracle9to11g'
-        envArgs.platformVersion = '18.11.47'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - Postgres
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaPostgreSQL'
-        envArgs.platformVersion = '18.11.47'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- Java - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Platform.JavaSapHana'
-        envArgs.platformVersion = '18.11.47'
-        integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Oracle 9 to 11
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaOracle9to11g'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaOracle9to11g'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - Postgres
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaPostgreSQL'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaPostgreSQL'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- Java - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.JavaSapHana'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.JavaSapHana'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateJavaPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -299,9 +361,9 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ------------------------ DOWNLOAD PLATFORM ------------------------ 
-        if(envArgs.platformId) {
+        if(envArgs.gamPlatformId) {
             stage("Download GAM Platform") {
-                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.gamPlatformId, envArgs.gamPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             }
         }
         // ------------------------ PREPARE ENVIRONMENT ------------------------ 
@@ -435,16 +497,49 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
             powershell script: """
                 & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
             """
+            // ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.reorgPlatformId, envArgs.reorgPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Packages::${envArgs.deployTarget}\\Packages"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Packages"
+            """
+            // ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+        }
+        stage("Publish Platform ${envArgs.targetPath}") {
             // ----------------------------- Create NuGet package
-            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
             envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
             envArgs.packageVersion = envArgs.componentVersion
             envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
 
+            // ----------------------------- Publish NuGet package
+            envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+            gxLibDeployEngine.publishNuGetPackage(envArgs)
+        }
+            // // ----------------------------- Create NuGet package
+            // envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
+            // envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+            // envArgs.packageVersion = envArgs.componentVersion
+            // envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+
             // // ----------------------------- Publish NuGet package
             // envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             // gxLibDeployEngine.publishNuGetPackage(envArgs)
-        }
+        // }
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         return ret
     } catch (error) {
@@ -457,60 +552,76 @@ String integrateJavaPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engi
  */
 void buildNoStandardNetPlatforms(Map envArgs = [:], Map clientDuArgs = [:], Map engineDuArgs = [:]) {
     try {
-        // -------------------------- NetCore - MySQL
-        envArgs.dataSource = 'mysql5'
-        envArgs.dbmsModelConst = 'MySQL'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - Dameng
-        envArgs.dataSource = 'Dameng'
-        envArgs.dbmsModelConst = 'Dameng'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreDameng'
-        envArgs.platformVersion = '18.11.43'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - DB2 ISeries
-        envArgs.dataSource = 'DB2ISeries'
-        envArgs.dbmsModelConst = 'DB2400'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreDB2ISeries'
-        envArgs.platformVersion = '18.11.43'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - DB2 Common
-        envArgs.dataSource = 'DB2UDB'
-        envArgs.dbmsModelConst = 'DB2Common'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreDB2UDB'
-        envArgs.platformVersion = '18.11.43'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - Informix
-        envArgs.dataSource = 'Informix'
-        envArgs.dbmsModelConst = 'Informix'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreInformix'
-        envArgs.platformVersion = '18.11.43'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - MySQL
+        // envArgs.dataSource = 'mysql5'
+        // envArgs.dbmsModelConst = 'MySQL'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - Dameng
+        // envArgs.dataSource = 'Dameng'
+        // envArgs.dbmsModelConst = 'Dameng'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreDameng'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreDameng'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - DB2 ISeries
+        // envArgs.dataSource = 'DB2ISeries'
+        // envArgs.dbmsModelConst = 'DB2400'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreDB2ISeries'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreDB2ISeries'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - DB2 Common
+        // envArgs.dataSource = 'DB2UDB'
+        // envArgs.dbmsModelConst = 'DB2Common'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreDB2UDB'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreDB2UDB'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - Informix
+        // envArgs.dataSource = 'Informix'
+        // envArgs.dbmsModelConst = 'Informix'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreInformix'
+        // envArgs.gamPlatformVersion = '18.11.43'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreInformix'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
         // -------------------------- NetCore - Oracle 12
         envArgs.dataSource = 'Oracle'
         envArgs.dbmsModelConst = 'Oracle'
         envArgs.dbmsVersion = '12c or higher'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreOracle'
-        envArgs.platformVersion = '18.11.47'
+        envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreOracle'
+        envArgs.gamPlatformVersion = '18.11.47'
+        envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreOracle'
+        envArgs.reorgPlatformVersion = '18.11.0'
         integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - Oracle 9 to 11
-        envArgs.dataSource = 'Oracle9to11g'
-        envArgs.dbmsModelConst = 'Oracle'
-        envArgs.dbmsVersion = '9 to 11g'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreOracle9to11g'
-        envArgs.platformVersion = '18.11.47'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - Postgres
-        envArgs.dataSource = 'PostgreSQL'
-        envArgs.dbmsModelConst = 'POSTGRESQL'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCorePostgreSQL'
-        envArgs.platformVersion = '18.11.47'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
-        // -------------------------- NetCore - SAP Hana
-        envArgs.dataSource = 'SapHana'
-        envArgs.dbmsModelConst = 'HANA'
-        envArgs.platformId = 'GXDeps.GAM.Platform.NetCoreSapHana'
-        envArgs.platformVersion = '18.11.47'
-        integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - Oracle 9 to 11
+        // envArgs.dataSource = 'Oracle9to11g'
+        // envArgs.dbmsModelConst = 'Oracle'
+        // envArgs.dbmsVersion = '9 to 11g'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreOracle9to11g'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreOracle9to11g'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - Postgres
+        // envArgs.dataSource = 'PostgreSQL'
+        // envArgs.dbmsModelConst = 'POSTGRESQL'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCorePostgreSQL'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCorePostgreSQL'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
+        // // -------------------------- NetCore - SAP Hana
+        // envArgs.dataSource = 'SapHana'
+        // envArgs.dbmsModelConst = 'HANA'
+        // envArgs.gamPlatformId = 'GXDeps.GAM.Platform.NetCoreSapHana'
+        // envArgs.gamPlatformVersion = '18.11.47'
+        // envArgs.reorgPlatformId = 'GXDeps.GXFlow.Reorgs.NetCoreSapHana'
+        // envArgs.reorgPlatformVersion = '18.11.0'
+        // integrateNetPlatform(envArgs, clientDuArgs, engineDuArgs)
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
@@ -527,9 +638,9 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
         def kbLibHelper = new PropertiesHelper()
         def gxLibDeployEngine = new GXDeployEngineHelper()
         // ------------------------ DOWNLOAD PLATFORM ------------------------ 
-        if(envArgs.platformId) {
+        if(envArgs.gamPlatformId) {
             stage("Download GAM Platform") {
-                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.platformId, envArgs.platformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+                gxLibHelper.downloadNugetPackage(envArgs.gxBasePath, envArgs.gamPlatformId, envArgs.gamPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
             }
         }
         // ------------------------ PREPARE ENVIRONMENT ------------------------ 
@@ -661,8 +772,31 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
             powershell script: """
                 & 7z a -tzip "${envArgs.deployTarget}\\${envArgs.packageName}" "${envArgs.deployTarget}\\Packages"
             """
+            // ----------------------------- Rename package for nuget
+            envArgs.packageName = powershell script: """
+                \$ErrorActionPreference = 'Stop'
+                \$packageFileName = (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+                \$packageFullPath = Join-Path "${envArgs.deployTarget}" "\$packageFileName"
+                Rename-Item -Path \$packageFullPath -NewName \$packageFileName.replace('-', '.') -Force
+                (Get-ChildItem -Path "${envArgs.deployTarget}" -Filter '*.zip').Name
+            """, returnStdout: true
+            echo "[INFO] Package Name:: ${envArgs.packageName.trim()}"
+            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName.trim()}"
+            echo "[INFO] Package Location:: ${envArgs.packageLocation}"
+            // ----------------------------- Add Reorganization files
+            gxLibHelper.downloadNugetPackage(envArgs.deployTarget, envArgs.reorgPlatformId, envArgs.reorgPlatformVersion, "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}\\index.json")
+            powershell script: """
+            Write-Host "[DEBUG] INPUT: envArgs.packageLocation::${envArgs.packageLocation}"
+            Write-Host "[DEBUG] INPUT: Packages::${envArgs.deployTarget}\\Packages"
+                & 'C:\\Program Files\\7-Zip\\7z.exe' a "${envArgs.packageLocation}" "${envArgs.deployTarget}\\Packages"
+            """
+            // ----------------------------- Archive artifacts
+            dir("${envArgs.deployTarget}") {
+                archiveArtifacts artifacts: "${envArgs.packageName.trim()}", followSymlinks: false
+            }
+        }
+        stage("Publish Platform ${envArgs.targetPath}") {
             // ----------------------------- Create NuGet package
-            envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
             envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
             envArgs.packageVersion = envArgs.componentVersion
             envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
@@ -671,6 +805,16 @@ String integrateNetPlatform(Map envArgs = [:], Map clientDuArgs = [:], Map engin
             envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
             gxLibDeployEngine.publishNuGetPackage(envArgs)
         }
+        //     // ----------------------------- Create NuGet package
+        //     envArgs.packageLocation = "${envArgs.deployTarget}\\${envArgs.packageName}"
+        //     envArgs.packageName = envArgs.packageName.replace(".zip", "").trim()
+        //     envArgs.packageVersion = envArgs.componentVersion
+        //     envArgs.nupkgPath = gxLibDeployEngine.createNuGetPackageFromZip(envArgs)
+
+        //     // ----------------------------- Publish NuGet package
+        //     envArgs.moduleServerSource = "${envArgs.moduleServerSourceBase}${envArgs.artifactsServerId}"
+        //     gxLibDeployEngine.publishNuGetPackage(envArgs)
+        // }
         def ret = "${envArgs.componentId}.${envArgs.packageName}"
         return ret
 
