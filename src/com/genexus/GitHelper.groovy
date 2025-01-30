@@ -65,5 +65,25 @@ void dispatchToGeneXusDependencySync(Map args = [:]) {
         throw error
     }
 }
+void dispatchToReusableUpdateImageNumber(Map args = [:]) {
+    try {
+        withCredentials([
+            usernamePassword(credentialsId: "${args.dispatchGitHubAppCredentialsId}",
+                usernameVariable: 'githubClientId',
+                passwordVariable: 'githubAccessToken'
+        )]) {
+            bat """
+                curl -X POST ^
+                -H \"Accept: application/vnd.github+json\" ^
+                -H \"Authorization: Bearer ${githubAccessToken}\" ^
+                https://api.github.com/repos/${args.dispatchRepoOrganization}/${args.dispatchRepoName}/actions/workflows/${args.dispatchWorkflowName}/dispatches ^
+                -d "{ \"ref\": \"${args.dispatchRepoBranch}\", \"inputs\": { \"DEPLOY_REPOSITORY\": \"${args.deployRepository}\", \"DEPLOY_ENV\": \"${args.deployEnv}\", \"BRANCH\": \"${args.branch}\", \"COMMITTER\": \"${args.committer}\", \"SERVICES\": \"${args.services}\", \"IMAGE_VERSION\": \"${args.imageVersion}\" } }"            
+            """
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
 
 return this
