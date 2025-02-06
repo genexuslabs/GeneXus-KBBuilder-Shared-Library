@@ -33,23 +33,20 @@ void awsConfigure(Map args = [:]) {
  *
  * @param args A map containing the following parameters:
  *   - artifactFullPath: The full path to the artifact to be uploaded
- *   - awsS3BucketName: The name of the AWS S3 bucket
- *   - awsCredentialsId: AWS previously configured profile
+ *   - awsS3Bucket: The name of the AWS S3 bucket
  */
 void awsUploadToS3Bucket(Map args = [:]) {
     try{
         echo "[INFO] Starting upload artifact to S3"
-        echo "[DEBUG] Artifact absolute path:\"${args.artifactFullPath}\""
-        echo "[DEBUG] AWS Bucket S3://${args.awsS3Bucket}"
-        echo "[DEBUG] AWS profile: ${args.awsCredentialsId}"
-        powershell script: "aws s3 cp \"${args.artifactFullPath}\" s3://${args.awsS3BucketName} --profile ${args.awsCredentialsId}"
+        echo "[DEBUG] Artifact full path:\"${args.artifactFullPath}\""
+        echo "[DEBUG] AWS Bucket full destination s3://${args.awsS3Bucket}"
         powershell script: """
             if(-not ${args.awsS3Bucket}.EndsWith("/")) {
                 ${args.awsS3Bucket} += "/"
             }
             \$fileNameExt = [System.IO.Path]::GetFileName(${args.artifactFullPath})
             Write-Output "$(Get-Date -Format G) [INFO] Uploading package: \$fileNameExt to ${args.awsS3Bucket}"
-            & aws s3 cp ${args.artifactFullPath} s3://${awsS3Bucket}\$fileNameExt
+            & aws s3 cp ${args.artifactFullPath} s3://${args.awsS3Bucket}\$fileNameExt
         """
     } catch (error) {
         currentBuild.result = 'FAILURE'
