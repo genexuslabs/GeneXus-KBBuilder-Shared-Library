@@ -44,9 +44,9 @@ void awsUploadToS3Bucket(Map args = [:]) {
             if(-not ${args.awsS3Bucket}.EndsWith("/")) {
                 ${args.awsS3Bucket} += "/"
             }
-            \$fileNameExt = [System.IO.Path]::GetFileName(${args.artifactFullPath})
+            \$fileNameExt = [System.IO.Path]::GetFileName("${args.artifactFullPath}")
             Write-Output "$(Get-Date -Format G) [INFO] Uploading package: \$fileNameExt to ${args.awsS3Bucket}"
-            & aws s3 cp ${args.artifactFullPath} s3://${args.awsS3Bucket}\$fileNameExt
+            & aws s3 cp "${args.artifactFullPath}" s3://${args.awsS3Bucket}\$fileNameExt
         """
     } catch (error) {
         currentBuild.result = 'FAILURE'
