@@ -41,7 +41,7 @@ void awsUploadToS3Bucket(Map args = [:]) {
         echo "[DEBUG] Artifact full path:\"${args.artifactFullPath}\""
         echo "[DEBUG] AWS Bucket full destination s3://${args.awsS3Bucket}"
         powershell script: """
-            if(-not ${args.awsS3Bucket}.EndsWith(\"/\")) {
+            if(-not \"${args.awsS3Bucket}.EndsWith(\"/\")\") {
                 ${args.awsS3Bucket} += \"/\"
             }
             \$fileNameExt = [System.IO.Path]::GetFileName(\"${args.artifactFullPath}\")
