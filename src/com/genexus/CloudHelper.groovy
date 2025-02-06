@@ -41,11 +41,11 @@ void awsUploadToS3Bucket(Map args = [:]) {
         echo "[DEBUG] Artifact full path:\"${args.artifactFullPath}\""
         echo "[DEBUG] AWS Bucket full destination s3://${args.awsS3Bucket}"
         powershell script: """
-            if(-not ${args.awsS3Bucket}.EndsWith("/")) {
-                ${args.awsS3Bucket} += "/"
+            if(-not ${args.awsS3Bucket}.EndsWith(\"/\")) {
+                ${args.awsS3Bucket} += \"/\"
             }
-            \$fileNameExt = [System.IO.Path]::GetFileName("${args.artifactFullPath}")
-            Write-Output "$(Get-Date -Format G) [INFO] Uploading package: \$fileNameExt to ${args.awsS3Bucket}"
+            \$fileNameExt = [System.IO.Path]::GetFileName(\"${args.artifactFullPath}\")
+            Write-Output((Get-Date -Format G) + " [INFO] Uploading package: \$fileNameExt to ${args.awsS3Bucket}")
             & aws s3 cp "${args.artifactFullPath}" s3://${args.awsS3Bucket}\$fileNameExt
         """
     } catch (error) {
