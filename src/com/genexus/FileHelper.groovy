@@ -84,7 +84,7 @@ void winCompressDirectory(String sourceDir, String destinationZip) {
     try {
         powershell label: "Compress Directory",
             script: """
-                if(Test-Path -Path \$auxDestinationZip) { Remove-Item -Path \$auxDestinationZip}
+                if(Test-Path -Path "${destinationZip}") { Remove-Item -Path "${destinationZip}"}
                 if (Get-Command 7z -ErrorAction SilentlyContinue) {
                     Write-Output "7z command found. Using 7z to compress the directory."
                     & 7z a -tzip "${destinationZip}" "${sourceDir}"
