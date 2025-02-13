@@ -84,14 +84,13 @@ void winCompressDirectory(String sourceDir, String destinationZip) {
     try {
         powershell label: "Compress Directory",
             script: """
-                \$auxDestinationZip = \"${destinationZip}\\*\"
                 if(Test-Path -Path \$auxDestinationZip) { Remove-Item -Path \$auxDestinationZip}
                 if (Get-Command 7z -ErrorAction SilentlyContinue) {
                     Write-Output "7z command found. Using 7z to compress the directory."
-                    & 7z a -tzip \$auxDestinationZip ${sourceDir}
+                    & 7z a -tzip "${destinationZip}" "${sourceDir}"
                 } else {
                     Write-Output "7z command not found. Using Compress-Archive to compress the directory."
-                    Compress-Archive -Path ${sourceDir} -DestinationPath \$auxDestinationZip
+                    Compress-Archive -Path "${sourceDir}" -DestinationPath "${destinationZip}"
                 }
             """
     } catch (error) {
