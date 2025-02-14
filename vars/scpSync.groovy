@@ -1,3 +1,5 @@
+import com.genexus.FileHelper
+
 // # Job: SCPSync
 
 // ## Descripción
@@ -27,10 +29,10 @@
 
 // - Asegúrate de que las herramientas necesarias (PowerShell, SCP) estén instaladas y configuradas correctamente en el entorno de ejecución de Jenkins.
 // - Verifica que las credenciales y rutas proporcionadas sean correctas y estén protegidas adecuadamente.
-import com.genexus.FileHelper
-def sysLibHelper = new FileHelper()
 
 def call(Map args = [:]) {
+    def sysLibHelper = new FileHelper()
+
     sysLibHelper.winCompressDirectory(args.sourceDir, args.targetPath)
     try {
         powershell(
