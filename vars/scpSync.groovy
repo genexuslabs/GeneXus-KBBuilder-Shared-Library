@@ -44,6 +44,7 @@ def call(Map args = [:]) {
                     
                     Write-Host "INFO: Start sync zip file"
                     scp -i "${args.sshKeyPath}" "${args.targetPath}" "${args.dbnUsername}@${args.dbnIP}:${args.dbnSyncPath}"
+                    Write-Host "INFO cmd: scp -i "${args.sshKeyPath}" "${args.targetPath}" "${args.dbnUsername}@${args.dbnIP}:${args.dbnSyncPath}""
                     Write-Host "INFO: Finish sync zip file"
                 } catch {
                     if (\$Error) {
@@ -57,7 +58,6 @@ def call(Map args = [:]) {
             """
         )
         echo "[INFO] FINISH SYNC FILES"
-
     } catch (Exception err) {
         echo "[ERROR] Sync process failed: ${err.getMessage()}"
         throw err
