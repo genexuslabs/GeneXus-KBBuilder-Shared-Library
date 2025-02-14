@@ -27,20 +27,11 @@
 
 // - Asegúrate de que las herramientas necesarias (PowerShell, SCP) estén instaladas y configuradas correctamente en el entorno de ejecución de Jenkins.
 // - Verifica que las credenciales y rutas proporcionadas sean correctas y estén protegidas adecuadamente.
+import com.genexus.FileHelper
+def sysLibHelper = new FileHelper()
 
 def call(Map args = [:]) {
-    def fileContents = libraryResource 'com/genexus/pwshScripts/common/zip-directory.ps1'
-    writeFile file: 'zip-directory.ps1', text: fileContents
-
-    def exitCode = powershell(
-        script: ".\\zip-directory.ps1 -gxPIABaseLocation:'${WORKSPACE}' -ZipLocation:'${args.sourceFolder}' -Dir:'${args.targetPath}' -7zipPath:'7z'", 
-        returnStatus: true
-    )
-    
-    if (exitCode != 0) {
-        error "PowerShell script failed with exit code: ${exitCode}"
-    }
-
+    sysLibHelper.winCompressDirectory(args.sourceDir, args.targetPath)
     try {
         powershell(
             label: "Sync DU package to DBN",
