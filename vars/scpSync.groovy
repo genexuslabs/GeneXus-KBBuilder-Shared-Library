@@ -33,7 +33,7 @@ def call(Map args = [:]) {
     writeFile file: 'zip-directory.ps1', text: fileContents
 
     def exitCode = powershell(
-        script: ".\\zip-directory.ps1 -gxPIABaseLocation:'${WORKSPACE}' -ZipLocation:'${args.sourceFolder}' -Dir:'${args.targetPath}'", 
+        script: ".\\zip-directory.ps1 -gxPIABaseLocation:'${WORKSPACE}' -ZipLocation:'${args.sourceFolder}' -Dir:'${args.targetPath}' -7zipPath:'7z'", 
         returnStatus: true
     )
     
