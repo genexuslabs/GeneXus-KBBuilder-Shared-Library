@@ -17,6 +17,7 @@
  *   - targetPath: The target path within the Knowledge Base.
  *   - BUILD_NUMBER: The build number to be used in naming the exported files.
  *   - generator: The generator to be used for the reorganization.
+ *   - [OPTIONAL] javaPackageName: The Java package name to be used for the reorganization.
  *
  * Workflow Steps:
  * 1. Determine if the data source is MySQL by checking the value of ${args.dataSource}.
@@ -39,7 +40,8 @@ def call(Map args = [:]) {
         default:
             throw new IllegalArgumentException("Unsupported DataStore type: ${args.dataSource}");
     }
-    
+    def packageName = args.javaPackageName ?: ""
+
     try {
         bat label: "Export reorganization::${args.environmentName}", 
         script: """
@@ -54,7 +56,7 @@ def call(Map args = [:]) {
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
             /p:SQLServer="${isSQLServer}" \
-            /p:PackageName="${args.javaPackageName}" \
+            /p:PackageName="${packageName}" \
             /t:ExportReorganization 
         """
         
