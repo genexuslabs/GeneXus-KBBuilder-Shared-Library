@@ -41,11 +41,11 @@ def call(Map args = [:]) {
             throw new IllegalArgumentException("Unsupported DataStore type: ${args.dataSource}");
     }
     def packageName = args.javaPackageName ?: ""
-
+    echo "[INFO] PackageName: '${packageName}'"
     try {
         bat label: "Export reorganization::${args.environmentName}", 
         script: """
-            "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
+            "${args.msbuildEx]ePath}" "${args.gxBasePath}\\deploy.msbuild" \
             /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
