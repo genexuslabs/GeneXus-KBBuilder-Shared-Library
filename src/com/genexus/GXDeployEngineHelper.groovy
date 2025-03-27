@@ -29,7 +29,6 @@ def createDockerContext(Map args = [:]) {
         def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-                /p:localKbPath="${args.localKBPath}" \
                 /p:TargetId="DOCKER" \
                 /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
                 /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
@@ -38,7 +37,6 @@ def createDockerContext(Map args = [:]) {
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
-                /p:GENERATOR="${args.generator}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage \
             """
