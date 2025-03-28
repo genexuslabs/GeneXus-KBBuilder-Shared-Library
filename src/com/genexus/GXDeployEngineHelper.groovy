@@ -36,6 +36,7 @@ def createDockerContext(Map args = [:]) {
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
+                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage \
