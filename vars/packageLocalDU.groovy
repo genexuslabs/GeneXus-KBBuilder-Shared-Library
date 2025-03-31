@@ -46,7 +46,6 @@ def call(Map args = [:]) {
             /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:CallTreeLogFile="${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log" \
             /p:USE_APPSERVER_DATASOURCE="False" \
-            /p:DEPLOY_TYPE="BINARIES" \
             /p:APPLICATION_KEY="${args.duAppEncryKey}" \
             /p:INCLUDE_GAM="${args.duIncludeGAM}" \
             /p:INCLUDE_GXFLOW_BACKOFFICE="${args.duIncludeGXFlowBackoffice}" \
@@ -58,6 +57,7 @@ def call(Map args = [:]) {
             /l:FileLogger,Microsoft.Build.Engine \
             /t:CreateDeploy
         """
+            // /p:DEPLOY_TYPE="BINARIES" \
     gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
     
     def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
