@@ -29,6 +29,7 @@ def createDockerContext(Map args = [:]) {
         def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
                 /p:TargetId="DOCKER" \
                 /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
                 /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
@@ -36,11 +37,11 @@ def createDockerContext(Map args = [:]) {
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
-                /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage \
             """
+              //  /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
 
             def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.packageLocation}')", returnStdout: true
             def contextLocation = ''
