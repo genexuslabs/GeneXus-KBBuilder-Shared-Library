@@ -335,4 +335,33 @@ String getFourDigitVersion(String version, String buildNumber, String buildOffse
     return standarizedVersion.trim()
 }
 
+/**
+ * Copies the contents from a source directory to a target directory. The behavior of the copy operation
+ * depends on the `includeParentDir` flag.
+ *
+ * - If `includeParentDir` is true, the source directory itself is included in the copy, resulting in:
+ *   /sourceDir/content -> /TargetDir/sourceDir/content
+ *
+ * - If `includeParentDir` is false, only the contents of the source directory are copied:
+ *   /sourceDir/content -> /TargetDir/content
+ *
+ * @param {String} sourcePath - The path to the source directory.
+ * @param {String} targetPath - The path to the target directory.
+ * @param {boolean} includeParentDir - Determines whether to include the source directory itself
+ *                                      in the copy operation.
+ */
+void copyFolder(String sourcePath, String targetPath, boolean includeParentDir = false) {
+    String source = includeParentDir ? sourcePath : "${sourcePath}\\*";
+    
+    powershell label: "Copy contents from folder",
+        script: """
+            try {
+                Copy-Item -Path "${source}" -Destination "${targetPath}" -Recurse -Force
+                Write-Host "[INFO] Contenido copiado de: ${sourcePath} a ${targetPath}"
+            } catch {
+                Write-Host "Error: \$_"
+            }
+        """
+}
+
 return this
