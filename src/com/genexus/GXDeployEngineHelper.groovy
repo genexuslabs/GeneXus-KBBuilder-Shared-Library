@@ -40,6 +40,7 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /t:CreatePackage \
+                /v:diagnostic
             """
 
                 // /p:localKbPath="${args.localKBPath}" \

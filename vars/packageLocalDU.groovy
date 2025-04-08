@@ -55,6 +55,7 @@ def call(Map args = [:]) {
             /p:PACKAGE_FORMAT="Automatic" \
             /p:TimeStamp="${env.BUILD_NUMBER}" \
             /l:FileLogger,Microsoft.Build.Engine \
+            /v:diagnostic \
             /t:CreateDeploy
         """
             // /p:DEPLOY_TYPE="BINARIES" \
@@ -70,6 +71,7 @@ def call(Map args = [:]) {
             /p:DeployFileFullPath="${packageLocationPath}" \
             /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:AppName="${args.duName}" \
+            /v:diagnostic \
             /t:CreatePackage
         """
         def generatedFile = powershell label: "Find generated file",
