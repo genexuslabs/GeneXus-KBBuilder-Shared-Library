@@ -39,6 +39,7 @@ def createDockerContext(Map args = [:]) {
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
+                /p:GENERATOR="${args.generator}" \
                 /t:CreatePackage \
                 /v:diagnostic \
             """
