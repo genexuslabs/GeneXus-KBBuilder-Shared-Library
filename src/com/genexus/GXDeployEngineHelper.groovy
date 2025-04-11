@@ -28,7 +28,7 @@ def createDockerContext(Map args = [:]) {
     try {
         def observabilityProvider = ''
         if(args.observabilityProvider) {
-            observabilityProvider = ${args.observabilityProvider}
+            observabilityProvider = args.observabilityProvider
         }
         def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
