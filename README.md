@@ -1,5 +1,3 @@
-Sure! Here’s the updated README for the **GeneXus-KBBuilder-Shared-Library** repository with the **Scripts Overview** section replaced by a new **Repo Folder Structure** section that includes a table:
-
 # GeneXus-KBBuilder-Shared-Library
 
 Welcome to the **GeneXus-KBBuilder-Shared-Library** repository! This repository contains a collection of scripts designed to facilitate the integration of GeneXus tasks with Jenkins, enabling seamless automation and continuous integration for your GeneXus projects.
