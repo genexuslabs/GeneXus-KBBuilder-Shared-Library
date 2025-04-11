@@ -61,7 +61,11 @@ def createDockerContext(Map args = [:]) {
                 default:
                     throw new Exception("[ERROR] Unsupported package extension: ${extension}")
             }
-    
+            powershell script: """
+        
+              if (Test-Path -Path ${contextLocation}) { Remove-Item -Path ${contextLocation} -Recurse -Force }
+              New-Item -ItemType Directory -Path ${contextLocation} | Out-Null
+        """
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
             
