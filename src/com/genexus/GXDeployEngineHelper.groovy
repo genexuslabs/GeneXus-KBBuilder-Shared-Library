@@ -26,6 +26,10 @@ def downloadNuGet() {
  */
 def createDockerContext(Map args = [:]) {
     try {
+        def observabilityProvider = ''
+        if(args.observabilityProvider) {
+            observabilityProvider = ${args.observabilityProvider}
+        }
         def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
@@ -39,6 +43,7 @@ def createDockerContext(Map args = [:]) {
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:GENERATOR="${args.generator}" \
+                /p:ObservabilityProvider="${observabilityProvider}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage \
             """
