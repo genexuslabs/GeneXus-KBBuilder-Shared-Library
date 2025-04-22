@@ -41,6 +41,7 @@ def createDockerContext(Map args = [:]) {
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
+                /p:GXDeployFileProject="${args.localKBPath}\\${args.targetPath}\\web\\${args.duName}.gxdproj" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:GENERATOR="${args.generator}" \
                 /p:ObservabilityProvider="${observabilityProvider}" \
