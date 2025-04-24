@@ -83,5 +83,87 @@ def call(Map args = [:]) {
         /p:AppName="${args.duName}" \
         /t:CreatePackage
     """
-    return "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\context"
+    
+    def generatedFile = powershell label: "Find generated file",
+    script: """
+        \$deployPath = \"${packageLocationPath}\"
+        \$dirs = Get-ChildItem -Path \$deployPath 
+        foreach(\$i in \$dirs) {
+            \$file = Get-ChildItem -Path \$deployPath\\\$i | Where-Object { \$_.Name.StartsWith(\"${args.duName}_${env.BUILD_NUMBER}\" + \".\")}
+            Write-Output(\$file.name)
+        }
+    """, returnStdout: true
+    def observabilityProvider = ''
+    if(args.observabilityProvider) {
+        observabilityProvider = args.observabilityProvider
+    }
+
+            // /p:CreatePackageTarget="CreatePackage" \
+            // /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
+            // /p:DeploymentUnit="${args.duName}" \
+            // /p:DOCKER_CONTAINER_RUNTIME="Default" \
+            // /p:DOCKER_IMAGE_REGISTRY="" \
+            // /p:DOCKER_BASE_IMAGE="${args.dockerBaseImage}" \
+            // /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
+            // /p:DOCKER_WEBAPPLOCATION="" \
+            // /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
+            // /p:K8S_GENERATE_KUBERNETES="False" \
+            // /p:K8S_NAMESPACE="" \
+            // /p:K8S_INITIAL_REPLICAS="" \
+            // /p:K8S_SERVICE_TYPE="" \
+            // /p:K8S_ENABLE_REDIS="False" \
+            // /p:DEPLOY_TYPE="BINARIES" \
+            // /p:APPLICATION_KEY="${args.duAppEncryKey}" \
+            // /p:INCLUDE_GAM="${args.duIncludeGAM}" \
+            // /p:INCLUDE_GXFLOW_BACKOFFICE="${args.duIncludeGXFlowBackoffice}" \
+            // /p:APP_UPDATE="${args.duAppUpdate}" \
+            // /p:ENABLE_KBN="${args.duEnableKBN}" \
+            // /p:TARGET_JRE="${args.duTargetJRE}" \
+            // /p:PACKAGE_FORMAT="Automatic" \
+    def msBuildCommand = """
+            "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
+            /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
+            /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:TargetId="DOCKER" \
+            /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
+            /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
+            /p:DOCKER_BASE_IMAGE="${args.dockerBaseImage}" \
+            /p:DeploySource="${args.packageLocation}" \
+            /p:CreatePackageScript="createpackage.msbuild" \
+            /p:GXDeployFileProject="${args.localKBPath}\\${args.targetPath}\\web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj" \
+            /p:GENERATOR="${args.generator}" \
+            /p:ObservabilityProvider="${observabilityProvider}" \
+            /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
+            /t:CreatePackage \
+        """
+
+    def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.generatedFile}')", returnStdout: true
+    def contextLocation = ''
+    extension = extension.trim().toLowerCase()
+    echo "[INFO] Package extension: ${extension}" 
+    switch (extension) {
+        case '.war':
+            msBuildCommand += " /p:WarName=\"${args.warName}\""
+            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.war","context")
+            break
+        case '.jar':
+            msBuildCommand += " /p:JarName=\"${args.jarName}\""
+            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.jar","context")
+            break
+        case '.zip':
+            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
+        default:
+            throw new Exception("[ERROR] Unsupported package extension: ${extension}")
+    }
+    powershell script: """
+        if (Test-Path -Path ${contextLocation}) { Remove-Item -Path ${contextLocation} -Recurse -Force }
+        New-Item -ItemType Directory -Path ${contextLocation} | Out-Null
+    """
+    bat label: "Create Docker context",
+        script: "${msBuildCommand}"
+        
+    return  contextLocation
 }
