@@ -129,11 +129,11 @@ def call(Map args = [:]) {
     echo "[INFO] Package extension: ${extension}" 
     switch (extension) {
         case '.war':
-            if(args.warName == null) { args.warName = 'ROOT' }
+            if(args.warName == null) { args.warName = 'ROOT.war' }
             msBuildCommand += " /p:WarName=\"${args.warName}\""
             break
         case '.jar':
-            if(args.jarName == null) { args.jarName = 'ROOT' }
+            if(args.jarName == null) { args.jarName = 'ROOT.jar' }
             msBuildCommand += " /p:JarName=\"${args.jarName}\""
             break
         case '.zip':
