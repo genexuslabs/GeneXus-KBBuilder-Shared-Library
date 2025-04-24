@@ -31,6 +31,12 @@
  */
 
 def call(Map args = [:]) {
+    String packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
+    echo "[DEBUG] packageLocationPath::${packageLocationPath}"
+    powershell script: """
+        if(Test-Path -Path "${packageLocationPath}") { Remove-Item -Path "${packageLocationPath}" -Recurse -Force}
+        New-Item -Path "${packageLocationPath}" -ItemType Directory  -Force | Out-Null
+    """
     bat script: """
         "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
         /p:DEPLOY_TARGETS="${args.gxBasePath}\\DeploymentTargets\\Docker\\docker.targets" \
@@ -69,8 +75,6 @@ def call(Map args = [:]) {
         /l:FileLogger,Microsoft.Build.Engine \
         /t:CreateDeploy
     """
-    String packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
-    echo "[DEBUG] packageLocationPath::${packageLocationPath}"
     String gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
     echo "[DEBUG] gxdprojFilePath::${gxdprojFilePath}"
     
@@ -147,5 +151,5 @@ def call(Map args = [:]) {
     bat label: "Create Docker context",
         script: "${msBuildCommand}"
         
-    return  contextLocation
+    return  fullDockerContextLocationPath
 }
