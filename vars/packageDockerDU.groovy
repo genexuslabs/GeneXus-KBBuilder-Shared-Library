@@ -124,7 +124,7 @@ def call(Map args = [:]) {
             /t:CreatePackage \
         """
 
-    def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.fullPackageLocationPath}')", returnStdout: true
+    def extension = powershell script: "return [System.IO.Path]::GetExtension('${fullPackageLocationPath}')", returnStdout: true
     extension = extension.trim().toLowerCase()
     echo "[INFO] Package extension: ${extension}" 
     switch (extension) {
