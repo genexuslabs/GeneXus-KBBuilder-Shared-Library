@@ -122,6 +122,7 @@ def call(Map args = [:]) {
             /p:DeploySource="${fullPackageLocationPath}" \
             /p:CreatePackageScript="createpackage.msbuild" \
             /p:GXDeployFileProject="${args.localKBPath}\\${args.targetPath}\\web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj" \
+            /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
             /p:GENERATOR="${args.generator}" \
             /p:ObservabilityProvider="${observabilityProvider}" \
             /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
