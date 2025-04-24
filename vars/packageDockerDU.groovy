@@ -31,8 +31,6 @@
  */
 
 def call(Map args = [:]) {
-
-    String gxdprojFilePath = ''
     bat script: """
         "${args.msbuildExePath}" "${args.gxBasePath}\\deploy.msbuild" \
         /p:DEPLOY_TARGETS="${args.gxBasePath}\\DeploymentTargets\\Docker\\docker.targets" \
@@ -71,8 +69,8 @@ def call(Map args = [:]) {
         /l:FileLogger,Microsoft.Build.Engine \
         /t:CreateDeploy
     """
-    def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
-    def gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
+    String packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
+    String gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
     
     echo "[DEBUG] packageLocationPath::${packageLocationPath}"
     bat script: """
