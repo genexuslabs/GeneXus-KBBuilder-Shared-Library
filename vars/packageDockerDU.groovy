@@ -70,9 +70,10 @@ def call(Map args = [:]) {
         /t:CreateDeploy
     """
     String packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
-    String gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
-    
     echo "[DEBUG] packageLocationPath::${packageLocationPath}"
+    String gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
+    echo "[DEBUG] gxdprojFilePath::${gxdprojFilePath}"
+    
     bat script: """
         "${args.msbuildExePath}" "${gxdprojFilePath}" \
         /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
@@ -93,33 +94,12 @@ def call(Map args = [:]) {
             Write-Output(\$file.name)
         }
     """, returnStdout: true
+    echo "[DEBUG] generatedFile::${generatedFile}"
+
     def observabilityProvider = ''
     if(args.observabilityProvider) {
         observabilityProvider = args.observabilityProvider
     }
-
-            // /p:CreatePackageTarget="CreatePackage" \
-            // /p:DeployFullPath="${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}\\${env.BUILD_NUMBER}" \
-            // /p:DeploymentUnit="${args.duName}" \
-            // /p:DOCKER_CONTAINER_RUNTIME="Default" \
-            // /p:DOCKER_IMAGE_REGISTRY="" \
-            // /p:DOCKER_BASE_IMAGE="${args.dockerBaseImage}" \
-            // /p:DOCKER_MAINTAINER="GeneXus DevOps Team <devops@genexus.com>" \
-            // /p:DOCKER_WEBAPPLOCATION="" \
-            // /p:DOCKER_IMAGE_NAME="${args.dockerImageName.toLowerCase()}" \
-            // /p:K8S_GENERATE_KUBERNETES="False" \
-            // /p:K8S_NAMESPACE="" \
-            // /p:K8S_INITIAL_REPLICAS="" \
-            // /p:K8S_SERVICE_TYPE="" \
-            // /p:K8S_ENABLE_REDIS="False" \
-            // /p:DEPLOY_TYPE="BINARIES" \
-            // /p:APPLICATION_KEY="${args.duAppEncryKey}" \
-            // /p:INCLUDE_GAM="${args.duIncludeGAM}" \
-            // /p:INCLUDE_GXFLOW_BACKOFFICE="${args.duIncludeGXFlowBackoffice}" \
-            // /p:APP_UPDATE="${args.duAppUpdate}" \
-            // /p:ENABLE_KBN="${args.duEnableKBN}" \
-            // /p:TARGET_JRE="${args.duTargetJRE}" \
-            // /p:PACKAGE_FORMAT="Automatic" \
     def msBuildCommand = """
             "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
             /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
