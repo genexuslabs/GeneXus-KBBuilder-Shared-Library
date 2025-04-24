@@ -71,7 +71,8 @@ def call(Map args = [:]) {
         /l:FileLogger,Microsoft.Build.Engine \
         /t:CreateDeploy
     """
-    gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
+    def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
+    def gxdprojFilePath = "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj"
     
     echo "[DEBUG] packageLocationPath::${packageLocationPath}"
     bat script: """
