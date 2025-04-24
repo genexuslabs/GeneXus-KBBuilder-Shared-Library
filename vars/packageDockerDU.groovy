@@ -85,7 +85,7 @@ def call(Map args = [:]) {
         /t:CreatePackage
     """
     
-    def generatedFile = powershell label: "Find generated file",
+    String generatedFile = powershell label: "Find generated file",
     script: """
         \$deployPath = \"${packageLocationPath}\"
         \$dirs = Get-ChildItem -Path \$deployPath 
@@ -94,7 +94,11 @@ def call(Map args = [:]) {
             Write-Output(\$file.name)
         }
     """, returnStdout: true
-    echo "[DEBUG] generatedFile::${generatedFile}"
+    echo "[DEBUG] generatedFile::${generatedFile.trim()}"
+    String fullPackageLocationPath = "${packageLocationPath}\\${generatedFile.trim()}"
+    echo "[DEBUG] fullPackageLocationPath::${fullPackageLocationPath}"
+    String fullDockerContextLocationPath = "${packageLocationPath}\\context"
+    echo "[DEBUG] fullDockerContextLocationPath::${fullDockerContextLocationPath}"
 
     def observabilityProvider = ''
     if(args.observabilityProvider) {
@@ -120,27 +124,23 @@ def call(Map args = [:]) {
             /t:CreatePackage \
         """
 
-    def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.generatedFile}')", returnStdout: true
-    def contextLocation = ''
+    def extension = powershell script: "return [System.IO.Path]::GetExtension('${args.fullPackageLocationPath}')", returnStdout: true
     extension = extension.trim().toLowerCase()
     echo "[INFO] Package extension: ${extension}" 
     switch (extension) {
         case '.war':
             msBuildCommand += " /p:WarName=\"${args.warName}\""
-            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.war","context")
             break
         case '.jar':
             msBuildCommand += " /p:JarName=\"${args.jarName}\""
-            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.jar","context")
             break
         case '.zip':
-            contextLocation = args.generatedFile.replace("${args.duName}_${env.BUILD_NUMBER}.zip","context")
         default:
             throw new Exception("[ERROR] Unsupported package extension: ${extension}")
     }
     powershell script: """
-        if (Test-Path -Path ${contextLocation}) { Remove-Item -Path ${contextLocation} -Recurse -Force }
-        New-Item -ItemType Directory -Path ${contextLocation} | Out-Null
+        if (Test-Path -Path ${fullDockerContextLocationPath}) { Remove-Item -Path ${fullDockerContextLocationPath} -Recurse -Force }
+        New-Item -ItemType Directory -Path ${fullDockerContextLocationPath} | Out-Null
     """
     bat label: "Create Docker context",
         script: "${msBuildCommand}"
