@@ -28,8 +28,6 @@ The repository is organized into the following folders:
 
 Contributions to the GeneXus-KBBuilder-Shared-Library are not currently being accepted. However, you are welcome to use this repository as inspiration for your own projects or to adapt the scripts for your specific needs.
 
-If you have any suggestions or feedback, feel free to reach out via the contact information provided below.
-
 Thank you for your understanding!
 
 ## License
