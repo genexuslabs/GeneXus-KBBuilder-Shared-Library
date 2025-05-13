@@ -38,7 +38,7 @@ void cloneRepository(String gitUrl, String gitBranch, String gitCredentialsId) {
  */
 void commitToRepository(Map args = [:]) {
     try {
-        withCredentials([usernamePassword(credentialsId: "${environmentDefinition.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+        withCredentials([usernamePassword(credentialsId: "${args.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
             def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
             powershell script: """
                 git config user.email \"${args.gitEmail}\"
