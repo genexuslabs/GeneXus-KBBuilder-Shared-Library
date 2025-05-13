@@ -44,7 +44,7 @@ void commitToRepository(Map args = [:]) {
                 git config user.email \"${args.gitEmail}\"
                 git config user.name \"${args.gitAppUserId}+${args.gitAppNameSlug}[bot]\"
                 git add .
-                git commit -m \"${args.gitCommitMessage}\"
+                git commit -m "${args.gitCommitMessage}"
                 git remote set-url origin ${authenticatedUrl}
                 git push origin ${args.gitBranch}
             """
