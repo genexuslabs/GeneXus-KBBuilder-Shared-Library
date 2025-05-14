@@ -36,7 +36,7 @@ void cloneRepository(String gitUrl, String gitBranch, String gitCredentialsId) {
  *
  * @throws Exception if any error occurs during the execution of the Git commands.
  */
-void commitToRepository(Map args = [:]) {
+void commitUsingGitHubAppBuilderToken(Map args = [:]) {
     try {
         withCredentials([usernamePassword(credentialsId: "${args.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
             def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
@@ -48,7 +48,6 @@ void commitToRepository(Map args = [:]) {
                 git remote set-url origin ${authenticatedUrl}
                 git push origin ${args.gitBranch}
             """
-            echo "Changes pushed to branch ${args.gitBranch} by GithubApp."
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
