@@ -66,22 +66,27 @@ void syncFlywayPackages(Map args = [:]) {
  *
  * @throws Exception if any error occurs during the execution of the PowerShell script.
  */
-void renameAndCopySQLScript(Map args = [:]) {
+void addMigrationToIacRepository(Map args = [:]) {
     try {
         powershell script: """
             \$currentDate = Get-Date -Format \"yyyy.MM.dd.HHmmss\" 
             \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.baseApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.txt"
             \$flywayUpdateSQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\"
-
             \$originalPath = "${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt"
             
             if (Test-Path -Path \$flywayUpdateSQLPath) {
+                Write-Output((Get-Date -Format G) + " [INFO] Sync update reorganizationScript (#${env.BUILD_NUMBER})")
+                Write-Output((Get-Date -Format G) + " [DEBUG] Copy -Path \$originalPath -Destination \$flywaySQLPath")
                 Copy-Item -Path "\$originalPath" -Destination "\$flywaySQLPath" -Force
             }
             else {
+                Write-Output((Get-Date -Format G) + " [INFO] Sync initial reorganizationScript (#${env.BUILD_NUMBER})")
                 \$parentDirectory = Split-Path -Path \$flywayUpdateSQLPath -Parent
-                \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.baseApplicationName}_CreationScript.txt"
-                New-Item -Path "\$flywayUpdateSQLPath" -ItemType Directory -Force
+                Write-Output((Get-Date -Format G) + " [DEBUG] Calculated parent dir: \$parentDirectory")
+                \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.baseApplicationName}_Schema_Initial.txt"
+                Write-Output((Get-Date -Format G) + " [DEBUG] Create dir: \$flywayCreationSQLPath")
+                New-Item -Path "\$flywayUpdateSQLPath" -ItemType Directory -Force | Out-Null
+                Write-Output((Get-Date -Format G) + " [DEBUG] -Path "\$originalPath" -Destination "\$flywayCreationSQLPath"")
                 Copy-Item -Path "\$originalPath" -Destination "\$flywayCreationSQLPath" -Force
             }
         """
