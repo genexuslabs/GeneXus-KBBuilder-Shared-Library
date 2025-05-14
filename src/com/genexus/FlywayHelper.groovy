@@ -70,7 +70,7 @@ void addMigrationToIacRepository(Map args = [:]) {
     try {
         powershell script: """
             \$currentDate = Get-Date -Format \"yyyy.MM.dd.HHmmss\" 
-            \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.baseApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.txt"
+            \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.flywayApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.txt"
             \$flywayUpdateSQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\"
             \$originalPath = "${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt"
             
