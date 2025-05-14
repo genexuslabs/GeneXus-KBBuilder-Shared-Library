@@ -17,6 +17,45 @@ void cloneRepository(String gitUrl, String gitBranch, String gitCredentialsId) {
     }
 }
 
+/**
+ * Commits changes to a specified Git repository using provided credentials and commit details.
+ *
+ * This method configures Git with the specified user email and name, stages all changes,
+ * commits them with the provided commit message, and pushes the changes to the specified branch
+ * of the repository using an authenticated URL.
+ *
+ * @param args A map containing the following keys:
+ *             - gitRepositoryUrl: The URL of the Git repository.
+ *             - gitEmail: The email address to use for the Git commit.
+ *             - gitAppUserId: The user ID of the GitHub App.
+ *             - gitAppNameSlug: The slug of the GitHub App name.
+ *             - gitCommitMessage: The commit message to use.
+ *             - gitBranch: The branch to which the changes should be pushed.
+ *
+ * The method uses credentials stored in Jenkins to authenticate the push operation.
+ *
+ * @throws Exception if any error occurs during the execution of the Git commands.
+ */
+void commitToRepository(Map args = [:]) {
+    try {
+        withCredentials([usernamePassword(credentialsId: "${args.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+            def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
+            powershell script: """
+                git config user.email \"${args.gitEmail}\"
+                git config user.name \"${args.gitAppUserId}+${args.gitAppNameSlug}[bot]\"
+                git add .
+                git commit -m "${args.gitCommitMessage}"
+                git remote set-url origin ${authenticatedUrl}
+                git push origin ${args.gitBranch}
+            """
+            echo "Changes pushed to branch ${args.gitBranch} by GithubApp."
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, String reorgFullPath) {
     try {
         dir("PublishReorgRepo") {

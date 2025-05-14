@@ -48,5 +48,47 @@ void syncFlywayPackages(Map args = [:]) {
     }
 }
 
+/**
+ * Renames and copies an SQL reorganization script to a specified destination directory with a timestamp.
+ * The script is renamed following the pattern: V[timestamp]___[baseApplicationName]_ReorganizationScript_[BUILD_NUMBER].txt
+ * If the destination directory does not exist, it is created, and the script is copied with a different naming pattern.
+ *
+ * @param args A map containing the following parameters:
+ *   - sqlScriptDestinationDirectory: The destination directory where the SQL script will be copied. (Not directly used in the script)
+ *   - projectName: The name of the project to be included in the renamed file. (Not directly used in the script)
+ *   - reorgExportPath: The source directory containing the original reorganization script. (Not directly used in the script)
+ *
+ * The method uses PowerShell to:
+ *   1. Generate a timestamp in the format "yyyy.MM.dd.HHmmss".
+ *   2. Construct the destination path with the new file name.
+ *   3. Copy the original SQL script to the destination if the destination directory exists.
+ *   4. If the destination directory does not exist, it creates the directory and copies the script with a different naming pattern.
+ *
+ * @throws Exception if any error occurs during the execution of the PowerShell script.
+ */
+void renameAndCopySQLScript(Map args = [:]) {
+    try {
+        powershell script: """
+            \$currentDate = Get-Date -Format \"yyyy.MM.dd.HHmmss\" 
+            \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.baseApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.txt"
+            \$flywayUpdateSQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\"
+
+            \$originalPath = "${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt"
+            
+            if (Test-Path -Path \$flywayUpdateSQLPath) {
+                Copy-Item -Path "\$originalPath" -Destination "\$flywaySQLPath" -Force
+            }
+            else {
+                \$parentDirectory = Split-Path -Path \$flywayUpdateSQLPath -Parent
+                \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.baseApplicationName}_CreationScript.txt"
+                New-Item -Path "\$flywayUpdateSQLPath" -ItemType Directory -Force
+                Copy-Item -Path "\$originalPath" -Destination "\$flywayCreationSQLPath" -Force
+            }
+        """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
 
 return this
