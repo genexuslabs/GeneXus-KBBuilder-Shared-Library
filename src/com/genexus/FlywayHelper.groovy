@@ -86,7 +86,7 @@ void addMigrationToIacRepository(Map args = [:]) {
                 \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.baseApplicationName}_Schema_Initial.txt"
                 Write-Output((Get-Date -Format G) + " [DEBUG] Create dir: \$flywayCreationSQLPath")
                 New-Item -Path "\$flywayUpdateSQLPath" -ItemType Directory -Force | Out-Null
-                Write-Output((Get-Date -Format G) + " [DEBUG] -Path "\$originalPath" -Destination "\$flywayCreationSQLPath"")
+                Write-Output((Get-Date -Format G) + " [DEBUG] -Path \$originalPath -Destination \$flywayCreationSQLPath")
                 Copy-Item -Path "\$originalPath" -Destination "\$flywayCreationSQLPath" -Force
             }
         """
