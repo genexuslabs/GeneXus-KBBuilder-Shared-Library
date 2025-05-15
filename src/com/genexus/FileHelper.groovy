@@ -354,7 +354,6 @@ void archiveArtifact(String filePath, String artifactName = null) {
     try {
         def parentDirPath = powershell script: "Split-Path \"${projectDefinition.targetPath}\" -Parent", returnStdout: true
         def fileName = powershell script: "Split-Path \"${projectDefinition.targetPath}\" -Leaf", returnStdout: true
-        def artifactName = null
         dir(parentDirPath.trim()) {
             if (artifactName != null) {
                 powershell script: """Copy-Item -Path "${fileName.trim()}" -Destination ${artifactName.trim()}"""
