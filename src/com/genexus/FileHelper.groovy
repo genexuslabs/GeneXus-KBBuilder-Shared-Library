@@ -363,7 +363,7 @@ void archiveArtifact(String filePath, String artifactName = null) {
                 artifactName = fileName.trim()
             }
             echo "DEBUG: artifactName = ${artifactName}"
-            archiveArtifacts artifacts: artifactName, followSymlinks: false
+            archiveArtifacts artifacts: "${artifactName}", followSymlinks: false
         }
     } catch (error) {
         currentBuild.result = 'FAILURE'
