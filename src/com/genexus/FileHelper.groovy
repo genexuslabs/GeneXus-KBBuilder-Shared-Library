@@ -352,15 +352,16 @@ String getFourDigitVersion(String version, String buildNumber, String buildOffse
  */
 void archiveArtifact(String filePath, String artifactName = null) {
     try {
-        def parentDirPath = powershell script: "Split-Path \"${filePath}\" -Parent", returnStdout: true
-        def fileName = powershell script: "Split-Path \"${filePath}\" -Leaf", returnStdout: true
+        def parentDirPath = powershell script: "Split-Path \"${projectDefinition.targetPath}\" -Parent", returnStdout: true
+        def fileName = powershell script: "Split-Path \"${projectDefinition.targetPath}\" -Leaf", returnStdout: true
+        def artifactName = null
         dir(parentDirPath.trim()) {
             if (artifactName != null) {
                 powershell script: """Copy-Item -Path "${fileName.trim()}" -Destination ${artifactName.trim()}"""
-            }
-            else{
+            } else {
                 artifactName = fileName.trim()
             }
+            echo "INFO: artifactName = ${artifactName}"
             archiveArtifacts artifacts: artifactName, followSymlinks: false
         }
     } catch (error) {
