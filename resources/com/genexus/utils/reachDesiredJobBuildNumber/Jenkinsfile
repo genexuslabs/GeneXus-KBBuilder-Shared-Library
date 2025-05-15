@@ -1,0 +1,27 @@
+pipeline {
+    agent { node { label '' } } 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+    parameters {
+        string(name: 'desiredBuildNumber', description: 'Desired build number')
+        integer(name: 'targetJob', description: 'Target Job Path')
+    }
+    stages {
+        stage('Increase Build Number') {
+             steps {
+                 script {
+                     def desiredBuildNumber = params.desiredBuildNumber
+                     def buildNumberReached = false
+                     echo "Executing until the desired build number (${desiredBuildNumber}) is reached."
+ 
+					 def result = build job: params.targetJob, propagate: false
+                     while (result.getNumber() >= desiredBuildNumber) {
+                        result = build job: params.targetJob, propagate: false
+                     }
+					 echo "Desired build number was reached."
+                 }
+             }
+         }
+    }
+}

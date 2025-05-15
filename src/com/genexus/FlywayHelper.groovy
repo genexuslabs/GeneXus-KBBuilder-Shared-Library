@@ -49,20 +49,23 @@ void syncFlywayPackages(Map args = [:]) {
 }
 
 /**
- * Renames and copies an SQL reorganization script to a specified destination directory with a timestamp.
- * The script is renamed following the pattern: V[timestamp]___[baseApplicationName]_ReorganizationScript_[BUILD_NUMBER].txt
- * If the destination directory does not exist, it is created, and the script is copied with a different naming pattern.
+ * Renames and copies an SQL reorganization script to a specified destination directory within an IaC repository.
+ * The script is renamed following the pattern: V[timestamp]___[flywayApplicationName]_ReorganizationScript_[BUILD_NUMBER].txt
+ * If the destination directory does not exist, it is created, and the script is copied with a different naming pattern:
+ * V[timestamp]___[baseApplicationName]_Schema_Initial.txt.
  *
  * @param args A map containing the following parameters:
- *   - sqlScriptDestinationDirectory: The destination directory where the SQL script will be copied. (Not directly used in the script)
- *   - projectName: The name of the project to be included in the renamed file. (Not directly used in the script)
- *   - reorgExportPath: The source directory containing the original reorganization script. (Not directly used in the script)
+ *   - iacRepoLocalPath: The local path to the Infrastructure as Code (IaC) repository.
+ *   - flywayRepoDestination: The destination directory within the IaC repository where the SQL script will be copied.
+ *   - flywayApplicationName: The name of the application to be included in the renamed file.
+ *   - baseApplicationName: The base name of the application to be used if the destination directory does not exist.
+ *   - reorgExportPath: The source directory containing the original reorganization script.
  *
  * The method uses PowerShell to:
  *   1. Generate a timestamp in the format "yyyy.MM.dd.HHmmss".
- *   2. Construct the destination path with the new file name.
- *   3. Copy the original SQL script to the destination if the destination directory exists.
- *   4. If the destination directory does not exist, it creates the directory and copies the script with a different naming pattern.
+ *   2. Construct the destination path with the new file name based on whether the destination directory exists.
+ *   3. Copy the original SQL script to the destination directory with the appropriate naming pattern.
+ *   4. Create the destination directory if it does not exist and copy the script with the initial naming pattern.
  *
  * @throws Exception if any error occurs during the execution of the PowerShell script.
  */

@@ -1,0 +1,21 @@
+pipeline {
+    agent { node { label '' } } 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '1'))
+    }
+    parameters {
+        string(name: 'credentialId', description: 'Desired credential to save')
+    }
+    stages {
+        stage('Save Credential to TXT') {
+             steps {
+                 script {
+                    withCredentials([usernamePassword(credentialsId: params.credentialId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+						echo "Path to file: ${WORKSPACE}/${params.credentialId}.txt"
+                        writeFile(file: "${params.credentialId}.txt", text: "Password: ${PASSWORD}")
+                    }
+                 }
+             }
+         }
+    }
+}
