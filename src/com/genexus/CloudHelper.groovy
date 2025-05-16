@@ -62,7 +62,7 @@ void awsUploadToS3Bucket(Map args = [:]) {
  *   - artifactFullPath: The full path to the artifact to be uploaded
  *   - awsS3Bucket: The name of the AWS S3 bucket
  */
-void DEPRECATEDawsUploadToS3Bucket(Map args = [:]) {
+void dEPRECATEDawsUploadToS3Bucket(Map args = [:]) {
     try{
         echo "[INFO] Starting upload artifact to S3"
         echo "[DEBUG] Artifact full path:\"${args.artifactFullPath}\""
