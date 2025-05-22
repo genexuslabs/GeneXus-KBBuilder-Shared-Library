@@ -20,9 +20,10 @@ void cloneRepository(String gitUrl, String gitBranch, String gitCredentialsId) {
 /**
  * Commits changes to a specified Git repository using provided credentials and commit details.
  *
- * This method configures Git with the specified user email and name, stages all changes,
- * commits them with the provided commit message, and pushes the changes to the specified branch
- * of the repository using an authenticated URL.
+ * This method allows you to commit and push changes to a GitHub repository using an authenticated
+ * URL with a GitHub App token. It configures Git with the specified user email and name, stages 
+ * all changes, commits them with the provided commit message, and pushes the changes to the specified 
+ * branch of the repository.
  *
  * @param args A map containing the following keys:
  *             - gitRepositoryUrl: The URL of the Git repository.
@@ -31,6 +32,7 @@ void cloneRepository(String gitUrl, String gitBranch, String gitCredentialsId) {
  *             - gitAppNameSlug: The slug of the GitHub App name.
  *             - gitCommitMessage: The commit message to use.
  *             - gitBranch: The branch to which the changes should be pushed.
+ *             - gitCredentialsId: The credentials ID stored in Jenkins for authentication.
  *
  * The method uses credentials stored in Jenkins to authenticate the push operation.
  *
