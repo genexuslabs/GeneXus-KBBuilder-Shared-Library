@@ -8,7 +8,7 @@ package com.genexus
  *   - awsOutput: Amazon output format (e.g., json)
  *   - awsCredentialsId: AWS AccessKey and SecretAccessKey stored as a Jenkins credential of type username/password
  */
-void awsConfigure(Map args = [:]) {
+void deprecated_awsConfigure(Map args = [:]) {
     try{
         echo "[INFO] Configure AWS CLI profile: ${args.awsCredentialsId}"
         withCredentials([
