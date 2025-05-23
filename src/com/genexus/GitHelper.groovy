@@ -45,6 +45,7 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
             powershell script: """
                 git config user.email \"${args.gitEmail}\"
                 git config user.name \"${args.gitAppUserId}+${args.gitAppNameSlug}[bot]\"
+                git pull
                 git add .
                 git commit -m "${args.gitCommitMessage}"
                 git remote set-url origin ${authenticatedUrl}
