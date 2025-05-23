@@ -372,4 +372,34 @@ void archiveArtifact(String filePath, String artifactName = null) {
     }
 }
 
+/**
+ * This method retrieves the version of the GeneXus installation.
+ *
+ * @param gxBasePath The base path of the GeneXus installation for which to obtain the version.
+ * @return A string representing the version of the GeneXus installation, or "--------" if the version cannot be determined.
+ *
+ * This method checks for the presence of the 'Artech.Common.Controls.dll' file in the specified GeneXus installation
+ * and retrieves the product version information. If the file is not found, it returns "--------" as a placeholder.
+ */
+String getGeneXusInstallationVersion(String gxBasePath) {
+    try{
+        String dllPath = "${gxBasePath}" + "\\Artech.Common.Controls.dll"
+        String gxversion = powershell label: "Using GeneXus version",
+            script: """
+                If( Test-Path -Path \"${dllPath}\"){
+                    (Get-Item \"${dllPath}\").VersionInfo.ProductVersion
+                }
+                else
+                {
+                    Write-Output "--------"
+                }
+                
+            """, returnStdout: true        
+        return gxversion
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this
