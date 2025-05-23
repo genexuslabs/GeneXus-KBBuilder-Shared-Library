@@ -52,7 +52,6 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
                 git commit -m "${args.gitCommitMessage}"
                 git push origin ${args.gitBranch}
                 git remote set-url origin '${args.gitRepositoryUrl}'
-                git pull
             """
         }
     } catch (error) {
