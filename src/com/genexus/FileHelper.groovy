@@ -353,17 +353,17 @@ String getFourDigitVersion(String version, String buildNumber, String buildOffse
 void archiveArtifact(String filePath, String artifactName = null) {
     try {
         def parentDirPath = powershell script: "Split-Path \"${filePath}\" -Parent", returnStdout: true
-        Write-Output((Get-Date -Format G) + " [DEBUG] parentDirPath:${parentDirPath.trim()}")
+        echo "[DEBUG] parentDirPath:${parentDirPath.trim()}"
         def fileName = powershell script: "Split-Path \"${filePath}\" -Leaf", returnStdout: true
-        Write-Output((Get-Date -Format G) + " [DEBUG] fileName:${fileName.trim()} ")
+        echo "[DEBUG] fileName:${fileName.trim()}"
         dir(parentDirPath.trim()) {
             if (artifactName != null) {
-                Write-Output((Get-Date -Format G) + " [DEBUG] Copy-Item -Path ${fileName.trim()} -Destination ${artifactName.trim()}")
+                echo "[DEBUG] Copy-Item -Path ${fileName.trim()} -Destination ${artifactName.trim()}"
                 powershell script: """Copy-Item -Path "${fileName.trim()}" -Destination ${artifactName.trim()}"""
             } else {
                 artifactName = fileName.trim()
             }
-            Write-Output((Get-Date -Format G) + " [DEBUG] artifactName:${artifactName} ")
+            echo "[DEBUG] artifactName:${artifactName}"
             archiveArtifacts artifacts: "${artifactName}", followSymlinks: false
         }
     } catch (error) {
