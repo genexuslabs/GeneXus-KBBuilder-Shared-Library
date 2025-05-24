@@ -11,7 +11,7 @@ package com.genexus
  */
 void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
     try{
-        fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
+        def fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
         writeFile file: 'deleteGeneXusInstallation.ps1', text: fileContents
         powershell script: ".\\deleteGeneXusInstallation.ps1 -gxBasePath:'${gxBasePath}' -localAndroidSDKPath:'${localAndroidSDKPath}'"
     } catch (error) {
@@ -37,6 +37,7 @@ void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
  */
 void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath, Boolean runGXInstall) {
     try{
+        def fileContents
         if (!fileExists("${WORKSPACE}\\deleteGeneXusInstallation.ps1")) {
             fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/deleteGeneXusInstallation.ps1'
             writeFile file: 'deleteGeneXusInstallation.ps1', text: fileContents
@@ -63,7 +64,7 @@ void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String
  */
 void configureProtectionServer(String gxBasePath, String protServerType, String protServerName, String protServerCredentialsId) {
     try{
-        fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
+        def fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/configureProtectionServer.ps1'
         writeFile file: 'configureProtectionServer.ps1', text: fileContents
         echo "[DEBUG] protServerCredentialsId::${protServerCredentialsId}"
         echo "[DEBUG] protServerName::${protServerName}"
@@ -115,7 +116,7 @@ String getGeneXusInstallationVersion(String gxBasePath) {
 
 void downloadNugetPackage(String gxBasePath, String platformId, String platformVersion, String nugetSourceRepository) {
     try{
-        fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
+        def fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-zip.ps1'
         writeFile file: 'update-from-zip.ps1', text: fileContents
         fileContents = libraryResource 'com/genexus/pwshScripts/common/update-from-nuget.ps1'
         writeFile file: 'update-from-nuget.ps1', text: fileContents
