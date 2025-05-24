@@ -18,7 +18,7 @@ void scpSyncToDBN(Map args = [:]) {
                 try {
                     \$ErrorActionPreference = 'Stop'
                     Write-Output "\$(Get-Date -Format G) [INFO] Start sync file"
-                    scp -i "${args.sshKeyPath}" "${args.fileFullPath}" "${args.dbnUsername}@${args.dbnIP}:${args.dbnSyncPath}"
+                    scp -v -i "${args.sshKeyPath}" "${args.fileFullPath}" "${args.dbnUsername}@${args.dbnIP}:${args.dbnSyncPath}"
                     Write-Output "\$(Get-Date -Format G) [INFO] Finish sync file"
                 } catch {
                     if (\$Error) {
