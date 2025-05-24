@@ -122,6 +122,23 @@ void removeUnusedImages() {
 }
 
 /**
+ * Prune unused Docker images.
+ *
+ * This method cleans up the local Docker environment by removing all unused images
+ * (images not associated with any existing container). It uses the 'docker image prune'
+ * command with the --all and --force flags for a non-interactive cleanup.
+ */
+void dockerPruneImages() {
+    try {
+        sh label: "Prune unused Docker images",
+           script: "docker image prune -a -f"
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+}
+
+/**
  * Pull an image from a private registry.
  *
  * @param args A map containing the following parameters:

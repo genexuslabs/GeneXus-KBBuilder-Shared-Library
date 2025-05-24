@@ -164,7 +164,7 @@ def call(Map args = [:], List<String> dusDeployed) {
         emailext body: template,
             mimeType: 'text/html',
             subject: "${icon} ${jobDisplayName.toString()} Build #${env.BUILD_NUMBER} » ${currentBuild.currentResult}",
-            to: "${args.notifyTo} , jalbarellos@genexus.com , jmachado@genexus.com ",
+            to: "${args.notifyTo} , jalbarellos@genexus.com",
             attachLog: true
 
     } catch (def error) {
