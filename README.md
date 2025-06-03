@@ -27,6 +27,8 @@ The repository is organized into the following folders based on the [Jenkins Sha
 |       |   +- CloudHelper.groovy    #   Provides utility methods for aws interactions.
 |       |   +- DockerHelper.groovy   #   Encapsulates Docker image and container operations.
 |       |   +- FileHelper.groovy     #   Offers common file and directory manipulation utilities.
+|       |   +- UnixHelper.groovy     #   Offers common utilities for Unix environment.
+|       |   +- FlywayHelper.groovy     #   Offers common utilities for managing flyway.
 |       |   +- GeneXusHelper.groovy  #   Core utilities for interacting with GeneXus installations or specifications.
 |       |   +- GitHelper.groovy      #   Simplifies Git version control operations within pipelines.
 |       |   +- GXDeployEngineHelper.groovy # Utilities for managing GeneXus Application Deployment engine tasks.
