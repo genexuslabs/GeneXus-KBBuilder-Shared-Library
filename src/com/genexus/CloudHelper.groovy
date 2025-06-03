@@ -8,7 +8,7 @@ package com.genexus
  *   - awsOutput: Amazon output format (e.g., json)
  *   - awsCredentialsId: AWS AccessKey and SecretAccessKey stored as a Jenkins credential of type username/password
  */
-void awsConfigure(Map args = [:]) {
+void deprecated_awsConfigure(Map args = [:]) {
     try{
         echo "[INFO] Configure AWS CLI profile: ${args.awsCredentialsId}"
         withCredentials([
@@ -48,6 +48,33 @@ void awsUploadToS3Bucket(Map args = [:]) {
             \$fileNameExt = [System.IO.Path]::GetFileName(\"${args.artifactFullPath}\")
             Write-Output((Get-Date -Format G) + " [INFO] Uploading package: \$fileNameExt to \$awsFullBucketPath")
             & aws s3 cp "${args.artifactFullPath}" s3://\$awsFullBucketPath\$fileNameExt
+        """
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * Uploads an artifact to an AWS S3 bucket
+ *
+ * @param args A map containing the following parameters:
+ *   - artifactFullPath: The full path to the artifact to be uploaded
+ *   - awsS3Bucket: The name of the AWS S3 bucket
+ */
+void dEPRECATEDawsUploadToS3Bucket(Map args = [:]) {
+    try{
+        echo "[INFO] Starting upload artifact to S3"
+        echo "[DEBUG] Artifact full path:\"${args.artifactFullPath}\""
+        echo "[DEBUG] AWS Bucket full destination s3://${args.awsS3Bucket}"
+        powershell script: """
+            \$awsFullBucketPath = "${args.awsS3Bucket}"
+            if(-not \$awsFullBucketPath.EndsWith("/")) {
+                \$awsFullBucketPath += "/"
+            }
+            \$fileNameExt = [System.IO.Path]::GetFileName(\"${args.artifactFullPath}\")
+            Write-Output((Get-Date -Format G) + " [INFO] Uploading package: \$fileNameExt to \$awsFullBucketPath")
+            & aws s3 cp "${args.artifactFullPath}" s3://\$awsFullBucketPath\$fileNameExt --profile ${args.awsCredentialsId}
         """
     } catch (error) {
         currentBuild.result = 'FAILURE'

@@ -335,4 +335,71 @@ String getFourDigitVersion(String version, String buildNumber, String buildOffse
     return standarizedVersion.trim()
 }
 
+/**
+ * Archives a specified file from a given file path. If an artifact name is provided, the file is copied
+ * to the new name before archiving. If no artifact name is provided, the original file name is used for archiving.
+ *
+ * @param {String} filePath - The full path to the file that needs to be archived.
+ * @param {String} [artifactName=null] - Optional. The name to use for the archived artifact. If not provided,
+ *                                       the original file name is used.
+ *
+ * The function performs the following steps:
+ * 1. Extracts the parent directory and file name from the provided file path using PowerShell commands.
+ * 2. Changes the working directory to the parent directory of the file.
+ * 3. If an artifact name is provided, copies the file to the new name.
+ * 4. Archives the file (or the newly named file) using the Jenkins `archiveArtifacts` plugin.
+ * 5. If any error occurs during these operations, the build result is set to 'FAILURE' and the error is thrown.
+ */
+void archiveArtifact(String filePath, String artifactName = null) {
+    try {
+        def parentDirPath = powershell script: "Split-Path \"${filePath}\" -Parent", returnStdout: true
+        echo "[DEBUG] parentDirPath:${parentDirPath.trim()}"
+        def fileName = powershell script: "Split-Path \"${filePath}\" -Leaf", returnStdout: true
+        echo "[DEBUG] fileName:${fileName.trim()}"
+        dir(parentDirPath.trim()) {
+            if (artifactName != null) {
+                echo "[DEBUG] Copy-Item -Path ${fileName.trim()} -Destination ${artifactName.trim()}"
+                powershell script: """Copy-Item -Path "${fileName.trim()}" -Destination ${artifactName.trim()}"""
+            } else {
+                artifactName = fileName.trim()
+            }
+            echo "[DEBUG] artifactName:${artifactName}"
+            archiveArtifacts artifacts: "${artifactName}", followSymlinks: false
+        }
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
+/**
+ * This method retrieves the version of the GeneXus installation.
+ *
+ * @param gxBasePath The base path of the GeneXus installation for which to obtain the version.
+ * @return A string representing the version of the GeneXus installation, or "--------" if the version cannot be determined.
+ *
+ * This method checks for the presence of the 'Artech.Common.Controls.dll' file in the specified GeneXus installation
+ * and retrieves the product version information. If the file is not found, it returns "--------" as a placeholder.
+ */
+String getGeneXusInstallationVersion(String gxBasePath) {
+    try{
+        String dllPath = "${gxBasePath}" + "\\Artech.Common.Controls.dll"
+        String gxversion = powershell label: "Using GeneXus version",
+            script: """
+                If( Test-Path -Path \"${dllPath}\"){
+                    (Get-Item \"${dllPath}\").VersionInfo.ProductVersion
+                }
+                else
+                {
+                    Write-Output "--------"
+                }
+                
+            """, returnStdout: true        
+        return gxversion
+    } catch (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
+    }
+}
+
 return this

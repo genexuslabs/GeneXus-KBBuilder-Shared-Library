@@ -26,6 +26,10 @@ def downloadNuGet() {
  */
 def createDockerContext(Map args = [:]) {
     try {
+        def observabilityProvider = ''
+        if(args.observabilityProvider) {
+            observabilityProvider = args.observabilityProvider
+        }
         def msBuildCommand = """
                 "${args.msbuildExePath}" "${args.gxBasePath}\\CreateCloudPackage.msbuild" \
                 /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
@@ -37,8 +41,10 @@ def createDockerContext(Map args = [:]) {
                 /p:DeploySource="${args.packageLocation}" \
                 /p:CreatePackageScript="createpackage.msbuild" \
                 /p:WebSourcePath="${args.localKBPath}\\${args.targetPath}\\web" \
+                /p:GXDeployFileProject="${args.localKBPath}\\${args.targetPath}\\web\\${args.duName}_${env.BUILD_NUMBER}.gxdproj" \
                 /p:ProjectName="${args.duName}_${env.BUILD_NUMBER}" \
                 /p:GENERATOR="${args.generator}" \
+                /p:ObservabilityProvider="${observabilityProvider}" \
                 /p:DOCKER_WEBAPPLOCATION="${args.webAppLocation}" \
                 /t:CreatePackage \
             """
@@ -61,7 +67,11 @@ def createDockerContext(Map args = [:]) {
                 default:
                     throw new Exception("[ERROR] Unsupported package extension: ${extension}")
             }
-    
+            powershell script: """
+        
+              if (Test-Path -Path ${contextLocation}) { Remove-Item -Path ${contextLocation} -Recurse -Force }
+              New-Item -ItemType Directory -Path ${contextLocation} | Out-Null
+        """
         bat label: "Create Docker context",
             script: "${msBuildCommand}"
             

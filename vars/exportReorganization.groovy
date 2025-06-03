@@ -41,6 +41,7 @@ def call(Map args = [:]) {
             throw new IllegalArgumentException("Unsupported DataStore type: ${args.dataSource}");
     }
     def packageName = args.javaPackageName ?: ""
+    def reorgExportPath = "${args.localKBPath}\\${args.targetPath}\\AppliedReorgs\\${env.BUILD_NUMBER}"
     echo "PackageName: '${packageName}'"
     try {
         bat label: "Export reorganization::${args.environmentName}", 
@@ -50,18 +51,18 @@ def call(Map args = [:]) {
             /p:localKbPath="${args.localKBPath}" \
             /p:environmentName="${args.environmentName}" \
             /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
-            /p:ReorgDestination="${args.reorgExportPath}" \
+            /p:ReorgDestination="${reorgExportPath}" \
             /p:FileName="${env.BUILD_NUMBER}_reorg.jar" \
             /p:Generator="${args.generator}" \
-            /p:SourcePath="${args.localKBPath}\\${args.targetPath}" \
             /p:MySQL="${isMySQL}" \
             /p:SQLServer="${isSQLServer}" \
             /p:PackageName="${packageName}" \
             /t:ExportReorganization 
         """
         
-        powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
-        echo "[INFO] Export reorganization to ${args.reorgExportPath}"
+        powershell script: "Copy-Item \"${args.localKBPath}\\${args.targetPath}\\Web\\ReorganizationScript.txt\" \"${reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt\""
+        echo "[INFO] Export reorganization to ${reorgExportPath}"
+        return reorgExportPath
     } catch (error) {
         echo "[ERROR] An error occurred during the reorganization export process: ${error}"
         throw error
