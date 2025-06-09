@@ -41,5 +41,15 @@ def call(Map args = [:]) {
             /p:serverPassword="${password}" \
             /t:PublishGXModule
         """
+    }else{
+        bat label: "Package Module::${args.packageModuleName}",
+        script: """
+            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+            /p:localKbPath="${args.localKBPath}" \
+            /p:opcPath="${args.localModulePackage}" \
+            /p:serverId="${args.moduleServerId}" \
+            /t:PublishGXModule
+        """
     }
 }
