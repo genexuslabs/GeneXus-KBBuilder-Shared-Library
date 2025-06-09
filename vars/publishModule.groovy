@@ -26,22 +26,24 @@ def call(Map args = [:]) {
     def fileContents = libraryResource 'com/genexus/templates/cdxci.msbuild'
     writeFile file: 'cdxci.msbuild', text: fileContents
 
-    withCredentials([ usernamePassword( credentialsId: args.moduleServerCredentialsId,
-        usernameVariable: 'username',
-        passwordVariable: 'password')
-    ]) {
-        bat label: "Package Module::${args.packageModuleName}",
-        script: """
-            "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
-            /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
-            /p:localKbPath="${args.localKBPath}" \
-            /p:opcPath="${args.localModulePackage}" \
-            /p:serverId="${args.moduleServerId}" \
-            /p:serverUsername="${username}" \
-            /p:serverPassword="${password}" \
-            /t:PublishGXModule
-        """
-    }else{
+    if(args.moduleServerCredentialsId) {
+        withCredentials([ usernamePassword( credentialsId: args.moduleServerCredentialsId,
+            usernameVariable: 'username',
+            passwordVariable: 'password')
+        ]) {
+            bat label: "Package Module::${args.packageModuleName}",
+            script: """
+                "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
+                /p:GX_PROGRAM_DIR="${args.gxBasePath}" \
+                /p:localKbPath="${args.localKBPath}" \
+                /p:opcPath="${args.localModulePackage}" \
+                /p:serverId="${args.moduleServerId}" \
+                /p:serverUsername="${username}" \
+                /p:serverPassword="${password}" \
+                /t:PublishGXModule
+            """
+        }
+    } else{
         bat label: "Package Module::${args.packageModuleName}",
         script: """
             "${args.msbuildExePath}" "${WORKSPACE}\\cdxci.msbuild" \
