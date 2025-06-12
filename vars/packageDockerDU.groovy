@@ -146,17 +146,17 @@ def call(Map args = [:]) {
             throw new Exception("[ERROR] Unsupported package extension: ${extension}")
     }
     powershell script: """
-        if (Test-Path -Path ${fullDockerContextLocationPath}) { Remove-Item -Path ${fullDockerContextLocationPath} -Recurse -Force }
-        New-Item -ItemType Directory -Path ${fullDockerContextLocationPath} | Out-Null
-        Copy-Item -Path ${gxdprojFilePath} -Destination ${fullDockerContextLocationPath} -Recurse -Force
-        Copy-Item -Path ${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log -Destination ${fullDockerContextLocationPath} -Recurse -Force
+        if (Test-Path -Path "${fullDockerContextLocationPath}") { Remove-Item -Path "${fullDockerContextLocationPath}" -Recurse -Force }
+        New-Item -ItemType Directory -Path "${fullDockerContextLocationPath}" | Out-Null
+        Copy-Item -Path "${gxdprojFilePath}" -Destination "${fullDockerContextLocationPath}" -Recurse -Force
+        Copy-Item -Path "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log" -Destination "${fullDockerContextLocationPath}" -Recurse -Force
     """
     bat label: "Create Docker context",
         script: "${msBuildCommand}"
     
     powershell script: """
-        if (Test-Path -Path ${gxdprojFilePath}) { Remove-Item -Path ${gxdprojFilePath} -Recurse -Force }
-        if (Test-Path -Path ${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log) { Remove-Item -Path ${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log -Recurse -Force }
+        if (Test-Path -Path "${gxdprojFilePath}") { Remove-Item -Path "${gxdprojFilePath}" -Recurse -Force }
+        if (Test-Path -Path "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log") { Remove-Item -Path "${args.localKBPath}\\${args.targetPath}\\Web\\${args.duName}_${env.BUILD_NUMBER}_gxdprojCallTree.log" -Recurse -Force }
     """
     
     return  fullDockerContextLocationPath

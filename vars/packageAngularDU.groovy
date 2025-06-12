@@ -62,6 +62,10 @@ def call(Map args = [:]) {
     
     def packageLocationPath = "${args.localKBPath}\\${args.targetPath}\\IntegrationPipeline\\${args.duName}"
     echo "[DEBUG] packageLocationPath::${packageLocationPath}"
+    powershell script: """
+        if(Test-Path -Path "${packageLocationPath}") { Remove-Item -Path "${packageLocationPath}" -Recurse -Force}
+        New-Item -Path "${packageLocationPath}" -ItemType Directory  -Force | Out-Null
+    """
 
     bat script: """
             "${args.msbuildExePath}" "${args.gxBasePath}\\CreateFrontendPackage.msbuild" \
