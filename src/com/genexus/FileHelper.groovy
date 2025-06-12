@@ -413,7 +413,7 @@ String getGeneXusInstallationVersion(String gxBasePath) {
  * For "18.0.5.152928", it would return [gxVersion:'18', gxUpgrade:'5', gxBuild:'152928'].
  * Throws an exception if the DLL is not found or the version cannot be parsed.
  */
-Map getGeneXusVersion(String gxBasePath) {
+Map getGenexusVersion(String gxBasePath) {
     try {
         // Usar \\ para asegurar que la barra invertida sea tratada correctamente en el string de Groovy
         String dllPath = "${gxBasePath}\\Artech.Common.Controls.dll"
