@@ -30,15 +30,17 @@
  * to the local KB path.
  */
 def call(Map args = [:]) {
-    gxserver changelog: (args.changelog ?? true), 
-             poll: (args.poll ?? true),
-             gxCustomPath: "${args.gxBasePath}",
-             msbuildCustomPath: "${args.msbuildExePath}",
-             serverURL: args.gxserverURL,
-             credentialsId: args.gxserverCredentials,
-             kbName: args.gxserverKB,
-             kbVersion: args.gxserverVersion,
-             kbDbServerInstance: "${args.kbDbServerInstance}",
-             localKbPath: "${args.localKBPath}",
-             localKbVersion: args.gxserverKB
+    gxserver(
+        changelog: (args.changelog == null) ? true : args.changelog,
+        poll: (args.poll == null) ? true : args.poll,
+        gxCustomPath: "${args.gxBasePath}",
+        msbuildCustomPath: "${args.msbuildExePath}",
+        serverURL: args.gxserverURL,
+        credentialsId: args.gxserverCredentials,
+        kbName: args.gxserverKB,
+        kbVersion: args.gxserverVersion,
+        kbDbServerInstance: "${args.kbDbServerInstance}",
+        localKbPath: "${args.localKBPath}",
+        localKbVersion: args.gxserverKB
+    )
 }
