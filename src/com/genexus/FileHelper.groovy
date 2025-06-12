@@ -402,4 +402,52 @@ String getGeneXusInstallationVersion(String gxBasePath) {
     }
 }
 
+/**
+ * Retrieves and parses the version of a GeneXus installation from its DLL.
+ *
+ * This method checks for the presence of the 'Artech.Common.Controls.dll' file, reads its
+ * product version, and parses it to extract the main version, upgrade, and build numbers.
+ *
+ * @param gxBasePath The base path of the GeneXus installation (e.g., "C:\Program Files (x86)\GeneXus\GeneXus18").
+ * @return A Map containing the version components: [gxVersion, gxUpgrade, gxBuild]. 
+ * For "18.0.5.152928", it would return [gxVersion:'18', gxUpgrade:'5', gxBuild:'152928'].
+ * Throws an exception if the DLL is not found or the version cannot be parsed.
+ */
+Map getGeneXusVersion(String gxBasePath) {
+    try {
+        // Usar \\ para asegurar que la barra invertida sea tratada correctamente en el string de Groovy
+        String dllPath = "${gxBasePath}\\Artech.Common.Controls.dll"
+
+        // El 'label' es más descriptivo. Se eliminó el 'else' de PowerShell para simplificar.
+        String gxversion = powershell(
+            returnStdout: true,
+            label: "Getting GeneXus version for path: ${gxBasePath}",
+            script: """
+                if (Test-Path -Path "${dllPath}") {
+                    # Devolver la versión del producto si el archivo existe
+                    (Get-Item "${dllPath}").VersionInfo.ProductVersion
+                }
+            """
+        ).trim()
+
+        def parts = gxversion.split(/[.+]/)
+        if (parts.length >= 4) {
+            Map versionInfo = [:]
+            versionInfo.gxVersion = parts[0]
+            versionInfo.gxUpgrade = parts[2]
+            versionInfo.gxBuild = parts[3]
+            
+            echo "INFO: Found and parsed GeneXus Version: ${versionInfo}"
+            return versionInfo
+        } else {
+            throw new IllegalArgumentException("Failed to parse GeneXus version string: '${gxversion}'")
+        }
+    } catch (Exception e) {
+        echo "ERROR: Failed to read GeneXus version properties - ${e.getMessage()}"
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+}
+
+
 return this
