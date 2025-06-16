@@ -60,6 +60,12 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
     }
 }
 
+void gitPull(Map args = [:]) {
+    powershell script: """
+        git pull origin ${args.gitBranch}
+    """
+}
+
 void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, String reorgFullPath) {
     try {
         dir("PublishReorgRepo") {
@@ -129,5 +135,7 @@ void dispatchToReusableUpdateImageNumber(Map args = [:]) {
         throw error
     }
 }
+
+
 
 return this
