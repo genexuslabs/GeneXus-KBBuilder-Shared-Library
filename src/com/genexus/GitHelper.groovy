@@ -61,9 +61,14 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
 }
 
 void gitPull(Map args = [:]) {
-    powershell script: """
-        git pull origin ${args.gitBranch}
-    """
+    withCredentials([usernamePassword(credentialsId: "${projectDefinition.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+        def authenticatedUrl = projectDefinition.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
+        powershell script: """
+            git config --global credential.helper ""
+            git remote set-url origin '${authenticatedUrl}'
+            git pull origin ${projectDefinition.gitBranch}
+        """, returnStdout: true
+    }
 }
 
 void publishReorganizationScript(LinkedHashMap reorgPublishTypeDefinition, String reorgFullPath) {
