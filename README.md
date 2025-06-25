@@ -37,6 +37,13 @@ Contributions to the GeneXus-KBBuilder-Shared-Library are not currently being ac
 
 Thank you for your understanding!
 
+## Versions
+- v2.0.1
+  - Add git pull method, remove pull before add and commit
+
+- v2.0.0
+  - Integrate genexus docker deploy DU instead genexus local package + create docker context
+
 ## License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
