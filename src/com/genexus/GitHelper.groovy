@@ -47,7 +47,6 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
                 git config user.email \"${args.gitEmail}\"
                 git config user.name \"${args.gitAppUserId}+${args.gitAppNameSlug}[bot]\"
                 git remote set-url origin '${authenticatedUrl}'
-                git pull origin ${args.gitBranch}
                 git add .
                 git commit -m "${args.gitCommitMessage}"
                 git push origin ${args.gitBranch}
@@ -127,6 +126,17 @@ void dispatchToReusableUpdateImageNumber(Map args = [:]) {
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
+    }
+}
+
+void gitPull(Map args = [:]) {
+    withCredentials([usernamePassword(credentialsId: "${args.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+        def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
+        powershell script: """
+            git config --global credential.helper ""
+            git remote set-url origin '${authenticatedUrl}'
+            git pull origin ${args.gitBranch}
+        """, returnStdout: true
     }
 }
 
