@@ -72,7 +72,7 @@ void addMigrationToIacRepository(Map args = [:]) {
     try {
         powershell script: """
             \$currentDate = Get-Date -Format \"yyyy.MM.dd.HHmmss\" 
-            \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.flywayApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.txt"
+            \$flywaySQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\V\$currentDate`___${args.flywayApplicationName}_ReorganizationScript_${env.BUILD_NUMBER}.sql"
             \$flywayUpdateSQLPath = "${WORKSPACE}\\${args.iacRepoLocalPath}\\${args.flywayRepoDestination}\\"
             \$originalPath = "${args.reorgExportPath}\\${env.BUILD_NUMBER}_ReorganizationScript.txt"
             
@@ -85,7 +85,7 @@ void addMigrationToIacRepository(Map args = [:]) {
                 Write-Output((Get-Date -Format G) + " [INFO] Sync initial reorganizationScript (#${env.BUILD_NUMBER})")
                 \$parentDirectory = Split-Path -Path \$flywayUpdateSQLPath -Parent
                 Write-Output((Get-Date -Format G) + " [DEBUG] Calculated parent dir: \$parentDirectory")
-                \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.flywayApplicationName}_Schema_Initial.txt"
+                \$flywayCreationSQLPath = "\$parentDirectory\\V\$currentDate`___${args.flywayApplicationName}_Schema_Initial.sql"
                 Write-Output((Get-Date -Format G) + " [DEBUG] Create dir: \$flywayCreationSQLPath")
                 New-Item -Path "\$flywayUpdateSQLPath" -ItemType Directory -Force | Out-Null
                 Write-Output((Get-Date -Format G) + " [DEBUG] -Path \$originalPath -Destination \$flywayCreationSQLPath")
