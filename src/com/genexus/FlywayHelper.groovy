@@ -50,9 +50,9 @@ void syncFlywayPackages(Map args = [:]) {
 
 /**
  * Renames and copies an SQL reorganization script to a specified destination directory within an IaC repository.
- * The script is renamed following the pattern: V[timestamp]___[flywayApplicationName]_ReorganizationScript_[BUILD_NUMBER].txt
+ * The script is renamed following the pattern: V[timestamp]___[flywayApplicationName]_ReorganizationScript_[BUILD_NUMBER].sql
  * If the destination directory does not exist, it is created, and the script is copied with a different naming pattern:
- * V[timestamp]___[flywayApplicationName]_Schema_Initial.txt.
+ * V[timestamp]___[flywayApplicationName]_Schema_Initial.sql.
  *
  * @param args A map containing the following parameters:
  *   - iacRepoLocalPath: The local path to the Infrastructure as Code (IaC) repository.
