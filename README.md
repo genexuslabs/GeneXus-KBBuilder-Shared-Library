@@ -38,6 +38,9 @@ Contributions to the GeneXus-KBBuilder-Shared-Library are not currently being ac
 Thank you for your understanding!
 
 ## Versions
+- v2.0.2
+  - Fix sync flyway iac reorg cript extention
+   
 - v2.0.1
   - Add git pull method, remove pull before add and commit
 
