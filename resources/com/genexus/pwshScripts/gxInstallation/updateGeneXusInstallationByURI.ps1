@@ -1,9 +1,9 @@
 param (
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
+    [ValidateNotNullOrEmpty()]
     [string] $genexusURI,
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
+    [ValidateNotNullOrEmpty()]
     [string] $gxBasePath,
     [string] $localAndroidSDKPath,
     [boolean] $runGXInstall,
@@ -22,7 +22,7 @@ if(Test-Path -Path "$gxBasePath") {
     }
 }
 if ($flag) {
-	Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $gxBasePath $localAndroidSDKPath}
+    Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $gxBasePath $localAndroidSDKPath}
     $null = New-Item -Path "$gxBasePath" -ItemType directory
     $tempDir = [System.IO.Path]::GetTempPath()
     [string] $guid = [System.Guid]::NewGuid()
