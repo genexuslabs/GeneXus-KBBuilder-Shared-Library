@@ -7,7 +7,7 @@ param (
     [string] $gxBasePath,
     [string] $localAndroidSDKPath,
     [boolean] $runGXInstall,
-    [boolean] $cleanData = $false
+    [boolean] $cleanCustomSpecialFolders = $false
 )
 $ErrorActionPreference="Stop"
 #
@@ -58,7 +58,7 @@ if ($flag) {
 
     $gxExeConfigPath = "$gxBasePath\GeneXus.exe.config"
     $relativeProgramDataPath = "$gxBasePath\..\ProgramData"
-    if ($cleanData -and (Test-Path -Path $relativeProgramDataPath)) {
+    if ($cleanCustomSpecialFolders -and (Test-Path -Path $relativeProgramDataPath)) {
         Write-Output((Get-Date -Format G) + " [INFO] Cleaning '$relativeProgramDataPath' directory...")
         Remove-Item -Path $relativeProgramDataPath -Recurse -Force
     }   
@@ -66,7 +66,7 @@ if ($flag) {
     Set-Location -Path $relativeProgramDataPath
     $programDataPath = (Get-Location).Path
     $relativeUserDataPath = "$gxBasePath\..\UserData"
-    if ($cleanData -and (Test-Path -Path $relativeUserDataPath)) {
+    if ($cleanCustomSpecialFolders -and (Test-Path -Path $relativeUserDataPath)) {
         Write-Output((Get-Date -Format G) + " [INFO] Cleaning '$relativeUserDataPath' directory...")
         Remove-Item -Path $relativeUserDataPath -Recurse -Force
     }   

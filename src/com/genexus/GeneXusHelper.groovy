@@ -27,7 +27,7 @@ void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
  * @param genexusURI The public URI from which to update the GeneXus installation.
  * @param localAndroidSDKPath The local path of the Android SDK associated with the GeneXus installation.
  * @param runGXInstall Boolean flag indicating whether to execute the GeneXus installation command after the update.
- * @param cleanData Optional: Boolean flag indicating whether to clean GeneXus user data after the update. Defaults to false.
+ * @param cleanCustomSpecialFolders Optional: Boolean flag indicating whether to clean GeneXus user data after the update. Defaults to false.
  *
  * This method ensures the existence of a supporting PowerShell script for uninstallation,
  * downloads an update script, and executes it to update the specified GeneXus installation
@@ -36,7 +36,7 @@ void deleteGeneXusInstallation(String gxBasePath, String localAndroidSDKPath) {
  * Note: The boolean parameter 'runGXInstall' is passed as a string with a double dollar sign ($$) 
  * to translate it correctly into the PowerShell variable context.
  */
-void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath, Boolean runGXInstall, Boolean cleanData = false) {
+void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String localAndroidSDKPath, Boolean runGXInstall, Boolean cleanCustomSpecialFolders = false) {
     try{
         def fileContents
         if (!fileExists("${WORKSPACE}\\deleteGeneXusInstallation.ps1")) {
@@ -45,7 +45,7 @@ void updateGeneXusInstallationByURI(String gxBasePath, String genexusURI, String
         }
         fileContents = libraryResource 'com/genexus/pwshScripts/gxInstallation/updateGeneXusInstallationByURI.ps1'
         writeFile file: 'updateGeneXusInstallationByURI.ps1', text: fileContents
-        powershell script: ".\\updateGeneXusInstallationByURI.ps1 -gxBasePath:'${gxBasePath}' -genexusURI:'${genexusURI}' -localAndroidSDKPath:'${localAndroidSDKPath}' -runGXInstall:\$${runGXInstall} -cleanData:\$${cleanData}"
+        powershell script: ".\\updateGeneXusInstallationByURI.ps1 -gxBasePath:'${gxBasePath}' -genexusURI:'${genexusURI}' -localAndroidSDKPath:'${localAndroidSDKPath}' -runGXInstall:\$${runGXInstall} -cleanCustomSpecialFolders:\$${cleanCustomSpecialFolders}"
     } catch (error) {
         currentBuild.result = 'FAILURE'
         throw error
