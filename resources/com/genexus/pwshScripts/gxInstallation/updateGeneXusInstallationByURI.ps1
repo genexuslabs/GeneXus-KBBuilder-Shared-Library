@@ -1,12 +1,13 @@
 param (
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
+    [ValidateNotNullOrEmpty()]
     [string] $genexusURI,
     [Parameter(Mandatory=$True)]
-	[ValidateNotNullOrEmpty()]
+    [ValidateNotNullOrEmpty()]
     [string] $gxBasePath,
     [string] $localAndroidSDKPath,
-    [boolean] $runGXInstall
+    [boolean] $runGXInstall,
+    [boolean] $cleanCustomSpecialFolders = $false
 )
 $ErrorActionPreference="Stop"
 #
@@ -21,12 +22,12 @@ if(Test-Path -Path "$gxBasePath") {
     }
 }
 if ($flag) {
-	Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $gxBasePath $localAndroidSDKPath}
+    Invoke-Command -ScriptBlock {& "$PSScriptRoot\deleteGeneXusInstallation.ps1" $gxBasePath $localAndroidSDKPath}
     $null = New-Item -Path "$gxBasePath" -ItemType directory
     $tempDir = [System.IO.Path]::GetTempPath()
     [string] $guid = [System.Guid]::NewGuid()
     $blZip = Join-Path -Path $tempDir -ChildPath $guid".zip"
-    Write-Output((Get-Date -Format G) + " INFO downloading: $genexusURI to: $blZip")
+    Write-Output((Get-Date -Format G) + " [INFO] Downloading '$genexusURI' to '$blZip'")
     if($genexusURI.Contains("s3://")) {
         & aws s3 cp $genexusURI $blZip
     } else {
@@ -34,7 +35,7 @@ if ($flag) {
         $clnt.DownloadFile("$genexusURI", $blZip)
     }
 
-    Write-Output((Get-Date -Format G) + " INFO unziping gx-bl")
+    Write-Output((Get-Date -Format G) + " [INFO] Unziping '$blZip' to '$gxBasePath'")
     Expand-Archive -LiteralPath $blZip -DestinationPath "$gxBasePath" -Force
     #Mover sub carpeta al raiz si existe serchgxfile
     $serchGxFile="Artech.Common.dll"
@@ -52,20 +53,28 @@ if ($flag) {
             }
         }
     }
-    Write-Output((Get-Date -Format G) + " Remove genexus.zip")
+    Write-Output((Get-Date -Format G) + " [INFO] Remove genexus.zip ($blZip)")
     Remove-Item -Path $blZip -Recurse
 
     $gxExeConfigPath = "$gxBasePath\GeneXus.exe.config"
     $relativeProgramDataPath = "$gxBasePath\..\ProgramData"
+    if ($cleanCustomSpecialFolders -and (Test-Path -Path $relativeProgramDataPath)) {
+        Write-Output((Get-Date -Format G) + " [INFO] Cleaning '$relativeProgramDataPath' directory...")
+        Remove-Item -Path $relativeProgramDataPath -Recurse -Force
+    }   
     if(!(Test-Path -Path $relativeProgramDataPath)) {$null = New-Item -Path $relativeProgramDataPath -ItemType Directory}
     Set-Location -Path $relativeProgramDataPath
     $programDataPath = (Get-Location).Path
     $relativeUserDataPath = "$gxBasePath\..\UserData"
+    if ($cleanCustomSpecialFolders -and (Test-Path -Path $relativeUserDataPath)) {
+        Write-Output((Get-Date -Format G) + " [INFO] Cleaning '$relativeUserDataPath' directory...")
+        Remove-Item -Path $relativeUserDataPath -Recurse -Force
+    }   
     if(!(Test-Path -Path $relativeUserDataPath)) {$null = New-Item -Path $relativeUserDataPath -ItemType Directory}
     Set-Location -Path $relativeUserDataPath
     $userDataPath = (Get-Location).Path
     [xml]$xml = Get-Content $gxExeConfigPath
-    Write-Output((Get-Date -Format G) + " INFO set ProgramDataPath in genexus.exe.config")
+    Write-Output((Get-Date -Format G) + " [INFO] Set ProgramDataPath=$relativeProgramDataPath in genexus.exe.config")
     $newEl_a = $xml.CreateElement("add");                               # Create a new Element 
     $nameAtt1_a = $xml.CreateAttribute("key");                         # Create a new attribute “key” 
     $nameAtt1_a.psbase.value = "ProgramDataPath";                    # Set the value of “key” attribute 
@@ -75,7 +84,7 @@ if ($flag) {
     $newEl_a.SetAttributeNode($nameAtt2_a);                               # Attach the “value” attribute 
     $xml.configuration["appSettings"].AppendChild($newEl_a);    # Add the newly created element to the right position
 
-    Write-Output((Get-Date -Format G) + " INFO set UserDataPath in genexus.exe.config")
+    Write-Output((Get-Date -Format G) + " [INFO] Set UserDataPath=$relativeUserDataPath in genexus.exe.config")
     $newEl_b = $xml.CreateElement("add");                               # Create a new Element 
     $nameAtt1_b = $xml.CreateAttribute("key");                         # Create a new attribute “key” 
     $nameAtt1_b.psbase.value = "UserAppDataPath";                    # Set the value of “key” attribute 
@@ -92,7 +101,7 @@ if ($flag) {
         Write-Output((Get-Date -Format G) + " [INFO] Avoid genexus.com /install execution")
     } else {
         $gxInstallationPth = "$gxBasePath\GeneXus.com"
-        Write-Output((Get-Date -Format G) + " INFO executing genexus.com /install")
+        Write-Output((Get-Date -Format G) + " [INFO] Executing genexus.com /install")
         powershell "$gxInstallationPth /install"
     }
     if(Test-Path -Path $lastURIFilePath) { Remove-Item -Path $lastURIFilePath }
@@ -100,7 +109,7 @@ if ($flag) {
     Set-Content -Path $lastURIFilePath -Value "$genexusURI"
 
     if([string]::IsNullOrEmpty($localAndroidSDKPath)) {
-        Write-Output((Get-Date -Format G) + " INFO AndroidSDK installation not configured") 
+        Write-Output((Get-Date -Format G) + " [INFO] AndroidSDK installation not configured") 
     } else {
         $androidRequirementsExe = "$gxBasePath\Android\Setup\AndroidRequirements.exe"
         if(-not(Test-Path -Path $androidRequirementsExe)) {
@@ -108,12 +117,12 @@ if ($flag) {
                 $null = New-Item -Path "$gxBasePath\Android\Setup" -ItemType Directory
             }
             $androidReqURI = "https://files.genexus.com/runtimesxev2u1/AndroidSDK18.exe"
-            Write-Output((Get-Date -Format G) + " INFO Downloading androidSDK from $androidReqURI...")
+            Write-Output((Get-Date -Format G) + " [INFO] Downloading androidSDK from $androidReqURI...")
             Invoke-WebRequest -Uri $androidReqURI -OutFile "$gxBasePath\Android\Setup\AndroidRequirements.exe"
         }
-        Write-Output((Get-Date -Format G) + " INFO Installing $androidRequirementsExe to $localAndroidSDKPath...")
+        Write-Output((Get-Date -Format G) + " [INFO] Installing $androidRequirementsExe to $localAndroidSDKPath...")
         #AndroidRequirements.exe /s GXPATH=<path GX> ANDROIDSDKPATH=<path Android SDK> LOG=<path log>
         Start-Process -FilePath $androidRequirementsExe -ArgumentList "/s GXPATH=`"$gxBasePath`" ANDROIDSDKPATH=`"$localAndroidSDKPath`" LOG=`"$localAndroidSDKPath\androidsdk.log`"" -NoNewWindow -Wait
-        Write-Output((Get-Date -Format G) + " INFO Android SDK installation complete!") 
+        Write-Output((Get-Date -Format G) + " [INFO] Android SDK installation complete!") 
     }
 }
