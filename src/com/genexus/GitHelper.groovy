@@ -62,7 +62,7 @@ void commitUsingGitHubAppBuilderToken(Map args = [:]) {
 
 void gitPull(Map args = [:]) {
     withCredentials([usernamePassword(credentialsId: "${args.gitCredentialsId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
-        def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:\$ENV.GITHUB_ACCESS_TOKEN@")
+        def authenticatedUrl = args.gitRepositoryUrl.replace("https://", "https://x-access-token:${GITHUB_ACCESS_TOKEN}@")
         powershell script: """
             git config --global credential.helper ""
             git remote set-url origin '${authenticatedUrl}'
