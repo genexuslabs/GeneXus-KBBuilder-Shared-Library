@@ -38,6 +38,9 @@ Contributions to the GeneXus-KBBuilder-Shared-Library are not currently being ac
 Thank you for your understanding!
 
 ## Versions
+- v2.0.4
+  - Add support for whitespaces in paths, in method packageDockerDU. 
+
 - v2.0.3
   - Add flag: cleanCustomSpecialFolders in intallGeneXusUsingURI to prevent unchecked accumulation of generated genexus installation directories
 
