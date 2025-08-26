@@ -55,6 +55,32 @@ void awsUploadToS3Bucket(Map args = [:]) {
     }
 }
 
+void awsUploadToS3BucketAssumingRole(Map args = [:]){
+    powershell script: """
+        Write-Output((Get-Date -Format G) + " [INFO] Attempting to assume role: ${args.awsRoleToAssumeArn}")
+        \$stsResponse = aws sts assume-role --role-arn "${args.awsRoleToAssumeArn}" --role-session-name "CICD-S3-Upload-Session" | ConvertFrom-Json
+        
+        if (!\$stsResponse) {
+            Write-Error "Failed to assume role. STS response was empty."
+            exit 1
+        }
+
+        \$env:AWS_ACCESS_KEY_ID = \$stsResponse.Credentials.AccessKeyId
+        \$env:AWS_SECRET_ACCESS_KEY = \$stsResponse.Credentials.SecretAccessKey
+        \$env:AWS_SESSION_TOKEN = \$stsResponse.Credentials.SessionToken
+        Write-Output((Get-Date -Format G) + " [INFO] Role assumed successfully. Using temporary credentials.")
+
+        \$awsFullBucketPath = "${args.awsS3Bucket}"
+        if (-not \$awsFullBucketPath.EndsWith("/")) {
+            \$awsFullBucketPath += "/"
+        }
+        \$fileNameExt = [System.IO.Path]::GetFileName("${args.artifactFullPath}")
+
+        Write-Output((Get-Date -Format G) + " [INFO] Uploading package: \$fileNameExt to \$awsFullBucketPath")
+        & aws s3 cp "${args.artifactFullPath}" s3://\$awsFullBucketPath\$fileNameExt
+    """
+}
+
 /**
  * Uploads an artifact to an AWS S3 bucket
  *
