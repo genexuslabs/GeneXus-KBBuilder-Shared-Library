@@ -57,7 +57,6 @@
         </GetEnvironmentProperty>
         <SetGeneratorProperty Generator="Default" Name="Reorganize server tables" Value="Yes" />
         <SetDataStoreProperty DataStore="$(dataStoreName)" Condition="'$(EnvGenerator)'=='.NET' AND '$(EnvDataSource)'=='SQL Server'" Name="Use trusted connection" Value="No" />
-        <SetDataStoreProperty DataStore="$(dataStoreName)" Condition="'$(EnvGenerator)'=='Java'" Name="Use custom JDBC URL" Value="False" />
         <SetEnvironmentProperty Condition="'$(dataStoreName)'=='GAM'" Name="Keep GAM database updated" Value="true" />
     </Target>
 
