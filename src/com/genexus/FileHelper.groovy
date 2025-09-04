@@ -402,4 +402,48 @@ String getGeneXusInstallationVersion(String gxBasePath) {
     }
 }
 
+/**
+ * Retrieves and parses the version of a GeneXus installation from its DLL.
+ *
+ * This method checks for the presence of the 'Artech.Common.Controls.dll' file, reads its
+ * product version, and parses it to extract the main version, upgrade, and build numbers.
+ *
+ * @param gxBasePath The base path of the GeneXus installation (e.g., "C:\Program Files (x86)\GeneXus\GeneXus18").
+ * @return A Map containing the version components: [gxVersion, gxUpgrade, gxBuild]. 
+ * Throws an exception if the DLL is not found or the version cannot be parsed.
+ */
+Map getGenexusVersion(String gxBasePath) {
+    try {
+        String dllPath = "${gxBasePath}\\Artech.Common.Controls.dll"
+
+        String gxversion = powershell(
+            returnStdout: true,
+            label: "Getting GeneXus version for path: ${gxBasePath}",
+            script: """
+                if (-Not (Test-Path -Path "${dllPath}")) {
+                    Write-Error "Artech.Common.Controls.dll not found at path: ${dllPath}"
+                    exit 1
+                }
+                (Get-Item "${dllPath}").VersionInfo.ProductVersion
+            """
+        ).trim()
+
+        def parts = gxversion.split(/[.+]/)
+        if (parts.length < 4) {
+            throw new IllegalArgumentException("GeneXus version found: '${gxversion}' is not valid.")
+        } else {
+            Map versionInfo = [:]
+            versionInfo.gxVersion = parts[0]
+            versionInfo.gxUpgrade = parts[2]
+            versionInfo.gxBuild = parts[3]
+            echo "INFO: Found and parsed GeneXus Version: ${versionInfo}"
+            return versionInfo
+        }
+    } catch (Exception e) {
+        echo "ERROR: Failed to read GeneXus version properties: \n ${e.getMessage()}"
+        currentBuild.result = 'FAILURE'
+        throw e 
+    }
+}
+
 return this

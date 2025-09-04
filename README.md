@@ -38,6 +38,10 @@ Contributions to the GeneXus-KBBuilder-Shared-Library are not currently being ac
 Thank you for your understanding!
 
 ## Versions
+- v2.0.5
+  - Add method getGenexusVersion to FileHelper Module.
+  - Add method checkoutFromGxServer
+
 - v2.0.4
   - Remover hardcoded propery '/use custom JDBC URL'
  
